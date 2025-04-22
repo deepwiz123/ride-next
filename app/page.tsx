@@ -28,7 +28,7 @@ export default function HomePage() {
   const handleBooking = () => {
     const bookingId: string = Math.random().toString(36).substring(2, 10);
     updateBookingData({ bookingId });
-    router.push(`/reservations/book/${bookingId}`);
+    router.push(`/book/${bookingId}`);
   };
 
   return (

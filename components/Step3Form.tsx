@@ -30,18 +30,18 @@ export default function Step3Form() {
   const { bookingData } = useBooking();
 
   const cars = [
-    { type: "SUV", rate: 70, image: "/11452727.png" },
-    { type: "Van", rate: 100, image: "/11452727.png" },
-    { type: "Hatchback", rate: 45, image: "/11452727.png" },
-    { type: "Truck", rate: 120, image: "/11452727.png" },
-    { type: "Luxury", rate: 150, image: "/11452727.png" },
-    { type: "Convertible", rate: 200, image: "/11452727.png" },
-    { type: "Electric", rate: 90, image: "/11452727.png" },
-    { type: "Compact", rate: 40, image: "/11452727.png" },
-    { type: "Sedan", rate: 60, image: "/11452727.png" },
-    { type: "Coupe", rate: 80, image: "/11452727.png" },
-    { type: "Wagon", rate: 55, image: "/11452727.png" },
-    { type: "Crossover", rate: 75, image: "/11452727.png" },
+    { type: "SUV", rate: 70, image: "/reservations/11452727.png" },
+    { type: "Van", rate: 100, image: "/reservations/11452727.png" },
+    { type: "Hatchback", rate: 45, image: "/reservations/11452727.png" },
+    { type: "Truck", rate: 120, image: "/reservations/11452727.png" },
+    { type: "Luxury", rate: 150, image: "/reservations/11452727.png" },
+    { type: "Convertible", rate: 200, image: "/reservations/11452727.png" },
+    { type: "Electric", rate: 90, image: "/reservations/11452727.png" },
+    { type: "Compact", rate: 40, image: "/reservations/11452727.png" },
+    { type: "Sedan", rate: 60, image: "/reservations/11452727.png" },
+    { type: "Coupe", rate: 80, image: "/reservations/11452727.png" },
+    { type: "Wagon", rate: 55, image: "/reservations/11452727.png" },
+    { type: "Crossover", rate: 75, image: "/reservations/11452727.png" },
   ];
 
   const onSubmit = (data: Car) => {
