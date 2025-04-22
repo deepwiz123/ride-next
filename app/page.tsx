@@ -7,10 +7,10 @@ import { useBooking } from "@/context/BookingContext";
 import Image from "next/image";
 
 const images = [
-  "/urban.png",
-  "/airport.png",
-  "/city-night.png",
-  "/country-road.png",
+  "/reservations/urban.png",
+  "/reservations/airport.png",
+  "/reservations/city-night.png",
+  "/reservations/country-road.png",
 ];
 
 export default function HomePage() {
@@ -26,17 +26,16 @@ export default function HomePage() {
   }, []);
 
   const handleBooking = () => {
-    const bookingId : string = Math.random().toString(36).substring(2, 10);
+    const bookingId: string = Math.random().toString(36).substring(2, 10);
     updateBookingData({ bookingId });
-    router.push(`/book/${bookingId}`);
+    router.push(`/reservations/book/${bookingId}`);
   };
 
   return (
     <main className="relative w-full h-screen overflow-hidden">
-
       {/* Background Image Slider */}
       {images.map((src, index) => (
-          <div
+        <div
           key={index}
           className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
             index === current ? "opacity-100 z-10" : "opacity-0 z-0"
@@ -47,10 +46,10 @@ export default function HomePage() {
             alt={`Background ${index}`}
             fill
             className="object-cover"
+            priority={index === 0} // Prioritize first image for faster loading
           />
         </div>
       ))}
-
 
       {/* Content */}
       <section className="relative z-30 flex flex-col items-center justify-center h-full text-white text-center px-4">
@@ -69,7 +68,7 @@ export default function HomePage() {
             Book a Ride
           </button>
           <Link
-            href="/about"
+            href="/reservations/about"
             className="font-medium text-white hover:text-yellow-400 transition self-center text-center"
           >
             Learn more
