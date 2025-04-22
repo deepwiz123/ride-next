@@ -1,0 +1,46 @@
+"use client";
+
+import { Stepper } from "react-form-stepper";
+import { useState, useEffect } from "react";
+import { useBooking } from "@/context/BookingContext";
+
+const DefaultStepper = () => {
+  const { bookingData } = useBooking();
+  const [activeStep, setActiveStep] = useState<number | null>(null); 
+
+  useEffect(() => {
+    setActiveStep(bookingData.step - 1);
+  }, [bookingData.step]);
+
+  if (activeStep === null) return null;
+
+  return (
+    <Stepper
+      steps={[1, 2, 3, 4].map((step) => {
+        switch (step) {
+        case 1:
+          return { label: "Give Us your Contacts" };
+        case 2:
+          return { label: "Your Trip Details" };
+        case 3:
+          return { label: "Choose Your ride" };
+        case 4:
+          return { label: "You are All Set" };
+        default:
+          return { label: "" };
+        }
+      })}
+      activeStep={activeStep}
+      styleConfig={{
+        activeBgColor:"#5f5d86",
+        completedBgColor: "#4F46E5",
+        inactiveBgColor: "#D1D5DB",
+        activeTextColor: "#FFFFFF",
+        completedTextColor: "#FFFFFF",
+        inactiveTextColor: "#000000",
+      }}
+    />
+  );
+};
+
+export default DefaultStepper;
