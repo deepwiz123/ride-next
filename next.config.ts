@@ -1,25 +1,23 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/reservations",
-  images: {
-    domains: ["images.unsplash.com", "example.com"],
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  trailingSlash: true, // Prevents redirect loops with cPanel’s Apache
+  basePath: '/reservations',
+  trailingSlash: true,
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/reservations/' : '',
   async rewrites() {
     return [
       {
-        source: "/reservations/api/:path*",
-        destination: "/api/:path*", // Map API routes correctly
+        source: '/reservations/api/:path*',
+        destination: '/api/:path*',
       },
     ];
   },
+  // Ensure images and static assets are served correctly
+  images: {
+    path: '/reservations/_next/image',
+  },
+  // Optimize for Vercel
+  output: 'standalone', // Recommended for Vercel to optimize serverless functions
 };
 
 export default nextConfig;
