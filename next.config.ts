@@ -23,7 +23,6 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true, // Retain for now, but fix errors long-term
   },
-  output: 'standalone', // Optimize for Vercel
 };
 
 export default nextConfig;

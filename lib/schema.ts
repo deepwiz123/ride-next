@@ -1,10 +1,17 @@
-import { count } from "console";
 import { z } from "zod";
 
 export const customerSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
-  phone: z.string().min(1, "Phone number is required"),
+  phone: z
+    .string()
+    .min(7, "Phone number must be at least 7 digits")
+    .max(15, "Phone number cannot exceed 15 digits")
+    .regex(
+      /^[0-9\s\-()]+$/,
+      "Phone number can only contain digits, spaces, dashes, or parentheses"
+    )
+    .transform((val) => val.replace(/[\s\-()]/g, "")), // Normalize by removing spaces, dashes, parentheses
   countryCode: z.string().min(1, "Country code is required"),
 });
 

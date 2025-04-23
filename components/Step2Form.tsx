@@ -18,16 +18,21 @@ declare global {
   }
 }
 
-
 export default function Step2Form() {
   const { updateBookingData, bookingData } = useBooking();
-  const [distance, setDistance] = useState<string | null>("10.50");
+  const [distance, setDistance] = useState<string | null>("10.50 miles");
   const [isHourly, setIsHourly] = useState(bookingData.trip.hourly ?? false);
-  const [stopCount, setStopCount] = useState(bookingData.trip.stops?.length || 0);
+  const [stopCount, setStopCount] = useState(
+    bookingData.trip.stops?.length || 0
+  );
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [directionsService] = useState(() => new window.google.maps.DirectionsService());
-  const [directionsRenderer] = useState(() => new window.google.maps.DirectionsRenderer());
+  const [directionsService] = useState(
+    () => new window.google.maps.DirectionsService()
+  );
+  const [directionsRenderer] = useState(
+    () => new window.google.maps.DirectionsRenderer()
+  );
 
   const {
     register,
@@ -51,7 +56,7 @@ export default function Step2Form() {
       hourlyRate: bookingData.trip.hourlyRate || 0,
       durationHours: bookingData.trip.durationHours || 0,
       durationMinutes: bookingData.trip.durationMinutes || 0,
-      distance : bookingData.trip.distance || "0.0"
+      distance: bookingData.trip.distance || "",
     },
   });
 
@@ -77,7 +82,12 @@ export default function Step2Form() {
   }, [initMap]);
 
   const calculateDistance = useCallback(() => {
-    if (debouncedPickupLatLng && debouncedDropoffLatLng && directionsService && map) {
+    if (
+      debouncedPickupLatLng &&
+      debouncedDropoffLatLng &&
+      directionsService &&
+      map
+    ) {
       directionsService.route(
         {
           origin: debouncedPickupLatLng,
@@ -86,9 +96,14 @@ export default function Step2Form() {
         },
         (result, status) => {
           if (status === google.maps.DirectionsStatus.OK && result) {
-            setDistance(result.routes[0].legs[0].distance?.text || "Unable to calculate distance");
+            setDistance(
+              result.routes[0].legs[0].distance?.text ||
+                "Unable to calculate distance"
+            );
             updateBookingData({
-              trip : { distance: result.routes[0].legs[0].distance?.text } as Trip,
+              trip: {
+                distance: result.routes[0].legs[0].distance?.text,
+              } as Trip,
             });
           } else {
             setDistance("Unable to calculate distance");
@@ -97,23 +112,32 @@ export default function Step2Form() {
         }
       );
     }
-  }, [debouncedPickupLatLng, debouncedDropoffLatLng, directionsService, map, updateBookingData]);
+  }, [
+    debouncedPickupLatLng,
+    debouncedDropoffLatLng,
+    directionsService,
+    map,
+    updateBookingData,
+  ]);
 
   useEffect(() => {
     calculateDistance();
   }, [calculateDistance]);
 
-  const handleTripTypeToggle = useCallback((hourly: boolean) => {
-    setIsHourly(hourly);
-    setValue("hourly", hourly);
-    if (!hourly) {
-      setStopCount(0);
-      setValue("stops", []);
-      setValue("hourlyRate", 0);
-      setValue("durationHours", 0);
-      setValue("durationMinutes", 0);
-    }
-  }, [setValue]);
+  const handleTripTypeToggle = useCallback(
+    (hourly: boolean) => {
+      setIsHourly(hourly);
+      setValue("hourly", hourly);
+      if (!hourly) {
+        setStopCount(0);
+        setValue("stops", []);
+        setValue("hourlyRate", 0);
+        setValue("durationHours", 0);
+        setValue("durationMinutes", 0);
+      }
+    },
+    [setValue]
+  );
 
   const onSubmit = (data: Trip) => {
     updateBookingData({ trip: data, step: 3 });
@@ -144,7 +168,10 @@ export default function Step2Form() {
         setValue(field, place.formatted_address || "");
         setValue(`${field}LatLng`, latLng);
         updateBookingData({
-          trip : { [field]: place.formatted_address || "", [`${field}LatLng`]: latLng } as any,
+          trip: {
+            [field]: place.formatted_address || "",
+            [`${field}LatLng`]: latLng,
+          } as any,
         });
       }
     },
@@ -196,7 +223,9 @@ export default function Step2Form() {
             {...register("pickup")}
             onFocus={() => {
               const autocomplete = new window.google.maps.places.Autocomplete(
-                document.querySelector(`input[name="pickup"]`) as HTMLInputElement,
+                document.querySelector(
+                  `input[name="pickup"]`
+                ) as HTMLInputElement,
                 { types: ["geocode"] }
               );
               autocomplete.addListener("place_changed", () => {
@@ -204,7 +233,9 @@ export default function Step2Form() {
               });
             }}
           />
-          {errors.pickup && <p className="text-red-500 text-sm">{errors.pickup.message}</p>}
+          {errors.pickup && (
+            <p className="text-red-500 text-sm">{errors.pickup.message}</p>
+          )}
         </div>
         <div>
           <Input
@@ -215,7 +246,9 @@ export default function Step2Form() {
             {...register("dropoff")}
             onFocus={() => {
               const autocomplete = new window.google.maps.places.Autocomplete(
-                document.querySelector(`input[name="dropoff"]`) as HTMLInputElement,
+                document.querySelector(
+                  `input[name="dropoff"]`
+                ) as HTMLInputElement,
                 { types: ["geocode"] }
               );
               autocomplete.addListener("place_changed", () => {
@@ -223,17 +256,23 @@ export default function Step2Form() {
               });
             }}
           />
-          {errors.dropoff && <p className="text-red-500 text-sm">{errors.dropoff.message}</p>}
+          {errors.dropoff && (
+            <p className="text-red-500 text-sm">{errors.dropoff.message}</p>
+          )}
         </div>
       </div>
 
       {!isHourly && distance && (
         <p className="text-sm text-gray-700 mt-1">
-          <strong className="text-gray-900">Estimated Distance:</strong> {distance}
+          <strong className="text-gray-900">Estimated Distance:</strong>{" "}
+          {distance}
         </p>
       )}
 
-      <div ref={mapRef} style={{ height: "400px", width: "100%", marginBottom: "20px" }} />
+      <div
+        ref={mapRef}
+        style={{ height: "400px", width: "100%", marginBottom: "20px" }}
+      />
 
       <h2 className="text-2xl font-bold text-gray-900 ">Trip Details</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

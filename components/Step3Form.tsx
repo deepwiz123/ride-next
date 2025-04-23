@@ -4,15 +4,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { carSchema } from "@/lib/schema";
-import { useBooking } from "../context/BookingContext";
-import { Car } from "../types/booking";
+import { useBooking } from "@/context/BookingContext";
+import { Car } from "@/types/booking";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 
 export default function Step3Form() {
-  const { updateBookingData } = useBooking();
+  const { updateBookingData, bookingData, calculateFare } = useBooking();
   const {
     register,
     handleSubmit,
@@ -27,7 +27,6 @@ export default function Step3Form() {
   });
 
   const [selectedCar, setSelectedCar] = useState<string>("");
-  const { bookingData } = useBooking();
 
   const cars = [
     { type: "SUV", rate: 70, image: "/reservations/11452727.png" },
@@ -45,7 +44,11 @@ export default function Step3Form() {
   ];
 
   const onSubmit = (data: Car) => {
-    updateBookingData({ car: data, step: 4 });
+    updateBookingData({
+      car: data,
+      fare: calculateFare(), // Explicitly calculate fare
+      step: 4,
+    });
   };
 
   const handlePrev = () => {
@@ -58,10 +61,14 @@ export default function Step3Form() {
       resetField("type");
       resetField("rate");
       setValue("quantity", 1);
+      updateBookingData({ car: { type: "", rate: 0, quantity: 1 } }); // Reset car in context
     } else {
       setSelectedCar(car.type);
       setValue("type", car.type);
       setValue("rate", car.rate);
+      updateBookingData({
+        car: { type: car.type, rate: car.rate, quantity: bookingData.car.quantity || 1 },
+      }); // Update car in context
     }
   };
 
@@ -113,6 +120,13 @@ export default function Step3Form() {
                       value={quantity}
                       min={1}
                       onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => {
+                        const qty = Number(e.target.value);
+                        setValue("quantity", qty);
+                        updateBookingData({
+                          car: { ...bookingData.car, quantity: qty },
+                        }); // Update quantity in context
+                      }}
                     />
                   </div>
                 ) : (
@@ -120,7 +134,7 @@ export default function Step3Form() {
                     <h3 className="text-lg text-black font-semibold">
                       {car.type}
                     </h3>
-                    {/* <p className="text-gray-600">${car.rate} / trip</p> */}
+                    <p className="text-gray-600">${car.rate} / trip</p>
                   </div>
                 )}
               </div>
@@ -161,4 +175,3 @@ export default function Step3Form() {
     </motion.div>
   );
 }
-// Note: The `Button` component is used here for consistency with the rest of the code. Adjust styles as necessary.

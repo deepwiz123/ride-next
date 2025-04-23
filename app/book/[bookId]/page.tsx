@@ -7,6 +7,7 @@ import Step2Form from "@/components/Step2Form";
 import Step3Form from "@/components/Step3Form";
 import Step4Summary from "@/components/Step4Summary";
 import DefaultStepper from "@/components/DefaultStepper";
+import { Button } from "@/components/ui/Button";
 
 export default function RidePage() {
   const { bookingData } = useBooking();

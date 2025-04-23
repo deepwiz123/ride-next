@@ -6,8 +6,8 @@ import { BookingData } from "../../../types/booking";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER || "deeptanild4418@gmail.com",
-    pass: process.env.EMAIL_PASS || "luojbixguridulvg",
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 

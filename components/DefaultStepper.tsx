@@ -6,7 +6,7 @@ import { useBooking } from "@/context/BookingContext";
 
 const DefaultStepper = () => {
   const { bookingData } = useBooking();
-  const [activeStep, setActiveStep] = useState<number | null>(null); 
+  const [activeStep, setActiveStep] = useState<number | null>(null);
 
   useEffect(() => {
     setActiveStep(bookingData.step - 1);
@@ -18,26 +18,31 @@ const DefaultStepper = () => {
     <Stepper
       steps={[1, 2, 3, 4].map((step) => {
         switch (step) {
-        case 1:
-          return { label: "Give Us your Contacts" };
-        case 2:
-          return { label: "Your Trip Details" };
-        case 3:
-          return { label: "Choose Your ride" };
-        case 4:
-          return { label: "You are All Set" };
-        default:
-          return { label: "" };
+          case 1:
+            return { label: "Give Us Your Contacts" };
+          case 2:
+            return { label: "Your Trip Details" };
+          case 3:
+            return { label: "Choose Your Ride" };
+          case 4:
+            return { label: "You Are All Set" };
+          default:
+            return { label: "" };
         }
       })}
       activeStep={activeStep}
       styleConfig={{
-        activeBgColor:"#5f5d86",
+        activeBgColor: "#5f5d86",
         completedBgColor: "#4F46E5",
         inactiveBgColor: "#D1D5DB",
         activeTextColor: "#FFFFFF",
         completedTextColor: "#FFFFFF",
         inactiveTextColor: "#000000",
+        size: "32px", // Circle size
+        circleFontSize: "16px", // Font size for step number
+        labelFontSize: "14px", // Font size for label
+        borderRadius: "50%", // Circle border radius
+        fontWeight: "400", // Font weight for text
       }}
     />
   );
