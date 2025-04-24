@@ -123,7 +123,7 @@ export default function Step1Form() {
       name: bookingData.customer.name || "",
       email: bookingData.customer.email || "",
       phone: bookingData.customer.phone || "",
-      countryCode : bookingData.customer.countryCode || "+1" // Will be updated with country code
+      countryCode: bookingData.customer.countryCode || "+1" // Will be updated with country code
     },
   });
 
@@ -203,7 +203,7 @@ export default function Step1Form() {
           variant="outline"
           className="w-auto px-6 py-2 bg-transparent text-none rounded-md"
           onClick={handlePrev}
-        >{bookingData.step > 1 ? "Prev": ""}</Button>
+        >{bookingData.step > 1 ? "Prev" : ""}</Button>
         <Button
           type="submit"
           variant="solid"

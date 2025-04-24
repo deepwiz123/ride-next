@@ -33,6 +33,8 @@ export default function RidePage() {
           {bookingData.step === 4 && <Step4Summary />}
           {bookingData.step === 5 && <Step5Payment />}
         </div>
+
+        
       </motion.div>
     </div>
   );
