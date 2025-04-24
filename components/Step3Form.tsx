@@ -21,7 +21,7 @@ export default function Step3Form() {
     resetField,
     formState: { errors },
   } = useForm<Car>({
-    resolver: zodResolver(carSchema),
+    // resolver: zodResolver(carSchema),
     defaultValues: { type: "", rate: 0, quantity: 1 },
     mode: "onBlur",
   });
@@ -29,18 +29,18 @@ export default function Step3Form() {
   const [selectedCar, setSelectedCar] = useState<string>("");
 
   const cars = [
-    { type: "SUV", rate: 70, image: "/reservations/11452727.png" },
-    { type: "Van", rate: 100, image: "/reservations/11452727.png" },
-    { type: "Hatchback", rate: 45, image: "/reservations/11452727.png" },
-    { type: "Truck", rate: 120, image: "/reservations/11452727.png" },
-    { type: "Luxury", rate: 150, image: "/reservations/11452727.png" },
-    { type: "Convertible", rate: 200, image: "/reservations/11452727.png" },
-    { type: "Electric", rate: 90, image: "/reservations/11452727.png" },
-    { type: "Compact", rate: 40, image: "/reservations/11452727.png" },
-    { type: "Sedan", rate: 60, image: "/reservations/11452727.png" },
-    { type: "Coupe", rate: 80, image: "/reservations/11452727.png" },
-    { type: "Wagon", rate: 55, image: "/reservations/11452727.png" },
-    { type: "Crossover", rate: 75, image: "/reservations/11452727.png" },
+    { type: "SUV", transferRate: 70, hourlyRate: 12, capacity: 5, image: "/reservations/11452727.png" },
+    { type: "Van", transferRate: 100, hourlyRate: 16, capacity: 12, image: "/reservations/11452727.png" },
+    { type: "Hatchback", transferRate: 45, hourlyRate: 8, capacity: 4, image: "/reservations/11452727.png" },
+    { type: "Truck", transferRate: 120, hourlyRate: 20, capacity: 2, image: "/reservations/11452727.png" },
+    { type: "Luxury", transferRate: 150, hourlyRate: 25, capacity: 4, image: "/reservations/11452727.png" },
+    { type: "Convertible", transferRate: 200, hourlyRate: 30, capacity: 2, image: "/reservations/11452727.png" },
+    { type: "Electric", transferRate: 90, hourlyRate: 15, capacity: 5, image: "/reservations/11452727.png" },
+    { type: "Compact", transferRate: 40, hourlyRate: 7, capacity: 4, image: "/reservations/11452727.png" },
+    { type: "Sedan", transferRate: 60, hourlyRate: 10, capacity: 5, image: "/reservations/11452727.png" },
+    { type: "Coupe", transferRate: 80, hourlyRate: 13, capacity: 2, image: "/reservations/11452727.png" },
+    { type: "Wagon", transferRate: 55, hourlyRate: 9, capacity: 5, image: "/reservations/11452727.png" },
+    { type: "Crossover", transferRate: 75, hourlyRate: 12, capacity: 5, image: "/reservations/11452727.png" },
   ];
 
   const onSubmit = (data: Car) => {
@@ -115,7 +115,7 @@ export default function Step3Form() {
                     <Input
                       label="Quantity"
                       type="number"
-                      className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
+                      className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
                       {...register("quantity", { valueAsNumber: true })}
                       value={quantity}
                       min={1}
@@ -134,7 +134,7 @@ export default function Step3Form() {
                     <h3 className="text-lg text-black font-semibold">
                       {car.type}
                     </h3>
-                    <p className="text-gray-600">${car.rate} / trip</p>
+                    <p className="text-gray-600">{bookingData.trip.hourly ?  "":  ""}</p>
                   </div>
                 )}
               </div>

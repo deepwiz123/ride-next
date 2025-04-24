@@ -187,6 +187,7 @@ export default function Step1Form() {
             ))}
           </motion.select>
           <Input
+            type="number"
             placeholder="Enter your phone number"
             {...register("phone")}
             className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
@@ -202,7 +203,7 @@ export default function Step1Form() {
           variant="outline"
           className="w-auto px-6 py-2 bg-transparent text-none rounded-md"
           onClick={handlePrev}
-        ></Button>
+        >{bookingData.step > 1 ? "Prev": ""}</Button>
         <Button
           type="submit"
           variant="solid"

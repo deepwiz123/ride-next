@@ -20,7 +20,8 @@ declare global {
 
 export default function Step2Form() {
   const { updateBookingData, bookingData } = useBooking();
-  const [distance, setDistance] = useState<string | null>("10.50 miles");
+  const [distance, setDistance] = useState<string | null>("10.50");
+  const [distanceMetric, setDistanceMetric] = useState<string| undefined>("km")
   const [isHourly, setIsHourly] = useState(bookingData.trip.hourly ?? false);
   const [stopCount, setStopCount] = useState(
     bookingData.trip.stops?.length || 0
@@ -53,10 +54,9 @@ export default function Step2Form() {
       pickup: bookingData.trip.pickup || "",
       dropoff: bookingData.trip.dropoff || "",
       stops: bookingData.trip.stops || [],
-      hourlyRate: bookingData.trip.hourlyRate || 0,
       durationHours: bookingData.trip.durationHours || 0,
       durationMinutes: bookingData.trip.durationMinutes || 0,
-      distance: bookingData.trip.distance || "",
+      distance: bookingData.trip.distance || "10.50",
     },
   });
 
@@ -131,7 +131,6 @@ export default function Step2Form() {
       if (!hourly) {
         setStopCount(0);
         setValue("stops", []);
-        setValue("hourlyRate", 0);
         setValue("durationHours", 0);
         setValue("durationMinutes", 0);
       }
@@ -212,7 +211,9 @@ export default function Step2Form() {
         </Button>
       </div>
 
-      <h2 className="text-2xl font-bold text-gray-900">Pickup and Dropoff</h2>
+      <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+        Pickup and Dropoff
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <Input
@@ -262,49 +263,9 @@ export default function Step2Form() {
         </div>
       </div>
 
-      {!isHourly && distance && (
-        <p className="text-sm text-gray-700 mt-1">
-          <strong className="text-gray-900">Estimated Distance:</strong>{" "}
-          {distance}
-        </p>
-      )}
-
-      <div
-        ref={mapRef}
-        style={{ height: "400px", width: "100%", marginBottom: "20px" }}
-      />
-
-      <h2 className="text-2xl font-bold text-gray-900 ">Trip Details</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Input
-          label="Passengers"
-          type="number"
-          min={1}
-          className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
-          {...register("passengers", { valueAsNumber: true })}
-          error={errors.passengers}
-        />
-        <Input
-          label="Kids"
-          type="number"
-          min={0}
-          className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
-          {...register("kids", { valueAsNumber: true })}
-          error={errors.kids}
-        />
-        <Input
-          label="Bags"
-          type="number"
-          min={0}
-          className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
-          {...register("bags", { valueAsNumber: true })}
-          error={errors.bags}
-        />
-      </div>
-
       <div className="grid grid-cols-1 gap-6">
         <Input
-          label="Date and Time"
+          label="Pickup Date & Time"
           type="datetime-local"
           className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
           placeholder="Select date and time"
@@ -313,17 +274,73 @@ export default function Step2Form() {
         />
       </div>
 
+      {!isHourly && distance && (
+        <p className="text-sm text-gray-700 mt-1">
+          <strong className="text-gray-900">Estimated Distance:</strong>{" "}
+          {distance}{" "}{distanceMetric}
+        </p>
+      )}
+
+      <div
+        ref={mapRef}
+        style={{ height: "400px", width: "100%", marginBottom: "20px" }}
+      />
+
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Input
+          label="Passengers"
+          type="number"
+          min={1}
+          max={99}
+          className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+          {...register("passengers", { valueAsNumber: true })}
+          onKeyUp={(e) => {
+            const value = Number(e.currentTarget.value);
+            if (value > 99) {
+              e.currentTarget.value = "99";
+              setValue("passengers", 99, { shouldValidate: true });
+            }
+          }}
+          error={errors.passengers}
+        />
+        <Input
+          label="Kids"
+          type="number"
+          min={0}
+          max={99}
+          className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+          {...register("kids", { valueAsNumber: true })}
+          onKeyUp={(e) => {
+            const value = Number(e.currentTarget.value);
+            if (value > 99) {
+              e.currentTarget.value = "99";
+              setValue("kids", 99, { shouldValidate: true });
+            }
+          }}
+          error={errors.kids}
+        />
+        <Input
+          label="Bags"
+          type="number"
+          min={0}
+          max={99}
+          className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+          {...register("bags", { valueAsNumber: true })}
+          onKeyUp={(e) => {
+            const value = Number(e.currentTarget.value);
+            if (value > 99) {
+              e.currentTarget.value = "99";
+              setValue("bags", 99, { shouldValidate: true });
+            }
+          }}
+          error={errors.bags}
+        />
+      </div>
+
       {isHourly && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Input
-              label="Hourly Rate"
-              type="number"
-              min={0}
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
-              {...register("hourlyRate", { valueAsNumber: true })}
-              error={errors.hourlyRate}
-            />
             <Input
               label="Duration (Hours)"
               type="number"
@@ -375,7 +392,6 @@ export default function Step2Form() {
           </div>
         </div>
       )}
-
       <div className="flex justify-between my-6">
         <Button
           type="button"

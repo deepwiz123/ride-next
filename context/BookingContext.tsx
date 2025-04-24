@@ -1,14 +1,14 @@
 "use client";
 
-import { Trip } from "@/types/booking";
+import { Car, Customer, Trip } from "@/types/booking";
 import React, { createContext, useContext, useState, useMemo } from "react";
 
 interface BookingState {
   bookingId: string;
   step: number;
-  customer: { name: string; email: string; phone: string };
+  customer: Customer;
   trip: Trip;
-  car: { type: string; rate: number; quantity: number };
+  car: Car;
   fare: number;
 }
 
@@ -24,7 +24,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
   const [bookingData, setBookingData] = useState<BookingState>({
     bookingId: "",
     step: 1,
-    customer: { name: "", email: "", phone: "" },
+    customer: { name: "", email: "", phone: "", countryCode: "" },
     trip: {
       pickup: "",
       dropoff: "",
@@ -33,17 +33,16 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
       bags: 0,
       dateTime: "",
       hourly: false,
-      hourlyRate: 0,
       durationHours: 0,
       durationMinutes: 0,
       stops: [],
       distance: "0.0",
     },
-    car: { type: "", rate: 0, quantity: 1 },
+    car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1 , capacity : 0},
     fare: 0,
   });
 
-  const calculateFare = (): number => {
+  const calculateFare = () => {
     const { car, trip } = bookingData;
     let fare = 0;
 
@@ -53,12 +52,13 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
 
     if (trip.hourly) {
       // Hourly-based fare
-      const totalHours = (trip.durationHours ?? 0 + trip.durationMinutes ?? 0) || 0 ;
-      fare = trip.hourlyRate ?? 0 * totalHours;
+      const totalHours =
+        (trip.durationHours ?? 0 + trip.durationMinutes ?? 0) || 0;
+      fare = car.hourlyRate ?? 0 * totalHours;
     } else {
       // Distance-based fare
       const distance = parseFloat(trip.distance) || 0; // Convert string to number, default to 0
-      fare = car.rate * distance;
+      fare = car.transferRate * distance;
     }
 
     // Add base fee

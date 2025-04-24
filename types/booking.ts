@@ -15,7 +15,6 @@ export interface Trip {
   dropoffLatLng?: Coordinates;
   stops?: string[];
   hourly: boolean;
-  hourlyRate?: number; // Optional for transfer trips
   durationHours?: number; // Optional for transfer trips
   durationMinutes?: number; // Optional for transfer trips
   distance?: string; // Optional, not in schema but used in UI
@@ -30,10 +29,21 @@ export interface Customer {
 
 export interface Car {
   type: string;
-  rate: number;
+  transferRate: number;
+  hourlyRate?: number;
   quantity: number;
+  capacity : number;
 }
 
+export interface Payment {
+  method: "credit" | "debit";
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+  cardholderName: string;
+  billingPostalCode: string;
+  specialInstructions?: string;
+}
 
 export interface BookingData {
   bookingId: string;
@@ -42,4 +52,5 @@ export interface BookingData {
   trip: Trip;
   car: Car;
   fare?: number;
+  payment : Payment;
 }
