@@ -1,28 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import Image from "next/image";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY >= 250);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Run on mount in case the page is already scrolled
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <header className="bg-indigo-700 text-white shadow-md sticky top-0 z-50">
+    <header className={`bg-white text-gray-800 shadow-md sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'fixed-header' : ''}`}>
       <nav className="max-w-7xl mx-auto flex items-center justify-between p-4">
-        <a href="/reservations" className="text-2xl font-extrabold tracking-tight">
-          <span className="text-white">Ride</span>
-          <span className="text-yellow-400">Booking</span>
+        <a href="/" className="text-2xl font-extrabold tracking-tight">
+          <div className='logo'>
+
+            <Image
+              src="https://metrodtw.wizardcomm.in/wp-content/uploads/2025/01/MDS-LOGO-2022-1.png"
+              alt="logo"
+              width={100}
+              height={58}
+
+            />
+          </div>
+
         </a>
 
-        {/* Desktop Links */}
+
         <div className="hidden md:flex space-x-6 text-sm">
-          <a href="/reservations/about" className="hover:text-yellow-300 transition">About</a>
-          <a href="/reservations/services" className="hover:text-yellow-300 transition">Services</a>
-          <a href="/reservations/contact" className="hover:text-yellow-300 transition">Contact</a>
+
+          <a href="https://metrodtw.wizardcomm.in/" className="hover:text-[#00A0FF] transition">Services</a>
+          <a href="https://metrodtw.wizardcomm.in/fleet/" className="hover:text-[#00A0FF] transition">Fleet</a>
+          <a href="https://metrodtw.wizardcomm.in/rates/" className="hover:text-[#00A0FF] transition">Rates</a>
+          <a href="https://ride-next-iota.vercel.app/reservations/" className="hover:text-[#00A0FF] transition">Reservations</a>
         </div>
 
 
-        {/* Mobile Menu Toggle */}
+
+
         <button
           className="md:hidden"
           onClick={() => setIsMenuOpen(prev => !prev)}
@@ -32,12 +61,17 @@ export function Header() {
         </button>
       </nav>
 
-      {/* Mobile Dropdown */}
       {isMenuOpen && (
-        <div className="md:hidden bg-indigo-600 px-4 py-3 space-y-2 text-sm">
+        <div className="md:hidden bg-white px-4 py-3 space-y-2 text-sm">
           <a href="/about" className="block hover:text-yellow-300 transition">About</a>
           <a href="/services" className="block hover:text-yellow-300 transition">Services</a>
           <a href="/contact" className="block hover:text-yellow-300 transition">Contact</a>
+          <a
+            href="/book"
+            className="block mt-2 bg-[#2e97ef] text-white px-4 py-2 rounded-lg font-semibold text-center hover:bg-yellow-300 transition"
+          >
+            Book a Ride
+          </a>
         </div>
       )}
     </header>

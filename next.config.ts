@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     path: '/reservations/_next/image',
-    domains: ['maps.googleapis.com', 'maps.google.com'], // For Google Maps
+    domains: ['maps.googleapis.com', 'maps.google.com', 'metrodtw.wizardcomm.in'], // For Google Maps
     disableStaticImages: false,
   },
   typescript: {
