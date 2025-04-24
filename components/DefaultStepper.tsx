@@ -16,7 +16,7 @@ const DefaultStepper = () => {
 
   return (
     <Stepper
-      steps={[1, 2, 3, 4].map((step) => {
+      steps={[1, 2, 3, 4, 5].map((step) => {
         switch (step) {
           case 1:
             return { label: "Give Us Your Contacts" };
@@ -26,6 +26,8 @@ const DefaultStepper = () => {
             return { label: "Choose Your Ride" };
           case 4:
             return { label: "You Are All Set" };
+          case 5:
+            return { label: "Add Payments" }
           default:
             return { label: "" };
         }

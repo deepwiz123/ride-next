@@ -21,7 +21,7 @@ declare global {
 export default function Step2Form() {
   const { updateBookingData, bookingData } = useBooking();
   const [distance, setDistance] = useState<string | null>("10.50");
-  const [distanceMetric, setDistanceMetric] = useState<string| undefined>("km")
+  const [distanceMetric, setDistanceMetric] = useState<string | undefined>("km")
   const [isHourly, setIsHourly] = useState(bookingData.trip.hourly ?? false);
   const [stopCount, setStopCount] = useState(
     bookingData.trip.stops?.length || 0
@@ -98,7 +98,7 @@ export default function Step2Form() {
           if (status === google.maps.DirectionsStatus.OK && result) {
             setDistance(
               result.routes[0].legs[0].distance?.text ||
-                "Unable to calculate distance"
+              "Unable to calculate distance"
             );
             updateBookingData({
               trip: {
@@ -189,22 +189,20 @@ export default function Step2Form() {
       <div className="flex gap-4">
         <Button
           type="button"
-          className={`flex-1 rounded-xl font-semibold py-3 transition duration-300 ease-in-out shadow-sm border ${
-            !isHourly
-              ? "bg-indigo-500 border-indigo-400 hover:bg-indigo-600 text-white"
-              : "bg-gray-200 border-gray-300 hover:bg-gray-300 text-gray-800"
-          }`}
+          className={`flex-1 rounded-xl font-semibold py-3 transition duration-300 ease-in-out shadow-sm border ${!isHourly
+            ? "bg-indigo-500 border-indigo-400 hover:bg-indigo-600 text-white"
+            : "bg-gray-200 border-gray-300 hover:bg-gray-300 text-gray-800"
+            }`}
           onClick={() => handleTripTypeToggle(false)}
         >
           Transfer
         </Button>
         <Button
           type="button"
-          className={`flex-1 rounded-xl font-semibold py-3 transition duration-300 ease-in-out shadow-sm border ${
-            isHourly
-              ? "bg-indigo-500 border-indigo-400 hover:bg-indigo-600 text-white"
-              : "bg-gray-200 border-gray-300 hover:bg-gray-300 text-gray-800"
-          }`}
+          className={`flex-1 rounded-xl font-semibold py-3 transition duration-300 ease-in-out shadow-sm border ${isHourly
+            ? "bg-indigo-500 border-indigo-400 hover:bg-indigo-600 text-white"
+            : "bg-gray-200 border-gray-300 hover:bg-gray-300 text-gray-800"
+            }`}
           onClick={() => handleTripTypeToggle(true)}
         >
           Hourly

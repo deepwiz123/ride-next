@@ -1,6 +1,6 @@
 "use client";
 
-import { Car, Customer, Trip } from "@/types/booking";
+import { Car, Customer, Payment, Trip } from "@/types/booking";
 import React, { createContext, useContext, useState, useMemo } from "react";
 
 interface BookingState {
@@ -10,6 +10,7 @@ interface BookingState {
   trip: Trip;
   car: Car;
   fare: number;
+  payment: Payment
 }
 
 interface BookingContextType {
@@ -38,8 +39,17 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
       stops: [],
       distance: "0.0",
     },
-    car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1 , capacity : 0},
+    car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1, capacity: 1 },
     fare: 0,
+    payment: {
+      method: "credit",
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+      cardholderName: "",
+      billingPostalCode: "",
+      specialInstructions: "",
+    },
   });
 
   const calculateFare = () => {
@@ -47,17 +57,17 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     let fare = 0;
 
     // Constants
-    const BASE_FEE = 10; // Base booking fee ($10)
-    const STOP_FEE = 5; // Fee per additional stop ($5)
+    const BASE_FEE = 10;
+    const STOP_FEE = 5;
 
     if (trip.hourly) {
       // Hourly-based fare
       const totalHours =
-        (trip.durationHours ?? 0 + trip.durationMinutes ?? 0) || 0;
+        (trip.durationHours ?? 0 + Number(trip?.durationMinutes) ?? 0) || 0;
       fare = car.hourlyRate ?? 0 * totalHours;
     } else {
       // Distance-based fare
-      const distance = parseFloat(trip.distance) || 0; // Convert string to number, default to 0
+      const distance = Number(trip.distance) || 0; // Convert string to number, default to 0
       fare = car.transferRate * distance;
     }
 
@@ -65,7 +75,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     fare += BASE_FEE;
 
     // Add fee for additional stops
-    fare += trip.stops.length * STOP_FEE;
+    fare += Array(trip?.stops).length * STOP_FEE;
 
     // Multiply by car quantity
     fare *= car.quantity;

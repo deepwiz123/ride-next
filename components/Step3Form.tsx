@@ -7,7 +7,7 @@ import { carSchema } from "@/lib/schema";
 import { useBooking } from "@/context/BookingContext";
 import { Car } from "@/types/booking";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 
@@ -21,12 +21,18 @@ export default function Step3Form() {
     resetField,
     formState: { errors },
   } = useForm<Car>({
-    // resolver: zodResolver(carSchema),
-    defaultValues: { type: "", rate: 0, quantity: 1 },
+    resolver: zodResolver(carSchema),
+    defaultValues: {
+      type: bookingData.car.type || "",
+      transferRate: bookingData.car.transferRate || 0,
+      hourlyRate: bookingData.car.hourlyRate || 0,
+      quantity: bookingData.car.quantity || 1,
+      capacity: bookingData.car.capacity || 0,
+    },
     mode: "onBlur",
   });
 
-  const [selectedCar, setSelectedCar] = useState<string>("");
+  const [selectedCar, setSelectedCar] = useState<string>(bookingData.car.type || "");
 
   const cars = [
     { type: "SUV", transferRate: 70, hourlyRate: 12, capacity: 5, image: "/reservations/11452727.png" },
@@ -46,7 +52,7 @@ export default function Step3Form() {
   const onSubmit = (data: Car) => {
     updateBookingData({
       car: data,
-      fare: calculateFare(), // Explicitly calculate fare
+      fare: calculateFare(), // Calculate fare based on current car and trip
       step: 4,
     });
   };
@@ -55,50 +61,81 @@ export default function Step3Form() {
     updateBookingData({ step: bookingData.step - 1 });
   };
 
-  const handleCarSelect = (car: { type: string; rate: number }) => {
+  const handleCarSelect = (car: {
+    type: string;
+    transferRate: number;
+    hourlyRate: number;
+    capacity: number;
+  }) => {
     if (selectedCar === car.type) {
       setSelectedCar("");
       resetField("type");
-      resetField("rate");
-      setValue("quantity", 1);
-      updateBookingData({ car: { type: "", rate: 0, quantity: 1 } }); // Reset car in context
+      resetField("transferRate");
+      resetField("hourlyRate");
+      resetField("quantity");
+      resetField("capacity");
+      updateBookingData({
+        car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1, capacity: 0 },
+        fare: 0,
+      });
     } else {
       setSelectedCar(car.type);
       setValue("type", car.type);
-      setValue("rate", car.rate);
+      setValue("transferRate", car.transferRate);
+      setValue("hourlyRate", car.hourlyRate);
+      setValue("quantity", bookingData.car.quantity || 1);
+      setValue("capacity", car.capacity);
       updateBookingData({
-        car: { type: car.type, rate: car.rate, quantity: bookingData.car.quantity || 1 },
-      }); // Update car in context
+        car: {
+          type: car.type,
+          transferRate: car.transferRate,
+          hourlyRate: car.hourlyRate,
+          quantity: bookingData.car.quantity || 1,
+          capacity: car.capacity,
+        },
+        fare: calculateFare(), // Update fare on car selection
+      });
     }
   };
 
   const quantity = watch("quantity");
+  const capacity = watch("capacity");
+
+  // Validate quantity against passengers and capacity
+  useEffect(() => {
+    const totalPassengers = bookingData.trip.passengers || 0;
+    const requiredCars = Math.ceil(totalPassengers / (capacity || 1));
+    if (quantity < requiredCars) {
+      setValue("quantity", requiredCars);
+      updateBookingData({
+        car: { ...bookingData.car, quantity: requiredCars },
+        fare: calculateFare(),
+      });
+    }
+  }, [quantity, capacity, bookingData.trip.passengers, setValue, updateBookingData, calculateFare]);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mx-auto px-4 py-6"
+      className="mx-auto px-4 py-6 max-w-6xl"
     >
-      <h2 className="text-2xl font-bold mb-6 text-center sm:text-left">
+      <h2 className="text-2xl font-bold mb-6 text-center sm:text-left dark:text-gray-100">
         Select a Car
       </h2>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col space-y-6"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-6">
         {/* Responsive Grid Layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cars.map((car) => (
             <motion.div
               key={car.type}
               whileHover={{ scale: 1.03 }}
-              className={`border-2 rounded-xl p-4 cursor-pointer shadow-sm transition-all ${
+              className={`border-2 rounded-xl p-4 cursor-pointer shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 ${
                 selectedCar === car.type
-                  ? "border-blue-600 bg-blue-50"
-                  : "border-gray-300 bg-white"
+                  ? "border-blue-600 bg-blue-50 dark:border-blue-400 dark:bg-blue-900"
+                  : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800"
               }`}
               onClick={() => handleCarSelect(car)}
             >
@@ -111,30 +148,38 @@ export default function Step3Form() {
               />
               <div className="flex justify-between items-center">
                 {selectedCar === car.type ? (
-                  <div className="flex items-center justify-center gap-2 ml-2">
+                  <div className="flex items-center justify-center gap-2 ml-2 w-full">
                     <Input
                       label="Quantity"
                       type="number"
-                      className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"
+                      className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
                       {...register("quantity", { valueAsNumber: true })}
-                      value={quantity}
-                      min={1}
+                      min={Math.ceil((bookingData.trip.passengers || 1) / car.capacity)}
+                      max={10}
                       onClick={(e) => e.stopPropagation()}
                       onChange={(e) => {
                         const qty = Number(e.target.value);
                         setValue("quantity", qty);
                         updateBookingData({
                           car: { ...bookingData.car, quantity: qty },
-                        }); // Update quantity in context
+                          fare: calculateFare(),
+                        });
                       }}
                     />
                   </div>
                 ) : (
-                  <div>
-                    <h3 className="text-lg text-black font-semibold">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                       {car.type}
                     </h3>
-                    <p className="text-gray-600">{bookingData.trip.hourly ?  "":  ""}</p>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      {bookingData.trip.hourly
+                        ? `$${car.hourlyRate}/hr`
+                        : `$${car.transferRate}/transfer`}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500">
+                      Capacity: {car.capacity} passengers
+                    </p>
                   </div>
                 )}
               </div>
@@ -143,9 +188,17 @@ export default function Step3Form() {
         </div>
 
         {/* Validation Errors */}
-        {errors.type && <p className="text-red-500">{errors.type.message}</p>}
+        {errors.type && <p className="text-red-500 dark:text-red-400">{errors.type.message}</p>}
         {errors.quantity && (
-          <p className="text-red-500">{errors.quantity.message}</p>
+          <p className="text-red-500 dark:text-red-400">{errors.quantity.message}</p>
+        )}
+        {errors.capacity && (
+          <p className="text-red-500 dark:text-red-400">{errors.capacity.message}</p>
+        )}
+        {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
+          <p className="text-red-500 dark:text-red-400">
+            Selected cars cannot accommodate {bookingData.trip.passengers} passengers.
+          </p>
         )}
 
         {/* Navigation Buttons */}
@@ -153,7 +206,7 @@ export default function Step3Form() {
           <Button
             type="button"
             variant="outline"
-            className="w-full sm:w-auto px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+            className="w-full sm:w-auto px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
             onClick={handlePrev}
           >
             Prev
@@ -161,11 +214,11 @@ export default function Step3Form() {
           <Button
             type="submit"
             variant="solid"
-            disabled={!selectedCar}
+            disabled={!selectedCar || quantity * (capacity || 1) < (bookingData.trip.passengers || 1)}
             className={`w-full sm:w-auto px-6 py-2 rounded-md font-semibold transition-colors ${
-              selectedCar
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              selectedCar && quantity * (capacity || 1) >= (bookingData.trip.passengers || 1)
+                ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-600 dark:text-gray-400"
             }`}
           >
             Next

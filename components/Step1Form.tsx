@@ -122,7 +122,8 @@ export default function Step1Form() {
     defaultValues: {
       name: bookingData.customer.name || "",
       email: bookingData.customer.email || "",
-      phone: bookingData.customer.phone || "", // Will be updated with country code
+      phone: bookingData.customer.phone || "",
+      countryCode : bookingData.customer.countryCode || "+1" // Will be updated with country code
     },
   });
 
@@ -132,8 +133,7 @@ export default function Step1Form() {
 
   const onSubmit = (data: Customer) => {
     // Combine country code and phone number
-    const fullPhoneNumber = `${countryCodeValue}${phoneValue}`;
-    const updatedData = { ...data, phone: fullPhoneNumber };
+    const updatedData = { ...data };
     updateBookingData({ customer: updatedData, step: 2 });
   };
 
@@ -187,7 +187,7 @@ export default function Step1Form() {
             ))}
           </motion.select>
           <Input
-            type="number"
+            type="text"
             placeholder="Enter your phone number"
             {...register("phone")}
             className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400"

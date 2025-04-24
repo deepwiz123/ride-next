@@ -11,13 +11,13 @@ export interface Trip {
   kids: number;
   bags: number;
   dateTime: string;
+  hourly: boolean;
   pickupLatLng?: Coordinates;
   dropoffLatLng?: Coordinates;
+  distance?: string;
   stops?: string[];
-  hourly: boolean;
   durationHours?: number; // Optional for transfer trips
   durationMinutes?: number; // Optional for transfer trips
-  distance?: string; // Optional, not in schema but used in UI
 }
 
 export interface Customer {

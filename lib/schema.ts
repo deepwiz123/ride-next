@@ -58,8 +58,38 @@ const hourlyTripSchema = baseTripSchema.extend({
 export const tripSchema = z.union([transferTripSchema, hourlyTripSchema]);
 
 export const carSchema = z.object({
-  type: z.string().min(1, "Car type is required"),
-  rate: z.number().min(0),
-  hourlyRate: z.number().min(0, "Hourly rate cannot be negative"),
-  quantity: z.number().min(1, "At least 1 car required"),
+  type: z.string().min(1, "Please select a car type"),
+  transferRate: z.number().min(0, "Transfer rate must be non-negative"),
+  hourlyRate: z.number().min(0, "Hourly rate must be non-negative").optional(),
+  quantity: z
+    .number()
+    .min(1, "At least 1 car is required")
+    .max(10, "Quantity cannot exceed 10"),
+  capacity: z.number().min(1, "Capacity must be at least 1"),
+});
+
+
+export const paymentSchema = z.object({
+  method: z.enum(["credit", "debit"], {
+    errorMap: () => ({ message: "Please select a payment method" }),
+  }),
+  cardNumber: z
+    .string()
+    .regex(/^\d{16}$/, "Card number must be 16 digits")
+    .min(16, "Card number must be 16 digits")
+    .max(16, "Card number must be 16 digits"),
+  expiryDate: z
+    .string()
+    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Expiry date must be MM/YY"),
+  cvv: z
+    .string()
+    .regex(/^\d{3,4}$/, "CVV must be 3 or 4 digits")
+    .min(3, "CVV must be 3 or 4 digits")
+    .max(4, "CVV must be 3 or 4 digits"),
+  cardholderName: z.string().min(1, "Cardholder name is required"),
+  billingPostalCode: z
+    .string()
+    .min(5, "Postal code must be at least 5 characters")
+    .max(10, "Postal code cannot exceed 10 characters"),
+  specialInstructions: z.string().optional(),
 });

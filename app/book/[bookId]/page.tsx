@@ -7,13 +7,13 @@ import Step2Form from "@/components/Step2Form";
 import Step3Form from "@/components/Step3Form";
 import Step4Summary from "@/components/Step4Summary";
 import DefaultStepper from "@/components/DefaultStepper";
-import { Button } from "@/components/ui/Button";
+import Step5Payment from "@/components/Step5Payments";
 
 export default function RidePage() {
   const { bookingData } = useBooking();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 px-4 py-8 transition-colors duration-300">
+    <div className="h-screen flex items-center justify-center bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 px-4 py-8 transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -31,6 +31,7 @@ export default function RidePage() {
           {bookingData.step === 2 && <Step2Form />}
           {bookingData.step === 3 && <Step3Form />}
           {bookingData.step === 4 && <Step4Summary />}
+          {bookingData.step === 5 && <Step5Payment />}
         </div>
       </motion.div>
     </div>
