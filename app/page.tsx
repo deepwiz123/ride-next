@@ -7,10 +7,7 @@ import { useBooking } from "@/context/BookingContext";
 import Image from "next/image";
 
 const images = [
-  "/reservations/urban.png",
-  "/reservations/airport.png",
-  "/reservations/city-night.png",
-  "/reservations/country-road.png",
+  "/reservations/image.png",
 ];
 
 export default function HomePage() {

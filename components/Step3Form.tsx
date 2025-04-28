@@ -52,7 +52,7 @@ export default function Step3Form() {
   const onSubmit = (data: Car) => {
     updateBookingData({
       car: data,
-      fare: calculateFare(), // Calculate fare based on current car and trip
+      fare: calculateFare(),
       step: 4,
     });
   };
@@ -93,7 +93,7 @@ export default function Step3Form() {
           quantity: bookingData.car.quantity || 1,
           capacity: car.capacity,
         },
-        fare: calculateFare(), // Update fare on car selection
+        fare: calculateFare(),
       });
     }
   };
@@ -101,7 +101,6 @@ export default function Step3Form() {
   const quantity = watch("quantity");
   const capacity = watch("capacity");
 
-  // Validate quantity against passengers and capacity
   useEffect(() => {
     const totalPassengers = bookingData.trip.passengers || 0;
     const requiredCars = Math.ceil(totalPassengers / (capacity || 1));
@@ -116,115 +115,119 @@ export default function Step3Form() {
 
   return (
     <motion.div
+      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="mx-auto px-4 py-6 max-w-6xl"
     >
-      <h2 className="text-2xl font-bold mb-6 text-center sm:text-left dark:text-gray-100">
-        Select a Car
-      </h2>
+      {/* Scrollable Content */}
+      <div className="flex-1 space-y-6">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100">
+          Select a Car
+        </h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-6">
-        {/* Responsive Grid Layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cars.map((car) => (
-            <motion.div
-              key={car.type}
-              whileHover={{ scale: 1.03 }}
-              className={`border-2 rounded-xl p-4 cursor-pointer shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 ${
-                selectedCar === car.type
-                  ? "border-blue-600 bg-blue-50 dark:border-blue-400 dark:bg-blue-900"
-                  : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800"
-              }`}
-              onClick={() => handleCarSelect(car)}
-            >
-              <Image
-                src={car.image}
-                alt={car.type}
-                width={150}
-                height={150}
-                className="w-full h-36 object-cover rounded-md mb-4"
-              />
-              <div className="flex justify-between items-center">
-                {selectedCar === car.type ? (
-                  <div className="flex items-center justify-center gap-2 ml-2 w-full">
-                    <Input
-                      label="Quantity"
-                      type="number"
-                      className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
-                      {...register("quantity", { valueAsNumber: true })}
-                      min={Math.ceil((bookingData.trip.passengers || 1) / car.capacity)}
-                      max={10}
-                      onClick={(e) => e.stopPropagation()}
-                      onChange={(e) => {
-                        const qty = Number(e.target.value);
-                        setValue("quantity", qty);
-                        updateBookingData({
-                          car: { ...bookingData.car, quantity: qty },
-                          fare: calculateFare(),
-                        });
-                      }}
-                    />
-                  </div>
-                ) : (
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                      {car.type}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      {bookingData.trip.hourly
-                        ? `$${car.hourlyRate}/hr`
-                        : `$${car.transferRate}/transfer`}
-                    </p>
-                    <p className="text-sm text-gray-500 dark:text-gray-500">
-                      Capacity: {car.capacity} passengers
-                    </p>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Responsive Flex/Grid Layout */}
+          <div className="flex flex-col gap-4 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 flex-col-440">
+            {cars.map((car) => (
+              <motion.div
+                key={car.type}
+                whileHover={{ scale: 1.03 }}
+                className={`border-2 rounded-xl p-4 cursor-pointer shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 ${
+                  selectedCar === car.type
+                    ? "border-blue-600 bg-blue-50 dark:border-blue-400 dark:bg-blue-900"
+                    : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800"
+                }`}
+                onClick={() => handleCarSelect(car)}
+              >
+                <Image
+                  src={car.image}
+                  alt={car.type}
+                  width={150}
+                  height={150}
+                  className="w-full h-36 object-cover rounded-md mb-4"
+                />
+                <div className="flex justify-between items-center">
+                  {selectedCar === car.type ? (
+                    <div className="flex items-center justify-center gap-2 ml-2 w-full">
+                      <Input
+                        label="Quantity"
+                        type="number"
+                        className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
+                        {...register("quantity", { valueAsNumber: true })}
+                        min={Math.ceil((bookingData.trip.passengers || 1) / car.capacity)}
+                        max={10}
+                        onClick={(e) => e.stopPropagation()}
+                        onChange={(e) => {
+                          const qty = Number(e.target.value);
+                          setValue("quantity", qty);
+                          updateBookingData({
+                            car: { ...bookingData.car, quantity: qty },
+                            fare: calculateFare(),
+                          });
+                        }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                        {car.type}
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        {bookingData.trip.hourly
+                          ? `$${car.hourlyRate}/hr`
+                          : `$${car.transferRate}/transfer`}
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-500">
+                        Capacity: {car.capacity} passengers
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
 
-        {/* Validation Errors */}
-        {errors.type && <p className="text-red-500 dark:text-red-400">{errors.type.message}</p>}
-        {errors.quantity && (
-          <p className="text-red-500 dark:text-red-400">{errors.quantity.message}</p>
-        )}
-        {errors.capacity && (
-          <p className="text-red-500 dark:text-red-400">{errors.capacity.message}</p>
-        )}
-        {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
-          <p className="text-red-500 dark:text-red-400">
-            Selected cars cannot accommodate {bookingData.trip.passengers} passengers.
-          </p>
-        )}
+          {/* Validation Errors */}
+          {errors.type && <p className="text-red-500 dark:text-red-400">{errors.type.message}</p>}
+          {errors.quantity && (
+            <p className="text-red-500 dark:text-red-400">{errors.quantity.message}</p>
+          )}
+          {errors.capacity && (
+            <p className="text-red-500 dark:text-red-400">{errors.capacity.message}</p>
+          )}
+          {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
+            <p className="text-red-500 dark:text-red-400">
+              Selected cars cannot accommodate {bookingData.trip.passengers} passengers.
+            </p>
+          )}
+        </form>
+      </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full sm:w-auto px-6 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-            onClick={handlePrev}
-          >
-            Prev
-          </Button>
-          <Button
-            type="submit"
-            variant="solid"
-            disabled={!selectedCar || quantity * (capacity || 1) < (bookingData.trip.passengers || 1)}
-            className={`w-full sm:w-auto px-6 py-2 rounded-md font-semibold transition-colors ${
-              selectedCar && quantity * (capacity || 1) >= (bookingData.trip.passengers || 1)
-                ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-600 dark:text-gray-400"
-            }`}
-          >
-            Next
-          </Button>
-        </div>
-      </form>
+      {/* Sticky Buttons */}
+      <div className="sticky bottom-0 bg-white w-full flex justify-between items-center p-4 rounded-md dark:bg-gray-800">
+        <Button
+          type="button"
+          variant="outline"
+          className="w-auto px-6 py-2 bg-[#002e52] text-white rounded-md hover:bg-[#00518F] dark:bg-[#002e52] dark:text-white dark:hover:bg-[#00518F] "
+          onClick={handlePrev}
+        >
+          Prev
+        </Button>
+        <Button
+          type="submit"
+          variant="solid"
+          disabled={!selectedCar || quantity * (capacity || 1) < (bookingData.trip.passengers || 1)}
+          className={`w-auto px-6 py-2 rounded-md font-semibold transition-colors ${
+            selectedCar && quantity * (capacity || 1) >= (bookingData.trip.passengers || 1)
+              ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-600 dark:text-gray-400"
+          }`}
+          onClick={handleSubmit(onSubmit)}
+        >
+          Next
+        </Button>
+      </div>
     </motion.div>
   );
 }

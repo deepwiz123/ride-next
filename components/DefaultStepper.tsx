@@ -16,35 +16,35 @@ const DefaultStepper = () => {
 
   return (
     <Stepper
-      steps={[1, 2, 3, 4, 5].map((step) => {
+      steps={[1, 2, 3, 4, 5].map((step : number) => {
         switch (step) {
           case 1:
-            return { label: "Give Us Your Contacts" };
+            return { label: "Your Contacts" };
           case 2:
             return { label: "Your Trip Details" };
           case 3:
-            return { label: "Choose Your Ride" };
+            return { label: "Your Ride" };
           case 4:
-            return { label: "You Are All Set" };
+            return { label: "Your Trip Summary" };
           case 5:
-            return { label: "Add Payments" }
+            return { label: "Your Card Details" };
           default:
             return { label: "" };
         }
       })}
       activeStep={activeStep}
       styleConfig={{
-        activeBgColor: "#5f5d86",
-        completedBgColor: "#4F46E5",
-        inactiveBgColor: "#D1D5DB",
-        activeTextColor: "#FFFFFF",
+        activeBgColor: "#33A7FF",
+        completedBgColor: "#00518F",
+        inactiveBgColor: "#DDF0FF",
+        activeTextColor: "#000",
         completedTextColor: "#FFFFFF",
-        inactiveTextColor: "#000000",
-        size: "32px", // Circle size
-        circleFontSize: "16px", // Font size for step number
-        labelFontSize: "14px", // Font size for label
-        borderRadius: "50%", // Circle border radius
-        fontWeight: "400", // Font weight for text
+        inactiveTextColor: "#000",
+        size: "32px",
+        circleFontSize: "16px",
+        labelFontSize: "14px",
+        borderRadius: "50%",
+        fontWeight: "400",
       }}
     />
   );
