@@ -16,7 +16,7 @@ const DefaultStepper = () => {
 
   return (
     <Stepper
-      steps={[1, 2, 3, 4, 5].map((step : number) => {
+      steps={[1, 2, 3, 4].map((step : number) => {
         switch (step) {
           case 1:
             return { label: "Your Contacts" };
@@ -25,8 +25,6 @@ const DefaultStepper = () => {
           case 3:
             return { label: "Your Ride" };
           case 4:
-            return { label: "Your Trip Summary" };
-          case 5:
             return { label: "Your Card Details" };
           default:
             return { label: "" };
@@ -35,7 +33,7 @@ const DefaultStepper = () => {
       activeStep={activeStep}
       styleConfig={{
         activeBgColor: "#33A7FF",
-        completedBgColor: "#00518F",
+        completedBgColor: "#17CB2F",
         inactiveBgColor: "#DDF0FF",
         activeTextColor: "#000",
         completedTextColor: "#FFFFFF",

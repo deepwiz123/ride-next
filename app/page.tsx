@@ -6,9 +6,7 @@ import { useRouter } from "next/navigation";
 import { useBooking } from "@/context/BookingContext";
 import Image from "next/image";
 
-const images = [
-  "/reservations/image.png",
-];
+const images = ["/reservations/image.png"];
 
 export default function HomePage() {
   const [current, setCurrent] = useState(0);

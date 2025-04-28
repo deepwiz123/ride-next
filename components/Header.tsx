@@ -84,12 +84,6 @@ export function Header() {
           <a href="/contact" className="block hover:text-yellow-300 transition">
             Contact
           </a>
-          <a
-            href="/book"
-            className="block mt-2 bg-[#2e97ef] text-white px-4 py-2 rounded-lg font-semibold text-center hover:bg-yellow-300 transition"
-          >
-            Book a Ride
-          </a>
         </div>
       )}
     </header>

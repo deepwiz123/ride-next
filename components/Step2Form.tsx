@@ -192,29 +192,29 @@ export default function Step2Form() {
         </h2> */}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="flex flex-col gap-4 sm:gap-6 sm:flex-row">
-            <Button
+          <div className="flex sm:flex-row bg-gray-100 dark:bg-gray-800 p-2 rounded-xl gap-2">
+            <button
               type="button"
-              className={`flex-1 rounded-xl font-semibold py-3 transition duration-300 ease-in-out shadow-sm border ${
+              className={`flex-1 rounded-lg font-semibold py-3 transition duration-300 ease-in-out ${
                 !isHourly
-                  ? "bg-[#33A7FF] border-[#33A7FF] hover:bg-[#00518F] text-white"
-                  : "bg-gray-200 border-gray-300 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-600"
+                  ? "bg-[#33A7FF] text-white shadow-sm"
+                  : "bg-transparent text-gray-800 dark:text-gray-100"
               }`}
               onClick={() => handleTripTypeToggle(false)}
             >
               Transfer
-            </Button>
-            <Button
+            </button>
+            <button
               type="button"
-              className={`flex-1 rounded-xl font-semibold py-3 transition duration-300 ease-in-out shadow-sm border ${
+              className={`flex-1 rounded-lg font-semibold py-3 transition duration-300 ease-in-out ${
                 isHourly
-                  ? "bg-[#33A7FF] border-[#33A7FF] hover:bg-[#00518F] text-white"
-                  : "bg-gray-200 border-gray-300 hover:bg-gray-300 text-gray-800 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-600"
+                  ? "bg-[#33A7FF] text-white shadow-sm"
+                  : "bg-transparent text-gray-800 dark:text-gray-100"
               }`}
               onClick={() => handleTripTypeToggle(true)}
             >
               Hourly
-            </Button>
+            </button>
           </div>
 
           <div className="flex flex-col gap-4 sm:gap-6 md:grid md:grid-cols-2 flex-col-440">
@@ -291,7 +291,58 @@ export default function Step2Form() {
               {distance} {distanceMetric}
             </p>
           )}
-
+          {isHourly && (
+            <div className="space-y-6">
+              <div className="flex flex-col gap-4 sm:gap-6 md:grid md:grid-cols-2 flex-col-440">
+                <Input
+                  label="Duration (Hours)"
+                  type="number"
+                  min={0}
+                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                  {...register("durationHours", { valueAsNumber: true })}
+                  error={errors.durationHours}
+                />
+                <Input
+                  label="Duration (Minutes)"
+                  type="number"
+                  min={0}
+                  max={59}
+                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                  {...register("durationMinutes", { valueAsNumber: true })}
+                  error={errors.durationMinutes}
+                />
+              </div>
+              <div className="space-y-4">
+                {Array.from({ length: stopCount }, (_, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <Input
+                      label={`Stop ${index + 1}`}
+                      placeholder={`Enter Stop ${index + 1} location`}
+                      className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                      {...register(`stops.${index}` as const)}
+                      error={errors.stops?.[index] as any}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="p-2 mt-5 bg-red-200 text-red-800 rounded-md hover:bg-red-300 dark:bg-red-300 dark:text-red-900 dark:hover:bg-red-400"
+                      onClick={() => removeStop(index)}
+                    >
+                      <FaMinus />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full flex items-center justify-center gap-2 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
+                  onClick={addStop}
+                >
+                  <FaPlus /> Add Stop
+                </Button>
+              </div>
+            </div>
+          )}
           <div
             ref={mapRef}
             className="h-[400px] w-full rounded-md overflow-hidden"
@@ -347,59 +398,6 @@ export default function Step2Form() {
               error={errors.bags}
             />
           </div>
-
-          {isHourly && (
-            <div className="space-y-6">
-              <div className="flex flex-col gap-4 sm:gap-6 md:grid md:grid-cols-2 flex-col-440">
-                <Input
-                  label="Duration (Hours)"
-                  type="number"
-                  min={0}
-                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
-                  {...register("durationHours", { valueAsNumber: true })}
-                  error={errors.durationHours}
-                />
-                <Input
-                  label="Duration (Minutes)"
-                  type="number"
-                  min={0}
-                  max={59}
-                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
-                  {...register("durationMinutes", { valueAsNumber: true })}
-                  error={errors.durationMinutes}
-                />
-              </div>
-              <div className="space-y-4">
-                {Array.from({ length: stopCount }, (_, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Input
-                      label={`Stop ${index + 1}`}
-                      placeholder={`Enter Stop ${index + 1} location`}
-                      className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
-                      {...register(`stops.${index}` as const)}
-                      error={errors.stops?.[index] as any}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="p-2 mt-5 bg-red-200 text-red-800 rounded-md hover:bg-red-300 dark:bg-red-300 dark:text-red-900 dark:hover:bg-red-400"
-                      onClick={() => removeStop(index)}
-                    >
-                      <FaMinus />
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full flex items-center justify-center gap-2 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
-                  onClick={addStop}
-                >
-                  <FaPlus /> Add Stop
-                </Button>
-              </div>
-            </div>
-          )}
         </form>
       </div>
 
