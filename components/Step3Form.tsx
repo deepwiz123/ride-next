@@ -32,21 +32,95 @@ export default function Step3Form() {
     mode: "onBlur",
   });
 
-  const [selectedCar, setSelectedCar] = useState<string>(bookingData.car.type || "");
+  const [selectedCar, setSelectedCar] = useState<string>(
+    bookingData.car.type || ""
+  );
 
   const cars = [
-    { type: "SUV", transferRate: 70, hourlyRate: 12, capacity: 5, image: "/reservations/11452727.png" },
-    { type: "Van", transferRate: 100, hourlyRate: 16, capacity: 12, image: "/reservations/11452727.png" },
-    { type: "Hatchback", transferRate: 45, hourlyRate: 8, capacity: 4, image: "/reservations/11452727.png" },
-    { type: "Truck", transferRate: 120, hourlyRate: 20, capacity: 2, image: "/reservations/11452727.png" },
-    { type: "Luxury", transferRate: 150, hourlyRate: 25, capacity: 4, image: "/reservations/11452727.png" },
-    { type: "Convertible", transferRate: 200, hourlyRate: 30, capacity: 2, image: "/reservations/11452727.png" },
-    { type: "Electric", transferRate: 90, hourlyRate: 15, capacity: 5, image: "/reservations/11452727.png" },
-    { type: "Compact", transferRate: 40, hourlyRate: 7, capacity: 4, image: "/reservations/11452727.png" },
-    { type: "Sedan", transferRate: 60, hourlyRate: 10, capacity: 5, image: "/reservations/11452727.png" },
-    { type: "Coupe", transferRate: 80, hourlyRate: 13, capacity: 2, image: "/reservations/11452727.png" },
-    { type: "Wagon", transferRate: 55, hourlyRate: 9, capacity: 5, image: "/reservations/11452727.png" },
-    { type: "Crossover", transferRate: 75, hourlyRate: 12, capacity: 5, image: "/reservations/11452727.png" },
+    {
+      type: "SUV",
+      transferRate: 70,
+      hourlyRate: 12,
+      capacity: 5,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Van",
+      transferRate: 100,
+      hourlyRate: 16,
+      capacity: 12,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Hatchback",
+      transferRate: 45,
+      hourlyRate: 8,
+      capacity: 4,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Truck",
+      transferRate: 120,
+      hourlyRate: 20,
+      capacity: 2,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Luxury",
+      transferRate: 150,
+      hourlyRate: 25,
+      capacity: 4,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Convertible",
+      transferRate: 200,
+      hourlyRate: 30,
+      capacity: 2,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Electric",
+      transferRate: 90,
+      hourlyRate: 15,
+      capacity: 5,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Compact",
+      transferRate: 40,
+      hourlyRate: 7,
+      capacity: 4,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Sedan",
+      transferRate: 60,
+      hourlyRate: 10,
+      capacity: 5,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Coupe",
+      transferRate: 80,
+      hourlyRate: 13,
+      capacity: 2,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Wagon",
+      transferRate: 55,
+      hourlyRate: 9,
+      capacity: 5,
+      image: "/reservations/11452727.png",
+    },
+    {
+      type: "Crossover",
+      transferRate: 75,
+      hourlyRate: 12,
+      capacity: 5,
+      image: "/reservations/11452727.png",
+    },
   ];
 
   const onSubmit = (data: Car) => {
@@ -75,7 +149,13 @@ export default function Step3Form() {
       resetField("quantity");
       resetField("capacity");
       updateBookingData({
-        car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1, capacity: 0 },
+        car: {
+          type: "",
+          transferRate: 0,
+          hourlyRate: 0,
+          quantity: 1,
+          capacity: 0,
+        },
         fare: 0,
       });
     } else {
@@ -98,6 +178,21 @@ export default function Step3Form() {
     }
   };
 
+  const handleQuantityChange = (increment: boolean) => {
+    const currentQty = quantity;
+    const minQty = Math.ceil(
+      (bookingData.trip.passengers || 1) / (capacity || 1)
+    );
+    const newQty = increment ? currentQty + 1 : currentQty - 1;
+    if (newQty >= minQty && newQty <= 10) {
+      setValue("quantity", newQty);
+      updateBookingData({
+        car: { ...bookingData.car, quantity: newQty },
+        fare: calculateFare(),
+      });
+    }
+  };
+
   const quantity = watch("quantity");
   const capacity = watch("capacity");
 
@@ -111,7 +206,14 @@ export default function Step3Form() {
         fare: calculateFare(),
       });
     }
-  }, [quantity, capacity, bookingData.trip.passengers, setValue, updateBookingData, calculateFare]);
+  }, [
+    quantity,
+    capacity,
+    bookingData.trip.passengers,
+    setValue,
+    updateBookingData,
+    calculateFare,
+  ]);
 
   return (
     <motion.div
@@ -150,23 +252,59 @@ export default function Step3Form() {
                 <div className="flex justify-between items-center">
                   {selectedCar === car.type ? (
                     <div className="flex items-center justify-center gap-2 ml-2 w-full">
-                      <Input
-                        label="Quantity"
-                        type="number"
-                        className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
-                        {...register("quantity", { valueAsNumber: true })}
-                        min={Math.ceil((bookingData.trip.passengers || 1) / car.capacity)}
-                        max={10}
-                        onClick={(e) => e.stopPropagation()}
-                        onChange={(e) => {
-                          const qty = Number(e.target.value);
-                          setValue("quantity", qty);
-                          updateBookingData({
-                            car: { ...bookingData.car, quantity: qty },
-                            fare: calculateFare(),
-                          });
-                        }}
-                      />
+                      <div className="flex items-center gap-2 w-full">
+                        <Input
+                          label="Quantity"
+                          type="number"
+                          className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
+                          {...register("quantity", { valueAsNumber: true })}
+                          min={Math.floor(
+                            (bookingData.trip.passengers || 1) / car.capacity
+                          )}
+                          max={10}
+                          onClick={(e) => e.stopPropagation()}
+                          onChange={(e) => {
+                            const qty = Number(e.target.value);
+                            setValue("quantity", qty);
+                            updateBookingData({
+                              car: { ...bookingData.car, quantity: qty },
+                              fare: calculateFare(),
+                            });
+                          }}
+                        />
+                        <div className="md:hidden flex gap-1 self-end">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="p-2 rounded-md bg-gray-200 dark:bg-gray-700"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleQuantityChange(false);
+                            }}
+                            disabled={
+                              quantity <=
+                              Math.ceil(
+                                (bookingData.trip.passengers || 1) /
+                                  car.capacity
+                              )
+                            }
+                          >
+                            -
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="p-2 rounded-md bg-gray-200 dark:bg-gray-700"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleQuantityChange(true);
+                            }}
+                            disabled={quantity >= 10}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   ) : (
                     <div className="flex-1">
@@ -189,16 +327,25 @@ export default function Step3Form() {
           </div>
 
           {/* Validation Errors */}
-          {errors.type && <p className="text-red-500 dark:text-red-400">{errors.type.message}</p>}
+          {errors.type && (
+            <p className="text-red-500 dark:text-red-400">
+              {errors.type.message}
+            </p>
+          )}
           {errors.quantity && (
-            <p className="text-red-500 dark:text-red-400">{errors.quantity.message}</p>
+            <p className="text-red-500 dark:text-red-400">
+              {errors.quantity.message}
+            </p>
           )}
           {errors.capacity && (
-            <p className="text-red-500 dark:text-red-400">{errors.capacity.message}</p>
+            <p className="text-red-500 dark:text-red-400">
+              {errors.capacity.message}
+            </p>
           )}
           {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
             <p className="text-red-500 dark:text-red-400">
-              Selected cars cannot accommodate {bookingData.trip.passengers} passengers.
+              Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
+              passengers.
             </p>
           )}
         </form>
@@ -217,9 +364,13 @@ export default function Step3Form() {
         <Button
           type="submit"
           variant="solid"
-          disabled={!selectedCar || quantity * (capacity || 1) < (bookingData.trip.passengers || 1)}
+          disabled={
+            !selectedCar ||
+            quantity * (capacity || 1) < (bookingData.trip.passengers || 1)
+          }
           className={`w-auto px-6 py-2 rounded-md font-semibold transition-colors ${
-            selectedCar && quantity * (capacity || 1) >= (bookingData.trip.passengers || 1)
+            selectedCar &&
+            quantity * (capacity || 1) >= (bookingData.trip.passengers || 1)
               ? "bg-[#33A7FF] text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-[#33A7FF]"
               : "bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-600 dark:text-gray-400"
           }`}

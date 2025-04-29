@@ -55,8 +55,9 @@ export function Header() {
             Rates
           </a>
           <a
-            href="https://ride-next-iota.vercel.app/reservations/"
+            href="https://ride-next-iota.vercel.app/reservations/new-booking"
             className="hover:text-[#00A0FF] transition"
+            target="_blank"
           >
             Reservations
           </a>
