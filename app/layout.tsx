@@ -42,7 +42,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY
-  console.log(GOOGLE_API_KEY)
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900">

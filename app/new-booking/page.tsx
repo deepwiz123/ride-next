@@ -8,9 +8,19 @@ import Step3Form from "@/components/Step3Form";
 import DefaultStepper from "@/components/DefaultStepper";
 import Step4Form from "@/components/Step4Form";
 import SummaryView from "@/components/Summary";
+import { useEffect } from "react";
 
 export default function RidePage() {
-  const { bookingData } = useBooking();
+  const { bookingData, updateBookingData } = useBooking();
+
+  useEffect(() => {
+    const companyPrefix = "MDS";
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const bookingId = `${companyPrefix}${randomNum
+      .toString()
+      .padStart(4, "0")}`;
+    updateBookingData({ bookingId });
+  }, []);
 
   return (
     <div className="h-screen flex items-center justify-center bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 p-4 transition-colors duration-300">

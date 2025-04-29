@@ -85,7 +85,7 @@ export default function SummaryView() {
 
   return (
     <motion.div
-      className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col text-gray-900 dark:text-gray-100 shadow-lg"
+      className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col text-gray-900 dark:text-gray-100"
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -218,7 +218,7 @@ export default function SummaryView() {
       </div>
 
       {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white dark:bg-gray-900 w-full flex flex-col sm:flex-row justify-between items-center p-4 sm:p-6 rounded-xl gap-3 sm:gap-4 mt-6">
+      <div className="sticky bottom-0 bg-white dark:bg-gray-900 w-full flex flex-col sm:flex-row justify-between items-center p-4 sm:p-6 gap-3 sm:gap-4 mt-6">
         <Button
           type="button"
           variant="outline"

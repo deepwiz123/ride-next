@@ -205,7 +205,7 @@ export default function Step3Form() {
       </div>
 
       {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white w-full flex justify-between items-center p-4 rounded-md dark:bg-gray-800">
+      <div className="sticky bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 mx-auto dark:bg-gray-800">
         <Button
           type="button"
           variant="outline"
@@ -220,7 +220,7 @@ export default function Step3Form() {
           disabled={!selectedCar || quantity * (capacity || 1) < (bookingData.trip.passengers || 1)}
           className={`w-auto px-6 py-2 rounded-md font-semibold transition-colors ${
             selectedCar && quantity * (capacity || 1) >= (bookingData.trip.passengers || 1)
-              ? "bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+              ? "bg-[#33A7FF] text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-[#33A7FF]"
               : "bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-600 dark:text-gray-400"
           }`}
           onClick={handleSubmit(onSubmit)}

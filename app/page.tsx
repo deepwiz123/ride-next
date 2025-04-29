@@ -20,11 +20,11 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleBooking = () => {
-    const bookingId: string = Math.random().toString(36).substring(2, 10);
-    updateBookingData({ bookingId });
-    router.push(`/book/${bookingId}`);
-  };
+  // const handleBooking = () => {
+  //   const bookingId: string = Math.random().toString(36).substring(2, 10);
+  //   updateBookingData({ bookingId });
+  //   router.push(`/book/${bookingId}`);
+  // };
 
   return (
     <main className="relative w-full h-screen overflow-hidden">
@@ -49,7 +49,7 @@ export default function HomePage() {
       {/* Content */}
       <section className="relative z-30 flex flex-col items-center justify-center h-full text-white text-center px-4">
         <h1 className="text-5xl md:text-6xl font-extrabold leading-tight drop-shadow-lg">
-          Book Smarter. <span className="text-yellow-400">Ride Faster.</span>
+          Book Smarter. <span className="text-[#002e52]">Ride Faster.</span>
         </h1>
         <p className="mt-4 text-lg md:text-xl max-w-xl drop-shadow-md">
           Reliable rides, anytime, anywhere. Your journey begins now.
@@ -57,8 +57,8 @@ export default function HomePage() {
 
         <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <button
-            onClick={handleBooking}
-            className="bg-yellow-400 text-indigo-800 px-6 py-3 rounded-lg font-bold hover:bg-yellow-300 transition shadow-lg"
+            onClick={() => {}}
+            className="bg-[#002e52] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#002e52] transition shadow-lg"
           >
             Book a Ride
           </button>

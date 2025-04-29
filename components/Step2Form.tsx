@@ -180,16 +180,16 @@ export default function Step2Form() {
 
   return (
     <motion.div
-      className="w-full max-w-2xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+      className="w-full max-w-2xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-10 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       {/* Scrollable Content */}
       <div className="flex-1 space-y-6">
-        {/* <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100">
+        <h4 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100">
           Trip Details
-        </h2> */}
+        </h4>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex sm:flex-row bg-gray-100 dark:bg-gray-800 p-2 rounded-xl gap-2">
@@ -272,9 +272,18 @@ export default function Step2Form() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 sm:gap-6">
+          <div
+            className="flex flex-col gap-4 sm:gap-6 cursor-pointer"
+            onClick={() => {
+              const input = document.getElementById(
+                "dateTimeInput"
+              ) as HTMLInputElement;
+              input?.focus(); // Programmatically focus the input to open the datetime picker
+            }}
+          >
             <Input
               label="Pickup Date & Time"
+              id="dateTimeInput"
               type="datetime-local"
               className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               placeholder="Select date and time"
@@ -402,7 +411,7 @@ export default function Step2Form() {
       </div>
 
       {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white w-full flex justify-between items-center p-4 dark:bg-gray-800 ">
+      <div className="sticky bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 mx-auto dark:bg-gray-800">
         <Button
           type="button"
           variant="outline"

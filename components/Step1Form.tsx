@@ -199,7 +199,7 @@ export default function Step1Form() {
       </div>
 
       {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white w-full flex justify-between items-center rounded-md p-4 dark:bg-gray-800 ">
+      <div className="sticky bottom-0 bg-white w-full flex justify-center items-center gap-2 rounded-md p-4 dark:bg-gray-800 ">
         <Button
           type="button"
           variant="outline"
