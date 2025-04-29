@@ -180,19 +180,18 @@ export default function Step2Form() {
 
   return (
     <motion.div
-      className="w-full max-w-2xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-10 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       {/* Scrollable Content */}
-      <div className="flex-1 space-y-6">
-        <h4 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100">
-          Trip Details
-        </h4>
-
+      <div className="flex-1 px-4 py-2 gap-2">
+      <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
+          Enter Your Trip Information
+        </h3>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div className="flex sm:flex-row bg-gray-100 dark:bg-gray-800 p-2 rounded-xl gap-2">
+          <div className="flex sm:flex-row bg-gray-100 dark:bg-gray-600 p-2 rounded-xl gap-2">
             <button
               type="button"
               className={`flex-1 rounded-lg font-semibold py-3 transition duration-300 ease-in-out ${

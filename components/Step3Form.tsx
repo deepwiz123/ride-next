@@ -10,6 +10,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
+import { CarFront } from "lucide-react";
 
 export default function Step3Form() {
   const { updateBookingData, bookingData, calculateFare } = useBooking();
@@ -223,10 +224,13 @@ export default function Step3Form() {
       transition={{ duration: 0.5 }}
     >
       {/* Scrollable Content */}
-      <div className="flex-1 space-y-6">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100">
-          Select a Car
-        </h2>
+      <div className="flex-1 p-4">
+        <div className="flex items-center gap-3 justify-center">
+          <CarFront className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6 dark:text-blue-400 mb-4" />
+          <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
+            Select Your Car/Ride
+          </h3>
+        </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Responsive Flex/Grid Layout */}

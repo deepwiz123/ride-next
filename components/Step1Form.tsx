@@ -61,7 +61,11 @@ const countryCodes = [
   { code: "+56", label: "Chile (+56)", key: "+56-CL" },
   { code: "+57", label: "Colombia (+57)", key: "+57-CO" },
   { code: "+51", label: "Peru (+51)", key: "+51-PE" },
-  { code: "+58", label: "Venezuela, Bolivarian Republic of (+58)", key: "+58-VE" },
+  {
+    code: "+58",
+    label: "Venezuela, Bolivarian Republic of (+58)",
+    key: "+58-VE",
+  },
   { code: "+380", label: "Ukraine (+380)", key: "+380-UA" },
   { code: "+40", label: "Romania (+40)", key: "+40-RO" },
   { code: "+36", label: "Hungary (+36)", key: "+36-HU" },
@@ -95,7 +99,11 @@ const countryCodes = [
   { code: "+93", label: "Afghanistan (+93)", key: "+93-AF" },
   { code: "+95", label: "Myanmar (+95)", key: "+95-MM" },
   { code: "+855", label: "Cambodia (+855)", key: "+855-KH" },
-  { code: "+856", label: "Lao People's Democratic Republic (+856)", key: "+856-LA" },
+  {
+    code: "+856",
+    label: "Lao People's Democratic Republic (+856)",
+    key: "+856-LA",
+  },
   { code: "+975", label: "Bhutan (+975)", key: "+975-BT" },
   { code: "+354", label: "Iceland (+354)", key: "+354-IS" },
   { code: "+352", label: "Luxembourg (+352)", key: "+352-LU" },
@@ -123,7 +131,7 @@ export default function Step1Form() {
       name: bookingData.customer.name || "",
       email: bookingData.customer.email || "",
       phone: bookingData.customer.phone || "",
-      countryCode: bookingData.customer.countryCode || "+1",
+      countryCode: bookingData.customer.countryCode || "",
     },
   });
 
@@ -142,16 +150,16 @@ export default function Step1Form() {
 
   return (
     <motion.div
-      className="w-full mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+      className="w-full mx-auto bg-white rounded-2xl p-2 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       {/* Scrollable Content */}
-      <div className="flex-1 space-y-6">
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100">
-          Passenger Info
-        </h2>
+      <div className="flex-1 px-4 py-2 gap-2">
+        <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
+          Enter Your Basic Information
+        </h3>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col gap-4 sm:gap-6 flex-col-440">
@@ -199,7 +207,7 @@ export default function Step1Form() {
       </div>
 
       {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white w-full flex justify-center items-center gap-2 rounded-md p-4 dark:bg-gray-800 ">
+      <div className="sticky bottom-0 bg-white w-full flex justify-end items-center gap-2 rounded-md p-4 dark:bg-gray-800 ">
         <Button
           type="button"
           variant="outline"
@@ -217,7 +225,6 @@ export default function Step1Form() {
           Next
         </Button>
       </div>
-
     </motion.div>
   );
 }

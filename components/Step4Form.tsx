@@ -97,13 +97,13 @@ export default function Step4Form() {
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
       {/* Scrollable Content */}
-      <div className="flex-1 space-y-6">
+      <div className="flex-1 p-4">
         {/* Header */}
         <div className="flex items-center gap-3 justify-center">
-          <CreditCard className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6 dark:text-blue-400" />
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 tracking-tight dark:text-gray-100">
-            Payment Details
-          </h2>
+          <CreditCard className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6 dark:text-blue-400 mb-4" />
+          <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
+            Enter Your Payment Information
+          </h3>
         </div>
 
         {/* Form */}

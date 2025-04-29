@@ -1,11 +1,11 @@
 "use client";
 
-import { Stepper } from "react-form-stepper";
+import { Step, Stepper } from "react-form-stepper";
 import { useState, useEffect } from "react";
 import { useBooking } from "@/context/BookingContext";
 
 const DefaultStepper = () => {
-  const { bookingData } = useBooking();
+  const { bookingData, updateBookingData } = useBooking();
   const [activeStep, setActiveStep] = useState<number | null>(null);
 
   useEffect(() => {
@@ -16,20 +16,7 @@ const DefaultStepper = () => {
 
   return (
     <Stepper
-      steps={[1, 2, 3, 4].map((step : number) => {
-        switch (step) {
-          case 1:
-            return { label: "Your Contacts" };
-          case 2:
-            return { label: "Your Trip Details" };
-          case 3:
-            return { label: "Your Ride" };
-          case 4:
-            return { label: "Your Card Details" };
-          default:
-            return { label: "" };
-        }
-      })}
+      className="w-full flex justify-center item-center"
       activeStep={activeStep}
       styleConfig={{
         activeBgColor: "#33A7FF",
@@ -44,7 +31,12 @@ const DefaultStepper = () => {
         borderRadius: "50%",
         fontWeight: "400",
       }}
-    />
+    >
+      <Step label="Contact Detail" onClick={() => {updateBookingData({ step: 1 }) }} />
+      <Step label="Trip Detail" onClick={() => updateBookingData({ step: 2 })} />
+      <Step label="Ride Detail" onClick={() => updateBookingData({ step: 3 })} />
+      <Step label="Payment Detail" onClick={() => updateBookingData({ step: 4 })} />
+    </Stepper>
   );
 };
 

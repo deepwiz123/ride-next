@@ -1,29 +1,32 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY >= 250);
     };
     window.addEventListener("scroll", handleScroll);
-    // Run on mount in case the page is already scrolled
     handleScroll();
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <header
-      className={`bg-white text-gray-800 shadow-md sticky top-0 z-50 transition-all duration-300`}
+      className={`bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 shadow-md dark:shadow-gray-700 sticky top-0 z-50 transition-all duration-300`}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between p-4">
         <a
           href="https://ride-next-iota.vercel.app/reservations"
-          className="text-2xl font-extrabold tracking-tight"
+          className="text-2xl font-extrabold tracking-tight text-gray-800 dark:text-gray-100"
         >
           <div className="logo">
             <Image
@@ -35,35 +38,33 @@ export function Header() {
           </div>
         </a>
 
-        <div className="hidden md:flex space-x-6 text-sm">
+        <div className="hidden md:flex space-x-6 text-sm text-gray-800 dark:text-gray-100">
           <a
             href="https://metrodtw.wizardcomm.in/"
-            className="hover:text-[#00A0FF] transition"
+            className="hover:text-[#00A0FF] dark:hover:text-[#33A7FF] transition"
           >
             Services
           </a>
           <a
             href="https://metrodtw.wizardcomm.in/fleet/"
-            className="hover:text-[#00A0FF] transition"
+            className="hover:text-[#00A0FF] dark:hover:text-[#33A7FF] transition"
           >
             Fleet
           </a>
           <a
             href="https://metrodtw.wizardcomm.in/rates/"
-            className="hover:text-[#00A0FF] transition"
+            className="hover:text-[#00A0FF] dark:hover:text-[#33A7FF] transition"
           >
             Rates
           </a>
           <a
-            href="https://ride-next-iota.vercel.app/reservations/new-booking"
-            className="hover:text-[#00A0FF] transition"
-            target="_blank"
+            className="text-[#00A0FF] dark:text-[#33A7FF] transition"
           >
             Reservations
           </a>
         </div>
         <button
-          className="md:hidden"
+          className="md:hidden text-gray-800 dark:text-gray-100"
           onClick={() => setIsMenuOpen((prev) => !prev)}
           aria-label="Toggle menu"
         >
@@ -72,18 +73,31 @@ export function Header() {
       </nav>
 
       {isMenuOpen && (
-        <div className="md:hidden bg-white px-4 py-3 space-y-2 text-sm">
-          <a href="/about" className="block hover:text-yellow-300 transition">
-            About
-          </a>
+        <div className="md:hidden bg-white dark:bg-gray-800 px-4 py-3 space-y-2 text-sm text-gray-800 dark:text-gray-100">
           <a
-            href="/services"
-            className="block hover:text-yellow-300 transition"
+            href="https://metrodtw.wizardcomm.in/"
+            className="block hover:text-yellow-300 dark:hover:text-yellow-200 transition"
           >
             Services
           </a>
-          <a href="/contact" className="block hover:text-yellow-300 transition">
-            Contact
+          <a
+            href="https://metrodtw.wizardcomm.in/fleet/"
+            className="block hover:text-yellow-300 dark:hover:text-yellow-200 transition"
+          >
+            Fleet
+          </a>
+          <a
+            href="https://metrodtw.wizardcomm.in/rates/"
+            className="block hover:text-yellow-300 dark:hover:text-yellow-200 transition"
+          >
+            Rates
+          </a>
+          <a
+            href="https://ride-next-iota.vercel.app/reservations/new-booking"
+            className="block text-yellow-300 dark:hover:text-yellow-200 transition"
+            target="_blank"
+          >
+            Reservations
           </a>
         </div>
       )}
