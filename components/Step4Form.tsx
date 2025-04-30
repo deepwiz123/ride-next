@@ -19,8 +19,6 @@ type Step4FormProps = {
 
 export default function Step4Form({ formRef }: Step4FormProps) {
   const { bookingData, updateBookingData } = useBooking();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -33,17 +31,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
   });
 
   const handleConfirm = (data: PaymentForm) => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
       updateBookingData({ payment: data, step: 5 });
-    } catch (error) {
-      console.error("Error:", error);
-      setError("⚠️ Error processing payment details. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
@@ -140,12 +128,6 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               </p>
             )}
           </div>
-
-          {error && (
-            <p className="text-red-500 text-sm sm:text-base font-medium dark:text-red-400">
-              {error}
-            </p>
-          )}
         </form>
       </div>
     </motion.div>
