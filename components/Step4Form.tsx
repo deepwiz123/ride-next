@@ -7,17 +7,18 @@ import { paymentSchema } from "@/lib/schema";
 import { useBooking } from "@/context/BookingContext";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
-import axios from "axios";
-import { Loader2, CreditCard } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import z from "zod";
+import { RefObject } from "react";
 
 type PaymentForm = z.infer<typeof paymentSchema>;
 
-export default function Step4Form() {
+type Step4FormProps = {
+  formRef: RefObject<HTMLFormElement>;
+};
+
+export default function Step4Form({ formRef }: Step4FormProps) {
   const { bookingData, updateBookingData } = useBooking();
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,62 +32,18 @@ export default function Step4Form() {
     mode: "onBlur",
   });
 
-  const handlePrev = () => {
-    updateBookingData({ step: bookingData.step - 1 });
-  };
+  const handleConfirm = (data: PaymentForm) => {
+    setIsLoading(true);
+    setError(null);
 
-  const handleConfirm = async (data: PaymentForm) => {
-    // setIsLoading(true);
-    // setError(null);
-
-    // try {
-    //     updateBookingData({ payment: data });
-    //     await axios.post("/reservations/api/send-notifications", {
-    //         ...bookingData,
-    //         payment: data,
-    //     });
-
-    //     alert("✅ Booking confirmed! Payment processed and notifications sent.");
-    //     updateBookingData({
-    //         bookingId: "",
-    //         step: 1,
-    //         customer: { name: "", email: "", phone: "", countryCode: "" },
-    //         trip: {
-    //             pickup: "",
-    //             dropoff: "",
-    //             passengers: 1,
-    //             kids: 0,
-    //             bags: 0,
-    //             dateTime: "",
-    //             hourly: false,
-    //             durationHours: 0,
-    //             durationMinutes: 0,
-    //             stops: [],
-    //             distance: "0.0",
-    //         },
-    //         car: { type: "", quantity: 1, transferRate: 0, hourlyRate: 0, capacity: 1 },
-    //         fare: 0,
-    //         payment: {
-    //             method: "credit",
-    //             cardNumber: "",
-    //             expiryDate: "",
-    //             cvv: "",
-    //             cardholderName: "",
-    //             billingPostalCode: "",
-    //             specialInstructions: "",
-    //         },
-    //     });
-    //     router.push("/");
-    // } catch (error) {
-    //     console.error("Error:", error);
-    //     setError("⚠️ Error processing payment. Please try again.");
-    // } finally {
-    //     setIsLoading(false);
-    // }
-    updateBookingData({
-      payment: data,
-      step: 5,
-    });
+    try {
+      updateBookingData({ payment: data, step: 5 });
+    } catch (error) {
+      console.error("Error:", error);
+      setError("⚠️ Error processing payment details. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -98,19 +55,13 @@ export default function Step4Form() {
     >
       {/* Scrollable Content */}
       <div className="flex-1 p-4">
-        {/* Header */}
         <div className="flex items-center gap-3 justify-center">
-          <CreditCard className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6 dark:text-blue-400 mb-4" />
           <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
-            Enter Your Payment Information
+            Enter Your Payment Details
           </h3>
         </div>
 
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit(handleConfirm)}
-          className="space-y-4 sm:space-y-6"
-        >
+        <form ref={formRef} onSubmit={handleSubmit(handleConfirm)} className="space-y-4 sm:space-y-6">
           <div className="flex flex-col gap-4 sm:gap-6 sm:grid sm:grid-cols-2">
             <div className="flex flex-col">
               <label className="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
@@ -190,33 +141,12 @@ export default function Step4Form() {
             )}
           </div>
 
-          {/* Error Message */}
           {error && (
             <p className="text-red-500 text-sm sm:text-base font-medium dark:text-red-400">
               {error}
             </p>
           )}
         </form>
-      </div>
-
-      {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 mx-auto dark:bg-gray-800">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-auto px-6 py-2 bg-[#002e52] text-white rounded-md hover:bg-[#00518F] dark:bg-[#002e52] dark:text-white dark:hover:bg-[#00518F]"
-          onClick={handlePrev}
-        >
-          Prev
-        </Button>
-        <Button
-          type="submit"
-          variant="solid"
-          className="w-auto px-6 py-2 bg-green-700 text-white rounded-md hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500"
-          onClick={handleSubmit(handleConfirm)}
-        >
-          Proceed
-        </Button>
       </div>
     </motion.div>
   );

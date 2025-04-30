@@ -2,67 +2,9 @@
 
 import { motion } from "framer-motion";
 import { useBooking } from "@/context/BookingContext";
-import { Button } from "./ui/Button";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 
 export default function SummaryView() {
-  const { bookingData, updateBookingData } = useBooking();
-  const router = useRouter();
-  const handlePrev = () => {
-    updateBookingData({ step: bookingData.step - 1 });
-  };
-
-  const handleNext = async () => {
-    try {
-      await axios.post("/reservations/api/send-notifications", {
-        ...bookingData,
-      });
-
-      alert("✅ Booking confirmed! Payment processed and notifications sent.");
-      updateBookingData({
-        bookingId: "",
-        step: 1,
-        customer: { name: "", email: "", phone: "", countryCode: "" },
-        trip: {
-          pickup: "",
-          dropoff: "",
-          passengers: 1,
-          kids: 0,
-          bags: 0,
-          dateTime: "",
-          hourly: false,
-          durationHours: 0,
-          durationMinutes: 0,
-          stops: [],
-          distance: "0.0",
-        },
-        car: {
-          type: "",
-          quantity: 1,
-          transferRate: 0,
-          hourlyRate: 0,
-          capacity: 1,
-        },
-        fare: 0,
-        payment: {
-          method: "credit",
-          cardNumber: "",
-          expiryDate: "",
-          cvv: "",
-          cardholderName: "",
-          billingPostalCode: "",
-          specialInstructions: "",
-        },
-      });
-      router.push("/");
-    } catch (error) {
-      console.error("Error:", error);
-      // setError("⚠️ Error processing payment. Please try again.");
-    } finally {
-      // setIsLoading(false);
-    }
-  };
+  const { bookingData } = useBooking();
 
   // Format dateTime
   const formattedDateTime = bookingData.trip.dateTime
@@ -74,8 +16,8 @@ export default function SummaryView() {
 
   // Format stops
   const stopsDisplay =
-    bookingData?.trip.stops ?? [].length > 0
-      ? bookingData.trip.stops ?? [].join(", ")
+    (bookingData?.trip.stops ?? []).length > 0
+      ? (bookingData.trip.stops ?? []).join(", ")
       : "None";
 
   // Format hourly details
@@ -99,7 +41,7 @@ export default function SummaryView() {
           </h2>
         </div>
         <p className="text-center text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400">
-          Review your booking details below before proceeding to confirmation.
+          Review your booking details before proceeding to confirmation.
         </p>
 
         {/* Summary Grid */}
@@ -215,26 +157,6 @@ export default function SummaryView() {
             data use agreement.
           </p>
         </div>
-      </div>
-
-      {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white dark:bg-gray-900 w-full flex flex-col sm:flex-row justify-between items-center p-4 sm:p-6 gap-3 sm:gap-4 mt-6">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full sm:w-auto px-6 sm:px-8 py-2 sm:py-3 bg-[#002e52] text-white rounded-xl font-semibold hover:bg-[#00518F] dark:bg-[#002e52] dark:hover:bg-[#00518F] transition duration-300 text-xs sm:text-sm md:text-base"
-          onClick={handlePrev}
-        >
-          Previous
-        </Button>
-        <Button
-          type="button"
-          variant="solid"
-          className="w-full sm:w-auto px-6 sm:px-8 py-2 sm:py-3 bg-green-700 text-white rounded-xl font-semibold hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500 transition duration-300 text-xs sm:text-sm md:text-base"
-          onClick={handleNext}
-        >
-          Confirm Booking
-        </Button>
       </div>
     </motion.div>
   );

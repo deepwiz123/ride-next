@@ -21,7 +21,7 @@ const DefaultStepper = () => {
       styleConfig={{
         activeBgColor: "#33A7FF",
         completedBgColor: "#17CB2F",
-        inactiveBgColor: "#DDF0FF",
+        inactiveBgColor: "#cbc9c9",
         activeTextColor: "#000",
         completedTextColor: "#FFFFFF",
         inactiveTextColor: "#000",
@@ -32,10 +32,10 @@ const DefaultStepper = () => {
         fontWeight: "400",
       }}
     >
-      <Step label="Contact Detail" onClick={() => {updateBookingData({ step: 1 }) }} />
-      <Step label="Trip Detail" onClick={() => updateBookingData({ step: 2 })} />
-      <Step label="Ride Detail" onClick={() => updateBookingData({ step: 3 })} />
-      <Step label="Payment Detail" onClick={() => updateBookingData({ step: 4 })} />
+      <Step label="Contact" onClick={() => {updateBookingData({ step: 1 }) }} />
+      <Step label="Trip" onClick={() => updateBookingData({ step: 2 })} />
+      <Step label="Ride" onClick={() => updateBookingData({ step: 3 })} />
+      <Step label="Payment" onClick={() => updateBookingData({ step: 4 })} />
     </Stepper>
   );
 };

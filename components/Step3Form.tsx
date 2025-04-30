@@ -11,8 +11,13 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { CarFront } from "lucide-react";
+import { RefObject } from "react";
 
-export default function Step3Form() {
+type Step3FormProps = {
+  formRef: RefObject<HTMLFormElement>;
+};
+
+export default function Step3Form({ formRef }: Step3FormProps) {
   const { updateBookingData, bookingData, calculateFare } = useBooking();
   const {
     register,
@@ -33,9 +38,7 @@ export default function Step3Form() {
     mode: "onBlur",
   });
 
-  const [selectedCar, setSelectedCar] = useState<string>(
-    bookingData.car.type || ""
-  );
+  const [selectedCar, setSelectedCar] = useState<string>(bookingData.car.type || "");
 
   const cars = [
     {
@@ -132,10 +135,6 @@ export default function Step3Form() {
     });
   };
 
-  const handlePrev = () => {
-    updateBookingData({ step: bookingData.step - 1 });
-  };
-
   const handleCarSelect = (car: {
     type: string;
     transferRate: number;
@@ -181,9 +180,7 @@ export default function Step3Form() {
 
   const handleQuantityChange = (increment: boolean) => {
     const currentQty = quantity;
-    const minQty = Math.ceil(
-      (bookingData.trip.passengers || 1) / (capacity || 1)
-    );
+    const minQty = Math.ceil((bookingData.trip.passengers || 1) / (capacity || 1));
     const newQty = increment ? currentQty + 1 : currentQty - 1;
     if (newQty >= minQty && newQty <= 10) {
       setValue("quantity", newQty);
@@ -207,14 +204,7 @@ export default function Step3Form() {
         fare: calculateFare(),
       });
     }
-  }, [
-    quantity,
-    capacity,
-    bookingData.trip.passengers,
-    setValue,
-    updateBookingData,
-    calculateFare,
-  ]);
+  }, [quantity, capacity, bookingData.trip.passengers, setValue, updateBookingData, calculateFare]);
 
   return (
     <motion.div
@@ -226,14 +216,12 @@ export default function Step3Form() {
       {/* Scrollable Content */}
       <div className="flex-1 p-4">
         <div className="flex items-center gap-3 justify-center">
-          <CarFront className="text-blue-600 w-5 h-5 sm:w-6 sm:h-6 dark:text-blue-400 mb-4" />
           <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
             Select Your Car/Ride
           </h3>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Responsive Flex/Grid Layout */}
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex flex-col gap-4 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 flex-col-440">
             {cars.map((car) => (
               <motion.div
@@ -262,9 +250,7 @@ export default function Step3Form() {
                           type="number"
                           className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
                           {...register("quantity", { valueAsNumber: true })}
-                          min={Math.floor(
-                            (bookingData.trip.passengers || 1) / car.capacity
-                          )}
+                          min={Math.floor((bookingData.trip.passengers || 1) / car.capacity)}
                           max={10}
                           onClick={(e) => e.stopPropagation()}
                           onChange={(e) => {
@@ -285,13 +271,7 @@ export default function Step3Form() {
                               e.stopPropagation();
                               handleQuantityChange(false);
                             }}
-                            disabled={
-                              quantity <=
-                              Math.ceil(
-                                (bookingData.trip.passengers || 1) /
-                                  car.capacity
-                              )
-                            }
+                            disabled={quantity <= Math.ceil((bookingData.trip.passengers || 1) / car.capacity)}
                           >
                             -
                           </Button>
@@ -316,9 +296,7 @@ export default function Step3Form() {
                         {car.type}
                       </h3>
                       <p className="text-gray-600 dark:text-gray-400">
-                        {bookingData.trip.hourly
-                          ? `$${car.hourlyRate}/hr`
-                          : `$${car.transferRate}/transfer`}
+                        {bookingData.trip.hourly ? `$${car.hourlyRate}/hr` : `$${car.transferRate}/transfer`}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-500">
                         Capacity: {car.capacity} passengers
@@ -330,58 +308,21 @@ export default function Step3Form() {
             ))}
           </div>
 
-          {/* Validation Errors */}
           {errors.type && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.type.message}
-            </p>
+            <p className="text-red-500 dark:text-red-400">{errors.type.message}</p>
           )}
           {errors.quantity && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.quantity.message}
-            </p>
+            <p className="text-red-500 dark:text-red-400">{errors.quantity.message}</p>
           )}
           {errors.capacity && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.capacity.message}
-            </p>
+            <p className="text-red-500 dark:text-red-400">{errors.capacity.message}</p>
           )}
           {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
             <p className="text-red-500 dark:text-red-400">
-              Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
-              passengers.
+              Selected cars cannot accommodate {bookingData.trip.passengers} passengers.
             </p>
           )}
         </form>
-      </div>
-
-      {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 mx-auto dark:bg-gray-800">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-auto px-6 py-2 bg-[#002e52] text-white rounded-md hover:bg-[#00518F] dark:bg-[#002e52] dark:text-white dark:hover:bg-[#00518F] "
-          onClick={handlePrev}
-        >
-          Prev
-        </Button>
-        <Button
-          type="submit"
-          variant="solid"
-          disabled={
-            !selectedCar ||
-            quantity * (capacity || 1) < (bookingData.trip.passengers || 1)
-          }
-          className={`w-auto px-6 py-2 rounded-md font-semibold transition-colors ${
-            selectedCar &&
-            quantity * (capacity || 1) >= (bookingData.trip.passengers || 1)
-              ? "bg-[#33A7FF] text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-[#33A7FF]"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed dark:bg-gray-600 dark:text-gray-400"
-          }`}
-          onClick={handleSubmit(onSubmit)}
-        >
-          Next
-        </Button>
       </div>
     </motion.div>
   );

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { useDebounce } from "@/hooks/useDebounce";
+import { RefObject } from "react";
 
 declare global {
   interface Window {
@@ -18,24 +19,20 @@ declare global {
   }
 }
 
-export default function Step2Form() {
+type Step2FormProps = {
+  formRef: RefObject<HTMLFormElement>;
+};
+
+export default function Step2Form({ formRef }: Step2FormProps) {
   const { updateBookingData, bookingData } = useBooking();
   const [distance, setDistance] = useState<string | null>("10.50");
-  const [distanceMetric, setDistanceMetric] = useState<string | undefined>(
-    "km"
-  );
+  const [distanceMetric, setDistanceMetric] = useState<string | undefined>("km");
   const [isHourly, setIsHourly] = useState(bookingData.trip.hourly ?? false);
-  const [stopCount, setStopCount] = useState(
-    bookingData.trip.stops?.length || 0
-  );
+  const [stopCount, setStopCount] = useState(bookingData.trip.stops?.length || 0);
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [directionsService] = useState(
-    () => new window.google.maps.DirectionsService()
-  );
-  const [directionsRenderer] = useState(
-    () => new window.google.maps.DirectionsRenderer()
-  );
+  const [directionsService] = useState(() => new window.google.maps.DirectionsService());
+  const [directionsRenderer] = useState(() => new window.google.maps.DirectionsRenderer());
 
   const {
     register,
@@ -83,12 +80,7 @@ export default function Step2Form() {
   }, [initMap]);
 
   const calculateDistance = useCallback(() => {
-    if (
-      debouncedPickupLatLng &&
-      debouncedDropoffLatLng &&
-      directionsService &&
-      map
-    ) {
+    if (debouncedPickupLatLng && debouncedDropoffLatLng && directionsService && map) {
       directionsService.route(
         {
           origin: debouncedPickupLatLng,
@@ -97,10 +89,7 @@ export default function Step2Form() {
         },
         (result, status) => {
           if (status === google.maps.DirectionsStatus.OK && result) {
-            setDistance(
-              result.routes[0].legs[0].distance?.text ||
-                "Unable to calculate distance"
-            );
+            setDistance(result.routes[0].legs[0].distance?.text || "Unable to calculate distance");
             updateBookingData({
               trip: {
                 distance: result.routes[0].legs[0].distance?.text,
@@ -113,13 +102,7 @@ export default function Step2Form() {
         }
       );
     }
-  }, [
-    debouncedPickupLatLng,
-    debouncedDropoffLatLng,
-    directionsService,
-    map,
-    updateBookingData,
-  ]);
+  }, [debouncedPickupLatLng, debouncedDropoffLatLng, directionsService, map, updateBookingData]);
 
   useEffect(() => {
     calculateDistance();
@@ -141,10 +124,6 @@ export default function Step2Form() {
 
   const onSubmit = (data: Trip) => {
     updateBookingData({ trip: data, step: 3 });
-  };
-
-  const handlePrev = () => {
-    updateBookingData({ step: bookingData.step - 1 });
   };
 
   const addStop = () => {
@@ -180,17 +159,17 @@ export default function Step2Form() {
 
   return (
     <motion.div
-      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       {/* Scrollable Content */}
       <div className="flex-1 px-4 py-2 gap-2">
-      <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
-          Enter Your Trip Information
+        <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-8">
+          Enter Your Trip Details
         </h3>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="flex sm:flex-row bg-gray-100 dark:bg-gray-600 p-2 rounded-xl gap-2">
             <button
               type="button"
@@ -225,13 +204,10 @@ export default function Step2Form() {
                 placeholder="Enter pickup location"
                 {...register("pickup")}
                 onFocus={() => {
-                  const autocomplete =
-                    new window.google.maps.places.Autocomplete(
-                      document.querySelector(
-                        `input[name="pickup"]`
-                      ) as HTMLInputElement,
-                      { types: ["geocode"] }
-                    );
+                  const autocomplete = new window.google.maps.places.Autocomplete(
+                    document.querySelector(`input[name="pickup"]`) as HTMLInputElement,
+                    { types: ["geocode"] }
+                  );
                   autocomplete.addListener("place_changed", () => {
                     handlePlaceSelect(autocomplete.getPlace(), "pickup");
                   });
@@ -251,13 +227,10 @@ export default function Step2Form() {
                 placeholder="Enter dropoff location"
                 {...register("dropoff")}
                 onFocus={() => {
-                  const autocomplete =
-                    new window.google.maps.places.Autocomplete(
-                      document.querySelector(
-                        `input[name="dropoff"]`
-                      ) as HTMLInputElement,
-                      { types: ["geocode"] }
-                    );
+                  const autocomplete = new window.google.maps.places.Autocomplete(
+                    document.querySelector(`input[name="dropoff"]`) as HTMLInputElement,
+                    { types: ["geocode"] }
+                  );
                   autocomplete.addListener("place_changed", () => {
                     handlePlaceSelect(autocomplete.getPlace(), "dropoff");
                   });
@@ -274,10 +247,8 @@ export default function Step2Form() {
           <div
             className="flex flex-col gap-4 sm:gap-6 cursor-pointer"
             onClick={() => {
-              const input = document.getElementById(
-                "dateTimeInput"
-              ) as HTMLInputElement;
-              input?.focus(); // Programmatically focus the input to open the datetime picker
+              const input = document.getElementById("dateTimeInput") as HTMLInputElement;
+              input?.focus();
             }}
           >
             <Input
@@ -293,9 +264,7 @@ export default function Step2Form() {
 
           {!isHourly && distance && (
             <p className="text-sm text-gray-700 dark:text-gray-300">
-              <strong className="text-gray-900 dark:text-gray-100">
-                Estimated Distance:
-              </strong>{" "}
+              <strong className="text-gray-900 dark:text-gray-100">Estimated Distance:</strong>{" "}
               {distance} {distanceMetric}
             </p>
           )}
@@ -351,10 +320,7 @@ export default function Step2Form() {
               </div>
             </div>
           )}
-          <div
-            ref={mapRef}
-            className="h-[400px] w-full rounded-md overflow-hidden"
-          />
+          <div className="h-[400px] w-full rounded-md overflow-hidden" ref={mapRef} />
 
           <div className="flex flex-col gap-4 sm:gap-6 md:grid md:grid-cols-3 flex-col-440">
             <Input
@@ -407,29 +373,6 @@ export default function Step2Form() {
             />
           </div>
         </form>
-      </div>
-
-      {/* Sticky Buttons */}
-      <div className="sticky bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 mx-auto dark:bg-gray-800">
-        <Button
-          type="button"
-          variant="outline"
-          className={`w-auto px-6 py-2 bg-[#002e52] text-white rounded-md hover:bg-[#00518F] dark:bg-[#002e52] dark:text-white dark:hover:bg-[#00518F] ${
-            bookingData.step === 1 ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={handlePrev}
-          disabled={bookingData.step === 1}
-        >
-          Prev
-        </Button>
-        <Button
-          type="submit"
-          variant="solid"
-          className="w-auto px-6 py-2 bg-[#33A7FF] text-white rounded-md hover:bg-[#00518F] dark:bg-[#33A7FF] dark:hover:bg-[#00518F]"
-          onClick={handleSubmit(onSubmit)}
-        >
-          Next
-        </Button>
       </div>
     </motion.div>
   );
