@@ -143,14 +143,14 @@ export default function Step1Form({ formRef }: Step1FormProps) {
 
   return (
     <motion.div
-      className="w-full mx-auto bg-white rounded-2xl p-2 sm:p-6 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+      className="w-full mx-auto bg-white rounded-2xl p-2 mb-2 sm:p-6 flex flex-col text-gray-900 dark:bg-[#181818] dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
       {/* Scrollable Content */}
       <div className="flex-1 px-4 py-2 gap-2">
-        <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-8">
+        <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-3">
           Enter Your Contact Details
         </h3>
 
@@ -163,7 +163,7 @@ export default function Step1Form({ formRef }: Step1FormProps) {
             <Input
               label="Full Name"
               placeholder="Enter your full name"
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("name")}
               error={errors.name}
             />
@@ -171,7 +171,7 @@ export default function Step1Form({ formRef }: Step1FormProps) {
               label="Email"
               placeholder="Enter your email"
               type="email"
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("email")}
               error={errors.email}
             />
@@ -181,7 +181,7 @@ export default function Step1Form({ formRef }: Step1FormProps) {
               </label>
               <div className="flex items-center gap-2">
                 <select
-                  className="w-24 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                  className="w-24 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                   {...register("countryCode")}
                 >
                   {countryCodes.map((country) => (
@@ -194,7 +194,7 @@ export default function Step1Form({ formRef }: Step1FormProps) {
                   type="text"
                   placeholder="Enter your phone number"
                   maxLength={10}
-                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                   {...register("phone")}
                   error={errors.phone}
                 />

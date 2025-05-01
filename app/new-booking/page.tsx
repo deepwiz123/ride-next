@@ -100,7 +100,8 @@ export default function RidePage() {
   };
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 p-4 transition-colors duration-300">
+    <div className="h-screen flex flex-col items-center justify-center bg-white bg-[url('/reservations/backgroundmdswhite.jpg')] dark:bg-black dark:bg-[url('/reservations/backgroundmds.jpg')] bg-cover bg-center p-4 transition-colors duration-300">
+
       <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100 mb-4">
         Book Your Reservations
       </h3>
@@ -108,7 +109,7 @@ export default function RidePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl w-full max-w-2xl max-h-dvh flex flex-col overflow-hidden transition-colors duration-300"
+        className="bg-white shadow-[0px_1px_2px_1px_#dfdfdf] dark:shadow-[0px_1px_2px_1px_#282626] dark:bg-gradient-to-br dark:bg-[#282929] rounded-2xl w-full max-w-2xl max-h-dvh flex flex-col overflow-hidden transition-colors duration-300"
       >
         {/* Stepper Header */}
         <div className="p-2 flex items-center justify-center">
@@ -130,11 +131,11 @@ export default function RidePage() {
         </div>
 
         {/* Consolidated Buttons */}
-        <div className="bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 dark:bg-gray-800">
+        <div className="bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 dark:bg-[#181818]">
           <Button
             type="button"
             variant="outline"
-            className={`w-auto pxa="true" px-6 py-2 bg-[#002e52] text-white rounded-md hover:bg-[#00518F] dark:bg-[#002e52] dark:text-white dark:hover:bg-[#00518F] ${
+            className={`w-auto pxa="true" px-6 py-2 bg-[#002e52] text-white rounded-md hover:bg-[#00518F] dark:bg-[#6b6f71] dark:text-white dark:hover:bg-[#00518F] ${
               bookingData.step === 1 ? "opacity-50 cursor-not-allowed" : ""
             }`}
             onClick={handlePrev}

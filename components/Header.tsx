@@ -21,12 +21,12 @@ export function Header() {
 
   return (
     <header
-      className={`bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 shadow-md dark:shadow-gray-700 sticky top-0 z-50 transition-all duration-300`}
+      className={`bg-white text-gray-800 shadow-md sticky top-0 z-50 transition-all duration-300`}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between p-4">
         <a
           href="https://ride-next-iota.vercel.app/reservations"
-          className="text-2xl font-extrabold tracking-tight text-gray-800 dark:text-gray-100"
+          className="text-2xl font-extrabold tracking-tight text-gray-800"
         >
           <div className="logo">
             <Image
@@ -38,7 +38,7 @@ export function Header() {
           </div>
         </a>
 
-        <div className="hidden md:flex space-x-6 text-sm text-gray-800 dark:text-gray-100">
+        <div className="hidden md:flex space-x-6 text-sm text-gray-800">
           <a
             href="https://metrodtw.wizardcomm.in/"
             className="hover:text-[#00A0FF] dark:hover:text-[#33A7FF] transition"
