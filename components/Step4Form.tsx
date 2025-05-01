@@ -31,7 +31,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
   });
 
   const handleConfirm = (data: PaymentForm) => {
-      updateBookingData({ payment: data, step: 5 });
+    updateBookingData({ payment: data, step: 5 });
   };
 
   return (
@@ -49,7 +49,11 @@ export default function Step4Form({ formRef }: Step4FormProps) {
           </h3>
         </div>
 
-        <form ref={formRef} onSubmit={handleSubmit(handleConfirm)} className="space-y-4 sm:space-y-6">
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit(handleConfirm)}
+          className="space-y-4 sm:space-y-6"
+        >
           <div className="flex flex-col gap-4 sm:gap-6 sm:grid sm:grid-cols-2">
             <div className="flex flex-col">
               <label className="text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300">
@@ -78,7 +82,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               error={errors.cardNumber}
             />
             <Input
-              label="Expiry Date"
+              label="Expiry Date (MM/YY)"
               type="text"
               placeholder="MM/YY"
               maxLength={5}
@@ -97,7 +101,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
             />
             <div className="flex flex-col">
               <Input
-                label="Cardholder Name"
+                label="Card Holder Name"
                 type="text"
                 className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 {...register("cardholderName")}
@@ -129,6 +133,18 @@ export default function Step4Form({ formRef }: Step4FormProps) {
             )}
           </div>
         </form>
+
+        {/* Fare Display */}
+        <div className="mt-6 flex justify-center">
+          <div className="text-center">
+            <span className="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300">
+              Total Fare
+            </span>
+            <p className="text-lg sm:text-xl md:text-2xl font-bold text-green-600 dark:text-green-400">
+              ${bookingData.fare.toFixed(2)}
+            </p>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

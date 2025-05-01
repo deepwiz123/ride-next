@@ -38,7 +38,9 @@ export default function Step3Form({ formRef }: Step3FormProps) {
     mode: "onBlur",
   });
 
-  const [selectedCar, setSelectedCar] = useState<string>(bookingData.car.type || "");
+  const [selectedCar, setSelectedCar] = useState<string>(
+    bookingData.car.type || ""
+  );
 
   const cars = [
     {
@@ -180,7 +182,9 @@ export default function Step3Form({ formRef }: Step3FormProps) {
 
   const handleQuantityChange = (increment: boolean) => {
     const currentQty = quantity;
-    const minQty = Math.ceil((bookingData.trip.passengers || 1) / (capacity || 1));
+    const minQty = Math.ceil(
+      (bookingData.trip.passengers || 1) / (capacity || 1)
+    );
     const newQty = increment ? currentQty + 1 : currentQty - 1;
     if (newQty >= minQty && newQty <= 10) {
       setValue("quantity", newQty);
@@ -194,17 +198,24 @@ export default function Step3Form({ formRef }: Step3FormProps) {
   const quantity = watch("quantity");
   const capacity = watch("capacity");
 
-  useEffect(() => {
-    const totalPassengers = bookingData.trip.passengers || 0;
-    const requiredCars = Math.ceil(totalPassengers / (capacity || 1));
-    if (quantity < requiredCars) {
-      setValue("quantity", requiredCars);
-      updateBookingData({
-        car: { ...bookingData.car, quantity: requiredCars },
-        fare: calculateFare(),
-      });
-    }
-  }, [quantity, capacity, bookingData.trip.passengers, setValue, updateBookingData, calculateFare]);
+  // useEffect(() => {
+  //   const totalPassengers = bookingData.trip.passengers || 0;
+  //   const requiredCars = Math.ceil(totalPassengers / (capacity || 1));
+  //   if (quantity < requiredCars) {
+  //     setValue("quantity", requiredCars);
+  //     updateBookingData({
+  //       car: { ...bookingData.car, quantity: requiredCars },
+  //       fare: calculateFare(),
+  //     });
+  //   }
+  // }, [
+  //   quantity,
+  //   capacity,
+  //   bookingData.trip.passengers,
+  //   setValue,
+  //   updateBookingData,
+  //   calculateFare,
+  // ]);
 
   return (
     <motion.div
@@ -220,13 +231,41 @@ export default function Step3Form({ formRef }: Step3FormProps) {
             Select Your Car/Ride
           </h3>
         </div>
+        <div className="p-4">
+          {errors.type && (
+            <p className="text-red-500 dark:text-red-400">
+              {errors.type.message}
+            </p>
+          )}
+          {errors.quantity && (
+            <p className="text-red-500 dark:text-red-400">
+              {errors.quantity.message}
+            </p>
+          )}
+          {errors.capacity && (
+            <p className="text-red-500 dark:text-red-400">
+              {errors.capacity.message}
+            </p>
+          )}
 
-        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
+            <p className="text-red-500 dark:text-red-400">
+              Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
+              passengers.
+            </p>
+          )}
+        </div>
+
+        <motion.form
+          ref={formRef}
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-6"
+        >
           <div className="flex flex-col gap-4 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 flex-col-440">
             {cars.map((car) => (
               <motion.div
                 key={car.type}
-                whileHover={{ scale: 1.03 }}
+                whileHover={{ scale: 1.05 }}
                 className={`border-2 rounded-xl p-4 cursor-pointer shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 ${
                   selectedCar === car.type
                     ? "border-blue-600 bg-blue-50 dark:border-blue-400 dark:bg-blue-900"
@@ -250,7 +289,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                           type="number"
                           className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
                           {...register("quantity", { valueAsNumber: true })}
-                          min={Math.floor((bookingData.trip.passengers || 1) / car.capacity)}
+                          min={0}
                           max={10}
                           onClick={(e) => e.stopPropagation()}
                           onChange={(e) => {
@@ -271,7 +310,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                               e.stopPropagation();
                               handleQuantityChange(false);
                             }}
-                            disabled={quantity <= Math.ceil((bookingData.trip.passengers || 1) / car.capacity)}
+                            disabled={quantity <= 1}
                           >
                             -
                           </Button>
@@ -296,7 +335,9 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                         {car.type}
                       </h3>
                       <p className="text-gray-600 dark:text-gray-400">
-                        {bookingData.trip.hourly ? `$${car.hourlyRate}/hr` : `$${car.transferRate}/transfer`}
+                        {bookingData.trip.hourly
+                          ? `$${car.hourlyRate}/hr`
+                          : `$${car.transferRate}/transfer`}
                       </p>
                       <p className="text-sm text-gray-500 dark:text-gray-500">
                         Capacity: {car.capacity} passengers
@@ -307,22 +348,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
               </motion.div>
             ))}
           </div>
-
-          {errors.type && (
-            <p className="text-red-500 dark:text-red-400">{errors.type.message}</p>
-          )}
-          {errors.quantity && (
-            <p className="text-red-500 dark:text-red-400">{errors.quantity.message}</p>
-          )}
-          {errors.capacity && (
-            <p className="text-red-500 dark:text-red-400">{errors.capacity.message}</p>
-          )}
-          {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
-            <p className="text-red-500 dark:text-red-400">
-              Selected cars cannot accommodate {bookingData.trip.passengers} passengers.
-            </p>
-          )}
-        </form>
+        </motion.form>
       </div>
     </motion.div>
   );

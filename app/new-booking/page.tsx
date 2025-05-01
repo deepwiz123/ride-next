@@ -23,7 +23,9 @@ export default function RidePage() {
   useEffect(() => {
     const companyPrefix = "MDS";
     const randomNum = Math.floor(1000 + Math.random() * 9000);
-    const bookingId = `${companyPrefix}${randomNum.toString().padStart(4, "0")}`;
+    const bookingId = `${companyPrefix}${randomNum
+      .toString()
+      .padStart(4, "0")}`;
     updateBookingData({ bookingId });
   }, []);
 
@@ -49,7 +51,9 @@ export default function RidePage() {
           ...bookingData,
         });
 
-        alert("✅ Booking confirmed! Payment processed and notifications sent.");
+        alert(
+          "✅ Booking confirmed! Payment processed and notifications sent."
+        );
         updateBookingData({
           bookingId: "",
           step: 1,
@@ -85,7 +89,7 @@ export default function RidePage() {
             specialInstructions: "",
           },
         });
-        window.location.href = "/reservations/"; // Redirect to home
+        window.location.href = "https://metrodtw.wizardcomm.in/";
       }
     } catch (error) {
       console.error("Error:", error);
@@ -104,7 +108,7 @@ export default function RidePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl w-full max-w-2xl h-[100vh] max-h-dvh flex flex-col overflow-hidden transition-colors duration-300"
+        className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl w-full max-w-2xl max-h-dvh flex flex-col overflow-hidden transition-colors duration-300"
       >
         {/* Stepper Header */}
         <div className="p-2 flex items-center justify-center">

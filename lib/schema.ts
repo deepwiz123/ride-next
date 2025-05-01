@@ -68,7 +68,6 @@ export const carSchema = z.object({
   capacity: z.number().min(1, "Capacity must be at least 1"),
 });
 
-
 export const paymentSchema = z.object({
   method: z.enum(["credit", "debit"], {
     errorMap: () => ({ message: "Please select a payment method" }),
@@ -80,13 +79,27 @@ export const paymentSchema = z.object({
     .max(16, "Card number must be 16 digits"),
   expiryDate: z
     .string()
-    .regex(/^(0[1-9]|1[0-2])\/\d{2}$/, "Expiry date must be MM/YY"),
+    .regex(/^\d{2}\/\d{2}$/, "Expiry date must be MM/YY")
+    .refine(
+      (val) => {
+        const [month, year] = val.split("/").map(Number);
+        const currentYear = new Date().getFullYear() % 100; // e.g., 25 for 2025
+        const currentMonth = new Date().getMonth() + 1; // 1-12
+        return (
+          month >= 1 &&
+          month <= 12 &&
+          year >= currentYear &&
+          (year > currentYear || month >= currentMonth)
+        );
+      },
+      { message: "Expiry date must be in the future" }
+    ),
   cvv: z
     .string()
     .regex(/^\d{3,4}$/, "CVV must be 3 or 4 digits")
     .min(3, "CVV must be 3 or 4 digits")
     .max(4, "CVV must be 3 or 4 digits"),
-  cardholderName: z.string().min(1, "Cardholder name is required"),
+  cardholderName: z.string().min(1, "Card Holder name is required"),
   billingPostalCode: z
     .string()
     .min(5, "Postal code must be at least 5 characters")

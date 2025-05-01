@@ -203,15 +203,15 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                 className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 placeholder="Enter pickup location"
                 {...register("pickup")}
-                onFocus={() => {
-                  const autocomplete = new window.google.maps.places.Autocomplete(
-                    document.querySelector(`input[name="pickup"]`) as HTMLInputElement,
-                    { types: ["geocode"] }
-                  );
-                  autocomplete.addListener("place_changed", () => {
-                    handlePlaceSelect(autocomplete.getPlace(), "pickup");
-                  });
-                }}
+                // onFocus={() => {
+                //   const autocomplete = new window.google.maps.places.Autocomplete(
+                //     document.querySelector(`input[name="pickup"]`) as HTMLInputElement,
+                //     { types: ["geocode"] }
+                //   );
+                //   autocomplete.addListener("place_changed", () => {
+                //     handlePlaceSelect(autocomplete.getPlace(), "pickup");
+                //   });
+                // }}
               />
               {errors.pickup && (
                 <p className="text-xs sm:text-sm text-red-500 dark:text-red-400">
@@ -226,15 +226,15 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                 className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 placeholder="Enter dropoff location"
                 {...register("dropoff")}
-                onFocus={() => {
-                  const autocomplete = new window.google.maps.places.Autocomplete(
-                    document.querySelector(`input[name="dropoff"]`) as HTMLInputElement,
-                    { types: ["geocode"] }
-                  );
-                  autocomplete.addListener("place_changed", () => {
-                    handlePlaceSelect(autocomplete.getPlace(), "dropoff");
-                  });
-                }}
+                // onFocus={() => {
+                //   const autocomplete = new window.google.maps.places.Autocomplete(
+                //     document.querySelector(`input[name="dropoff"]`) as HTMLInputElement,
+                //     { types: ["geocode"] }
+                //   );
+                //   autocomplete.addListener("place_changed", () => {
+                //     handlePlaceSelect(autocomplete.getPlace(), "dropoff");
+                //   });
+                // }}
               />
               {errors.dropoff && (
                 <p className="text-xs sm:text-sm text-red-500 dark:text-red-400">
