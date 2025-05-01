@@ -7,7 +7,8 @@ import { paymentSchema } from "@/lib/schema";
 import { useBooking } from "@/context/BookingContext";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 import z from "zod";
 import { RefObject } from "react";
 
@@ -23,12 +24,35 @@ export default function Step4Form({ formRef }: Step4FormProps) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<PaymentForm>({
     resolver: zodResolver(paymentSchema),
-    defaultValues: bookingData.payment,
-    mode: "onBlur",
+    defaultValues: {
+      ...bookingData.payment,
+      method: bookingData.payment.method || "credit",
+      cardNumber: bookingData.payment.cardNumber || "",
+      expiryDate: bookingData.payment.expiryDate || "",
+      cvv: bookingData.payment.cvv || "",
+      cardholderName: bookingData.payment.cardholderName || "",
+      billingPostalCode: bookingData.payment.billingPostalCode || "",
+      specialInstructions: bookingData.payment.specialInstructions || "",
+    },
+    mode: "onChange",
   });
+
+  // Watch all form fields
+  const formValues = watch();
+
+  // Debounce form values to prevent excessive updates
+  const debouncedFormValues = useDebounce(formValues, 300);
+
+  // Sync debounced form values with BookingContext
+  useEffect(() => {
+    updateBookingData({
+      payment: debouncedFormValues,
+    });
+  }, [debouncedFormValues]);
 
   const handleConfirm = (data: PaymentForm) => {
     updateBookingData({ payment: data, step: 5 });

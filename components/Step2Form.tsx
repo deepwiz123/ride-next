@@ -25,7 +25,7 @@ type Step2FormProps = {
 
 export default function Step2Form({ formRef }: Step2FormProps) {
   const { updateBookingData, bookingData } = useBooking();
-  const [distance, setDistance] = useState<string | null>("10.50");
+  const [distance, setDistance] = useState<string | null>(bookingData.trip.distance || "10.50");
   const [distanceMetric, setDistanceMetric] = useState<string | undefined>("km");
   const [isHourly, setIsHourly] = useState(bookingData.trip.hourly ?? false);
   const [stopCount, setStopCount] = useState(bookingData.trip.stops?.length || 0);
@@ -56,8 +56,24 @@ export default function Step2Form({ formRef }: Step2FormProps) {
       durationHours: bookingData.trip.durationHours || 0,
       durationMinutes: bookingData.trip.durationMinutes || 0,
       distance: bookingData.trip.distance || "10.50",
+      pickupLatLng: bookingData.trip.pickupLatLng || undefined,
+      dropoffLatLng: bookingData.trip.dropoffLatLng || undefined,
     },
+    mode: "onChange", // Enable onChange validation for real-time updates
   });
+
+  // Watch all form fields
+  const formValues = watch();
+
+  // Sync form values with BookingContext on change
+  useEffect(() => {
+    updateBookingData({
+      trip: {
+        ...formValues,
+        distance: distance || formValues.distance, // Preserve calculated distance
+      },
+    });
+  }, [formValues, distance, updateBookingData]);
 
   const pickupLatLng = watch("pickupLatLng") as Coordinates | undefined;
   const dropoffLatLng = watch("dropoffLatLng") as Coordinates | undefined;
@@ -89,10 +105,11 @@ export default function Step2Form({ formRef }: Step2FormProps) {
         },
         (result, status) => {
           if (status === google.maps.DirectionsStatus.OK && result) {
-            setDistance(result.routes[0].legs[0].distance?.text || "Unable to calculate distance");
+            const newDistance = result.routes[0].legs[0].distance?.text || "Unable to calculate distance";
+            setDistance(newDistance);
             updateBookingData({
               trip: {
-                distance: result.routes[0].legs[0].distance?.text,
+                distance: newDistance,
               } as Trip,
             });
           } else {
@@ -111,12 +128,12 @@ export default function Step2Form({ formRef }: Step2FormProps) {
   const handleTripTypeToggle = useCallback(
     (hourly: boolean) => {
       setIsHourly(hourly);
-      setValue("hourly", hourly);
+      setValue("hourly", hourly, { shouldValidate: true });
       if (!hourly) {
         setStopCount(0);
-        setValue("stops", []);
-        setValue("durationHours", 0);
-        setValue("durationMinutes", 0);
+        setValue("stops", [], { shouldValidate: true });
+        setValue("durationHours", 0, { shouldValidate: true });
+        setValue("durationMinutes", 0, { shouldValidate: true });
       }
     },
     [setValue]
@@ -128,12 +145,14 @@ export default function Step2Form({ formRef }: Step2FormProps) {
 
   const addStop = () => {
     setStopCount((prev) => prev + 1);
+    const currentStops = getValues("stops") || [];
+    setValue("stops", [...currentStops, ""], { shouldValidate: true });
   };
 
   const removeStop = (index: number) => {
     const currentStops = getValues("stops") || [];
     const updatedStops = currentStops.filter((_, i) => i !== index);
-    setValue("stops", updatedStops);
+    setValue("stops", updatedStops, { shouldValidate: true });
     setStopCount((prev) => Math.max(prev - 1, 0));
   };
 
@@ -144,8 +163,8 @@ export default function Step2Form({ formRef }: Step2FormProps) {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
         };
-        setValue(field, place.formatted_address || "");
-        setValue(`${field}LatLng`, latLng);
+        setValue(field, place.formatted_address || "", { shouldValidate: true });
+        setValue(`${field}LatLng`, latLng, { shouldValidate: true });
         updateBookingData({
           trip: {
             [field]: place.formatted_address || "",

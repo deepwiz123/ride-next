@@ -7,7 +7,7 @@ import { carSchema } from "@/lib/schema";
 import { useBooking } from "@/context/BookingContext";
 import { Car } from "@/types/booking";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { CarFront } from "lucide-react";
@@ -19,6 +19,8 @@ type Step3FormProps = {
 
 export default function Step3Form({ formRef }: Step3FormProps) {
   const { updateBookingData, bookingData, calculateFare } = useBooking();
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const {
     register,
     handleSubmit,
@@ -44,90 +46,54 @@ export default function Step3Form({ formRef }: Step3FormProps) {
 
   const cars = [
     {
-      type: "SUV",
+      type: "Lincoln MKT Sedan",
       transferRate: 70,
       hourlyRate: 12,
-      capacity: 5,
-      image: "/reservations/11452727.png",
+      capacity: 3,
+      image: "/reservations/Lincoln MKT Sedan.png",
     },
     {
-      type: "Van",
+      type: "Chevy Suburban",
       transferRate: 100,
       hourlyRate: 16,
-      capacity: 12,
-      image: "/reservations/11452727.png",
+      capacity: 6,
+      image: "/reservations/Chevy Suburban.png",
     },
     {
-      type: "Hatchback",
+      type: "Cadillac Escalade",
       transferRate: 45,
       hourlyRate: 8,
-      capacity: 4,
-      image: "/reservations/11452727.png",
+      capacity: 6,
+      image: "/reservations/Cadillac Escalade.png",
     },
     {
-      type: "Truck",
+      type: "Lincoln Navigator",
       transferRate: 120,
       hourlyRate: 20,
-      capacity: 2,
-      image: "/reservations/11452727.png",
+      capacity: 6,
+      image: "/reservations/Lincoln Navigator.png",
     },
     {
-      type: "Luxury",
+      type: "Mercedes Sprinter Van",
       transferRate: 150,
       hourlyRate: 25,
-      capacity: 4,
-      image: "/reservations/11452727.png",
-    },
-    {
-      type: "Convertible",
-      transferRate: 200,
-      hourlyRate: 30,
-      capacity: 2,
-      image: "/reservations/11452727.png",
-    },
-    {
-      type: "Electric",
-      transferRate: 90,
-      hourlyRate: 15,
-      capacity: 5,
-      image: "/reservations/11452727.png",
-    },
-    {
-      type: "Compact",
-      transferRate: 40,
-      hourlyRate: 7,
-      capacity: 4,
-      image: "/reservations/11452727.png",
-    },
-    {
-      type: "Sedan",
-      transferRate: 60,
-      hourlyRate: 10,
-      capacity: 5,
-      image: "/reservations/11452727.png",
-    },
-    {
-      type: "Coupe",
-      transferRate: 80,
-      hourlyRate: 13,
-      capacity: 2,
-      image: "/reservations/11452727.png",
-    },
-    {
-      type: "Wagon",
-      transferRate: 55,
-      hourlyRate: 9,
-      capacity: 5,
-      image: "/reservations/11452727.png",
-    },
-    {
-      type: "Crossover",
-      transferRate: 75,
-      hourlyRate: 12,
-      capacity: 5,
-      image: "/reservations/11452727.png",
-    },
+      capacity: 14,
+      image: "/reservations/Mercedes Sprinter Van.png",
+    }
   ];
+
+  const quantity = watch("quantity");
+  const capacity = watch("capacity");
+
+  // Scroll to top on errors
+  useEffect(() => {
+    const hasErrors =
+      Object.keys(errors).length > 0 ||
+      quantity * (capacity || 1) < (bookingData.trip.passengers || 1);
+    if (hasErrors && containerRef.current) {
+      containerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [errors, quantity, capacity, bookingData.trip.passengers]);
 
   const onSubmit = (data: Car) => {
     updateBookingData({
@@ -195,30 +161,9 @@ export default function Step3Form({ formRef }: Step3FormProps) {
     }
   };
 
-  const quantity = watch("quantity");
-  const capacity = watch("capacity");
-
-  // useEffect(() => {
-  //   const totalPassengers = bookingData.trip.passengers || 0;
-  //   const requiredCars = Math.ceil(totalPassengers / (capacity || 1));
-  //   if (quantity < requiredCars) {
-  //     setValue("quantity", requiredCars);
-  //     updateBookingData({
-  //       car: { ...bookingData.car, quantity: requiredCars },
-  //       fare: calculateFare(),
-  //     });
-  //   }
-  // }, [
-  //   quantity,
-  //   capacity,
-  //   bookingData.trip.passengers,
-  //   setValue,
-  //   updateBookingData,
-  //   calculateFare,
-  // ]);
-
   return (
     <motion.div
+      ref={containerRef}
       className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -247,7 +192,6 @@ export default function Step3Form({ formRef }: Step3FormProps) {
               {errors.capacity.message}
             </p>
           )}
-
           {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
             <p className="text-red-500 dark:text-red-400">
               Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
