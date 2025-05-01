@@ -104,7 +104,7 @@ export default function RidePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl w-full max-w-2xl h-[80vh] max-h-dvh flex flex-col overflow-hidden transition-colors duration-300"
+        className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl w-full max-w-2xl h-[100vh] max-h-dvh flex flex-col overflow-hidden transition-colors duration-300"
       >
         {/* Stepper Header */}
         <div className="p-2 flex items-center justify-center">
@@ -126,7 +126,7 @@ export default function RidePage() {
         </div>
 
         {/* Consolidated Buttons */}
-        <div className="sticky bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 dark:bg-gray-800">
+        <div className="bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 dark:bg-gray-800">
           <Button
             type="button"
             variant="outline"

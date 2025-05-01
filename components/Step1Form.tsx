@@ -34,12 +34,12 @@ export default function Step1Form({ formRef }: Step1FormProps) {
       name: bookingData.customer.name || "",
       email: bookingData.customer.email || "",
       phone: bookingData.customer.phone || "",
-      countryCode: bookingData.customer.countryCode || "",
+      countryCode: bookingData.customer.countryCode || "+1",
     },
   });
 
-  const phoneValue = watch("phone", "");
-  const countryCodeValue = watch("countryCode", countryCodes[0].code);
+  // const phoneValue = watch("phone", "");
+  // const countryCodeValue = watch("countryCode", countryCodes[0].code);
 
   const onSubmit = (data: Customer) => {
     updateBookingData({ customer: data, step: 2 });
@@ -93,8 +93,8 @@ export default function Step1Form({ formRef }: Step1FormProps) {
                 <Input
                   type="text"
                   placeholder="Enter your phone number"
-                  min={7}
-                  max={15}
+                  minLength={7}
+                  maxLength={15}
                   className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                   {...register("phone")}
                   error={errors.phone}
