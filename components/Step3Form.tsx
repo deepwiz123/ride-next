@@ -79,7 +79,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
       hourlyRate: 25,
       capacity: 14,
       image: "/reservations/Mercedes Sprinter Van.png",
-    }
+    },
   ];
 
   const quantity = watch("quantity");
@@ -91,7 +91,10 @@ export default function Step3Form({ formRef }: Step3FormProps) {
       Object.keys(errors).length > 0 ||
       quantity * (capacity || 1) < (bookingData.trip.passengers || 1);
     if (hasErrors && containerRef.current) {
-      containerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      containerRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, [errors, quantity, capacity, bookingData.trip.passengers]);
 

@@ -44,103 +44,135 @@ export default function SummaryView() {
           Review your booking details before proceeding to confirmation.
         </p>
 
-        {/* Summary Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6 text-xs sm:text-sm md:text-base">
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Booking ID</span>
-            <span className="text-gray-700 dark:text-gray-300">
+        {/* Summary Grid with Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Booking ID
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.bookingId}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Customer Name</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Customer Name
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.customer.name}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Customer Email</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Customer Email
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.customer.email}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Customer Phone</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Customer Phone
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.customer.countryCode} {bookingData.customer.phone}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Pickup</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Pickup
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.trip.pickup}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Dropoff</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Dropoff
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.trip.dropoff}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Date & Time</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Date & Time
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {formattedDateTime}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Passengers</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Passengers
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.trip.passengers}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Kids</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Kids
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.trip.kids}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Bags</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Bags
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.trip.bags}
             </span>
           </div>
           {bookingData.trip.hourly && (
-            <div className="flex flex-col">
-              <span className="font-semibold text-[#33A7FF]">Stops</span>
-              <span className="text-gray-700 dark:text-gray-300">
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+              <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+                Stops
+              </span>
+              <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
                 {stopsDisplay}
               </span>
             </div>
           )}
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Trip Type</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Trip Type
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.trip.hourly ? "Hourly" : "Distance-based"}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Trip Details</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Trip Details
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {hourlyDetails}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Car Type</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Car Type
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.car.type}
             </span>
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-[#33A7FF]">Car Quantity</span>
-            <span className="text-gray-700 dark:text-gray-300">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Car Quantity
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.car.quantity}
             </span>
           </div>
-          <div className="flex flex-col sm:col-span-2">
-            <span className="font-semibold text-[#33A7FF]">Total Fare</span>
-            <span className="text-lg sm:text-xl md:text-2xl font-bold text-green-600 dark:text-green-400">
+          <div className="sm:col-span-2 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Total Fare
+            </span>
+            <span className="block text-lg sm:text-xl md:text-2xl font-bold text-green-600 dark:text-green-400">
               ${bookingData.fare.toFixed(2)}
             </span>
           </div>

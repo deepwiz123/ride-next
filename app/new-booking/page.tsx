@@ -12,12 +12,17 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import MessageCard from "@/components/ui/MessageCard";
 
 export default function RidePage() {
   const { bookingData, updateBookingData } = useBooking();
   const formRef = useRef<HTMLFormElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "failure";
+    text: string;
+    bookingId?: string;
+  } | null>(null);
 
   // Generate booking ID on mount
   useEffect(() => {
@@ -33,74 +38,100 @@ export default function RidePage() {
   const handlePrev = () => {
     if (bookingData.step > 1) {
       updateBookingData({ step: bookingData.step - 1 });
-      setError(null);
+      setMessage(null);
     }
   };
 
   // Handle "Next" button
   const handleNext = async () => {
     setIsLoading(true);
-    setError(null);
+    setMessage(null);
 
     try {
       if (bookingData.step <= 4 && formRef.current) {
-        formRef.current.requestSubmit(); // Trigger form submission for Steps 1–4
+        formRef.current.requestSubmit();
       } else if (bookingData.step === 5) {
         // Step 5: Send notifications and confirm booking
         await axios.post("/reservations/api/send-notifications", {
           ...bookingData,
         });
 
-        alert(
-          "✅ Booking confirmed! Payment processed and notifications sent."
-        );
-        updateBookingData({
-          bookingId: "",
-          step: 1,
-          customer: { name: "", email: "", phone: "", countryCode: "" },
-          trip: {
-            pickup: "",
-            dropoff: "",
-            passengers: 1,
-            kids: 0,
-            bags: 0,
-            dateTime: "",
-            hourly: false,
-            durationHours: 0,
-            durationMinutes: 0,
-            stops: [],
-            distance: "0.0",
-          },
-          car: {
-            type: "",
-            quantity: 1,
-            transferRate: 0,
-            hourlyRate: 0,
-            capacity: 1,
-          },
-          fare: 0,
-          payment: {
-            method: "credit",
-            cardNumber: "",
-            expiryDate: "",
-            cvv: "",
-            cardholderName: "",
-            billingPostalCode: "",
-            specialInstructions: "",
-          },
+        setMessage({
+          type: "success",
+          text: "Your booking has been successfully confirmed! Payment processed and notifications sent.",
+          bookingId: bookingData.bookingId,
         });
-        window.location.href = "https://metrodtw.wizardcomm.in/";
       }
     } catch (error) {
       console.error("Error:", error);
-      setError("⚠️ Error processing booking. Please try again.");
+      setMessage({
+        type: "failure",
+        text: "Error processing booking. Please try again.",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Handle message dismissal
+  const handleDismiss = () => {
+    if (message?.type === "success") {
+      updateBookingData({
+        bookingId: "",
+        step: 1,
+        customer: { name: "", email: "", phone: "", countryCode: "" },
+        trip: {
+          pickup: "",
+          dropoff: "",
+          passengers: 1,
+          kids: 0,
+          bags: 0,
+          dateTime: "",
+          hourly: false,
+          durationHours: 0,
+          durationMinutes: 0,
+          stops: [],
+          distance: "0.0",
+        },
+        car: {
+          type: "",
+          quantity: 1,
+          transferRate: 0,
+          hourlyRate: 0,
+          capacity: 1,
+        },
+        fare: 0,
+        payment: {
+          method: "credit",
+          cardNumber: "",
+          expiryDate: "",
+          cvv: "",
+          cardholderName: "",
+          billingPostalCode: "",
+          specialInstructions: "",
+        },
+      });
+      window.location.href = "https://metrodtw.wizardcomm.in/";
+    }
+    setMessage(null);
+  };
+
+  // Handle retry
+  const handleRetry = () => {
+    setMessage(null);
+  };
+
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 p-4 transition-colors duration-300">
+      {message && (
+        <MessageCard
+          type={message.type}
+          message={message.text}
+          bookingId={message.bookingId}
+          onDismiss={handleDismiss}
+          onRetry={message.type === "failure" ? handleRetry : undefined}
+        />
+      )}
       <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100 mb-4">
         Book Your Reservations
       </h3>
@@ -108,7 +139,7 @@ export default function RidePage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl w-full max-w-2xl max-h-dvh flex flex-col overflow-hidden transition-colors duration-300"
+        className="bg-white dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 border border-gray-300 dark:border-gray-700 rounded-2xl w-full max-w-2xl max-h-[75vh] flex flex-col overflow-hidden transition-colors duration-300"
       >
         {/* Stepper Header */}
         <div className="p-2 flex items-center justify-center">
@@ -122,11 +153,6 @@ export default function RidePage() {
           {bookingData.step === 3 && <Step3Form formRef={formRef} />}
           {bookingData.step === 4 && <Step4Form formRef={formRef} />}
           {bookingData.step === 5 && <SummaryView />}
-          {error && (
-            <p className="text-red-500 text-sm font-medium text-center mt-4">
-              {error}
-            </p>
-          )}
         </div>
 
         {/* Consolidated Buttons */}
@@ -134,7 +160,7 @@ export default function RidePage() {
           <Button
             type="button"
             variant="outline"
-            className={`w-auto pxa="true" px-6 py-2 bg-[#002e52] text-white rounded-md hover:bg-[#00518F] dark:bg-[#002e52] dark:text-white dark:hover:bg-[#00518F] ${
+            className={`w-auto px-6 py-2 bg-[#002e52] text-white rounded-md hover:bg-[#00518F] dark:bg-[#002e52] dark:text-white dark:hover:bg-[#00518F] ${
               bookingData.step === 1 ? "opacity-50 cursor-not-allowed" : ""
             }`}
             onClick={handlePrev}

@@ -5,8 +5,7 @@ export const customerSchema = z.object({
   email: z.string().email("Invalid email"),
   phone: z
     .string()
-    .min(7, "Phone number must be at least 7 digits")
-    .max(15, "Phone number cannot exceed 15 digits")
+    .min(10, "Phone number must be at least 10 digits")
     .regex(
       /^[0-9\s\-()]+$/,
       "Phone number can only contain digits, spaces, dashes, or parentheses"
@@ -75,8 +74,8 @@ export const paymentSchema = z.object({
   cardNumber: z
     .string()
     .regex(/^\d{16}$/, "Card number must be 16 digits")
-    .min(16, "Card number must be 16 digits")
-    .max(16, "Card number must be 16 digits"),
+    .min(15, "Card number must be 15 or 16 digits")
+    .max(16, "Card number must be 15 or 16 digits"),
   expiryDate: z
     .string()
     .regex(/^\d{2}\/\d{2}$/, "Expiry date must be MM/YY")

@@ -141,6 +141,7 @@ const customerEmailTemplate = (booking: BookingData) => `
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Terms Accepted:</td>
+                            <td style="color: #555;">True</td>
             </tr>
           </table>
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
@@ -157,9 +158,9 @@ const customerEmailTemplate = (booking: BookingData) => `
       <tr>
         <td style="padding: 20px; text-align: center; background-color: #f4f4f4; border-radius: 0 0 8px 8px;">
           <p style="color: #777; font-size: 14px; margin: 0;">
-            © ${new Date().getFullYear()} Ride Booking. All rights reserved.<br>
-            <a href="https://ridebooking.com" style="color: #1a73e8; text-decoration: none;">Visit our website</a> | 
-            <a href="https://ridebooking.com/privacy" style="color: #1a73e8; text-decoration: none;">Privacy Policy</a>
+            © ${new Date().getFullYear()}Copyright © 2025 Metro DTW Sedan <br>
+            <a href="https://metrodtw.wizardcomm.in/" style="color: #1a73e8; text-decoration: none;">Visit our website</a> | 
+            <a href="https://metrodtw.wizardcomm.in/privacy-policy/" style="color: #1a73e8; text-decoration: none;">Privacy Policy</a>
           </p>
         </td>
       </tr>
@@ -306,6 +307,7 @@ const companyEmailTemplate = (booking: BookingData) => `
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Terms Accepted:</td>
+                            <td style="color: #555;">True</td>
             </tr>
           </table>
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
@@ -322,9 +324,9 @@ const companyEmailTemplate = (booking: BookingData) => `
       <tr>
         <td style="padding: 20px; text-align: center; background-color: #f4f4f4; border-radius: 0 0 8px 8px;">
           <p style="color: #777; font-size: 14px; margin: 0;">
-            © ${new Date().getFullYear()} Ride Booking. All rights reserved.<br>
-            <a href="https://ridebooking.com" style="color: #d32f2f; text-decoration: none;">Visit our website</a> | 
-            <a href="https://ridebooking.com/privacy" style="color: #d32f2f; text-decoration: none;">Privacy Policy</a>
+            © ${new Date().getFullYear()} Metro DTW Sedan.<br>
+            <a href="https://metrodtw.wizardcomm.in/" style="color: #1a73e8; text-decoration: none;">Visit our website</a> | 
+            <a href="https://metrodtw.wizardcomm.in/privacy-policy/" style="color: #1a73e8; text-decoration: none;">Privacy Policy</a>
           </p>
         </td>
       </tr>
