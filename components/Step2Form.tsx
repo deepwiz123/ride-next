@@ -46,6 +46,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
     defaultValues: {
       ...bookingData.trip,
       hourly: bookingData.trip.hourly ?? false,
+      flightnumber:bookingData.trip.flightnumber || "",
       passengers: bookingData.trip.passengers || 1,
       kids: bookingData.trip.kids || 0,
       bags: bookingData.trip.bags || 0,
@@ -245,6 +246,31 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                 className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 placeholder="Enter dropoff location"
                 {...register("dropoff")}
+                // onFocus={() => {
+                //   const autocomplete = new window.google.maps.places.Autocomplete(
+                //     document.querySelector(`input[name="dropoff"]`) as HTMLInputElement,
+                //     { types: ["geocode"] }
+                //   );
+                //   autocomplete.addListener("place_changed", () => {
+                //     handlePlaceSelect(autocomplete.getPlace(), "dropoff");
+                //   });
+                // }}
+              />
+              {errors.dropoff && (
+                <p className="text-xs sm:text-sm text-red-500 dark:text-red-400">
+                  {errors.dropoff.message}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col gap-4 sm:gap-6 md:grid flex-col-440">
+            <div className="flex flex-col">
+              <Input
+                type="text"
+                label="Flight Number"
+                className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                placeholder="Enter Flight Number"
+                {...register("flightnumber")}
                 // onFocus={() => {
                 //   const autocomplete = new window.google.maps.places.Autocomplete(
                 //     document.querySelector(`input[name="dropoff"]`) as HTMLInputElement,

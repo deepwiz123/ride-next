@@ -88,6 +88,14 @@ export default function SummaryView() {
           </div>
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+              Flight Number
+            </span>
+            <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
+              {bookingData.trip.flightnumber || "N/A"}
+            </span>
+          </div>
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
+            <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Dropoff
             </span>
             <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
@@ -168,14 +176,14 @@ export default function SummaryView() {
               {bookingData.car.quantity}
             </span>
           </div>
-          <div className="sm:col-span-2 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
+          {/* <div className="sm:col-span-2 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Total Fare
             </span>
             <span className="block text-lg sm:text-xl md:text-2xl font-bold text-green-600 dark:text-green-400">
               ${bookingData.fare.toFixed(2)}
             </span>
-          </div>
+          </div> */}
         </div>
 
         {/* Terms */}

@@ -159,7 +159,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
         </form>
 
         {/* Fare Display */}
-        <div className="mt-6 flex justify-center">
+        {/* <div className="mt-6 flex justify-center">
           <div className="text-center">
             <span className="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300">
               Total Fare
@@ -168,7 +168,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               ${bookingData.fare.toFixed(2)}
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </motion.div>
   );
