@@ -179,7 +179,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
         </div>
         <div className="p-4">
           {selectedCar && (
-            <div className="w-full">
+            <>
               {errors.type && (
                 <p className="text-red-500 dark:text-red-400">
                   {errors.type.message}
@@ -202,7 +202,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                   passengers.
                 </p>
               )}
-            </div>
+            </>
           )}
         </div>
 
