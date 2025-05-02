@@ -178,7 +178,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
 
   return (
     <motion.div
-      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 flex flex-col text-gray-900 dark:bg-[#181818] mb-2 dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -219,7 +219,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
               <Input
                 type="text"
                 label="Pickup Location"
-                className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 placeholder="Enter pickup location"
                 {...register("pickup")}
                 // onFocus={() => {
@@ -242,7 +242,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
               <Input
                 type="text"
                 label="Dropoff Location"
-                className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 placeholder="Enter dropoff location"
                 {...register("dropoff")}
                 // onFocus={() => {
@@ -274,7 +274,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
               label="Pickup Date & Time"
               id="dateTimeInput"
               type="datetime-local"
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-100 dark:accent-gray-100"
               placeholder="Select date and time"
               {...register("dateTime")}
               error={errors.dateTime}
@@ -347,7 +347,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
               type="number"
               min={1}
               max={99}
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("passengers", { valueAsNumber: true })}
               onKeyUp={(e) => {
                 const value = Number(e.currentTarget.value);
@@ -363,7 +363,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
               type="number"
               min={0}
               max={99}
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("kids", { valueAsNumber: true })}
               onKeyUp={(e) => {
                 const value = Number(e.currentTarget.value);
@@ -379,7 +379,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
               type="number"
               min={0}
               max={99}
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("bags", { valueAsNumber: true })}
               onKeyUp={(e) => {
                 const value = Number(e.currentTarget.value);
