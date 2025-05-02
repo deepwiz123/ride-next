@@ -36,7 +36,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
 
   return (
     <motion.div
-      className="w-full max-w-2xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+      className="w-full max-w-2xl mb-3 mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-[#181818] dark:text-gray-100"
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -61,7 +61,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               </label>
               <select
                 {...register("method")}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black dark:bg-gray-800 dark:border-gray-600 dark:text-white"
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black dark:bg-[#181818] dark:border-gray-600 dark:text-white"
               >
                 <option value="credit">Credit Card</option>
                 <option value="debit">Debit Card</option>
@@ -77,7 +77,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               type="text"
               maxLength={16}
               placeholder="1234 5678 9012 3456"
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("cardNumber")}
               error={errors.cardNumber}
             />
@@ -86,7 +86,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               type="text"
               placeholder="MM/YY"
               maxLength={5}
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("expiryDate")}
               error={errors.expiryDate}
             />
@@ -95,7 +95,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               type="text"
               maxLength={4}
               placeholder="123"
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("cvv")}
               error={errors.cvv}
             />
@@ -103,7 +103,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               <Input
                 label="Card Holder Name"
                 type="text"
-                className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 {...register("cardholderName")}
                 error={errors.cardholderName}
               />
@@ -112,7 +112,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
               label="Billing Postal Code"
               type="text"
               maxLength={10}
-              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               {...register("billingPostalCode")}
               error={errors.billingPostalCode}
             />
@@ -123,7 +123,7 @@ export default function Step4Form({ formRef }: Step4FormProps) {
             </label>
             <textarea
               {...register("specialInstructions")}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
               rows={4}
             />
             {errors.specialInstructions && (

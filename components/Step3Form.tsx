@@ -219,7 +219,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
 
   return (
     <motion.div
-      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-gray-800 dark:text-gray-100"
+      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-[#181818] dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -266,10 +266,10 @@ export default function Step3Form({ formRef }: Step3FormProps) {
               <motion.div
                 key={car.type}
                 whileHover={{ scale: 1.05 }}
-                className={`border-2 rounded-xl p-4 cursor-pointer shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 ${
+                className={`border-2 rounded-xl p-2 cursor-pointer shadow-sm transition-all dark:bg-[#181818] dark:border-gray-700 ${
                   selectedCar === car.type
-                    ? "border-blue-600 bg-blue-50 dark:border-blue-400 dark:bg-blue-900"
-                    : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800"
+                    ? "border-blue-600 bg-blue-50 dark:border-blue-400 dark:bg-[#29292991]"
+                    : "border-gray-300 bg-white dark:border-gray-600 dark:bg-[#29292991]"
                 }`}
                 onClick={() => handleCarSelect(car)}
               >
@@ -278,7 +278,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                   alt={car.type}
                   width={150}
                   height={150}
-                  className="w-full h-36 object-cover rounded-md mb-4"
+                  className="w-full h-26 object-cover rounded-md mb-2"
                 />
                 <div className="flex justify-between items-center">
                   {selectedCar === car.type ? (
@@ -287,7 +287,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                         <Input
                           label="Quantity"
                           type="number"
-                          className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-900 dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
+                          className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
                           {...register("quantity", { valueAsNumber: true })}
                           min={0}
                           max={10}
