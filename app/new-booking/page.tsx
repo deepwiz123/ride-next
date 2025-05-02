@@ -148,7 +148,7 @@ export default function RidePage() {
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto px-4">
+        <div className="flex-1 overflow-y-auto p-4">
           {bookingData.step === 1 && <Step1Form formRef={formRef} />}
           {bookingData.step === 2 && <Step2Form formRef={formRef} />}
           {bookingData.step === 3 && <Step3Form formRef={formRef} />}
@@ -157,7 +157,7 @@ export default function RidePage() {
         </div>
 
         {/* Consolidated Buttons */}
-        <div className="bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 dark:bg-[#181818]">
+        <div className="bottom-0 bg-white w-full flex justify-center items-center gap-4 p-4 dark:bg-[#282929]">
           <Button
             type="button"
             variant="outline"

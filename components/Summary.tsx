@@ -27,7 +27,7 @@ export default function SummaryView() {
 
   return (
     <motion.div
-      className="w-full max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col text-gray-900 dark:text-gray-100"
+      className="w-full max-w-4xl mx-auto bg-white dark:bg-[#181818] rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col text-gray-900 dark:text-gray-100"
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -46,7 +46,7 @@ export default function SummaryView() {
 
         {/* Summary Grid with Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Booking ID
             </span>
@@ -54,7 +54,7 @@ export default function SummaryView() {
               {bookingData.bookingId}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Customer Name
             </span>
@@ -62,7 +62,7 @@ export default function SummaryView() {
               {bookingData.customer.name}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Customer Email
             </span>
@@ -70,7 +70,7 @@ export default function SummaryView() {
               {bookingData.customer.email}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Customer Phone
             </span>
@@ -78,7 +78,7 @@ export default function SummaryView() {
               {bookingData.customer.countryCode} {bookingData.customer.phone}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Pickup
             </span>
@@ -86,7 +86,7 @@ export default function SummaryView() {
               {bookingData.trip.pickup}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Dropoff
             </span>
@@ -94,7 +94,7 @@ export default function SummaryView() {
               {bookingData.trip.dropoff}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Date & Time
             </span>
@@ -102,7 +102,7 @@ export default function SummaryView() {
               {formattedDateTime}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Passengers
             </span>
@@ -110,7 +110,7 @@ export default function SummaryView() {
               {bookingData.trip.passengers}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Kids
             </span>
@@ -118,7 +118,7 @@ export default function SummaryView() {
               {bookingData.trip.kids}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Bags
             </span>
@@ -127,7 +127,7 @@ export default function SummaryView() {
             </span>
           </div>
           {bookingData.trip.hourly && (
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
               <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
                 Stops
               </span>
@@ -136,7 +136,7 @@ export default function SummaryView() {
               </span>
             </div>
           )}
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Trip Type
             </span>
@@ -144,7 +144,7 @@ export default function SummaryView() {
               {bookingData.trip.hourly ? "Hourly" : "Distance-based"}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Trip Details
             </span>
@@ -152,7 +152,7 @@ export default function SummaryView() {
               {hourlyDetails}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Car Type
             </span>
@@ -160,7 +160,7 @@ export default function SummaryView() {
               {bookingData.car.type}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Car Quantity
             </span>
@@ -168,7 +168,7 @@ export default function SummaryView() {
               {bookingData.car.quantity}
             </span>
           </div>
-          <div className="sm:col-span-2 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-gray-800">
+          <div className="sm:col-span-2 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Total Fare
             </span>
@@ -179,7 +179,7 @@ export default function SummaryView() {
         </div>
 
         {/* Terms */}
-        <div className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 sm:p-6">
+        <div className="bg-gray-100 dark:bg-[#282929] border border-gray-200 dark:border-gray-700 rounded-xl p-4 sm:p-6">
           <h3 className="text-sm sm:text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
             Terms & Conditions
           </h3>
