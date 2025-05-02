@@ -63,7 +63,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     if (trip.hourly) {
       // Hourly-based fare
       const totalHours =
-        (trip.durationHours ?? 0 + Number(trip?.durationMinutes) ?? 0) || 0;
+        (trip.durationHours ?? 0 + Number(trip?.durationMinutes)/60) || 0;
       fare = car.hourlyRate ?? 0 * totalHours;
     } else {
       // Distance-based fare

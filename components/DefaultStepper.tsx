@@ -16,7 +16,7 @@ const DefaultStepper = () => {
 
   return (
     <Stepper
-      className="w-full flex justify-center item-center"
+      className="flex-1 justify-center item-center"
       activeStep={activeStep}
       styleConfig={{
         activeBgColor: "#33A7FF",

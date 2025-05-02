@@ -85,7 +85,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
     if (!mapRef.current || !window.google) return;
     const newMap = new window.google.maps.Map(mapRef.current, {
       center: { lat: 37.7749, lng: -122.4194 },
-      zoom: 13,
+      zoom: 10,
     });
     setMap(newMap);
     directionsRenderer.setMap(newMap);

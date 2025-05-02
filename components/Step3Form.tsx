@@ -10,7 +10,6 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
-import { CarFront } from "lucide-react";
 import { RefObject } from "react";
 
 type Step3FormProps = {
@@ -211,7 +210,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-6"
         >
-          <div className="flex flex-col gap-4 sm:gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 flex-col-440">
+          <div className="flex flex-col gap-4 sm:gap-6 sm:grid sm:grid-cols-2 flex-col-440">
             {cars.map((car) => (
               <motion.div
                 key={car.type}
@@ -228,7 +227,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                   alt={car.type}
                   width={150}
                   height={150}
-                  className="w-full h-26 object-cover rounded-md mb-2"
+                  className="w-full rounded-md mb-2"
                 />
                 <div className="flex justify-between items-center">
                   {selectedCar === car.type ? (
@@ -284,13 +283,13 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {car.type}
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-400">
+                      {/* <p className="text-gray-600 dark:text-gray-400">
                         {bookingData.trip.hourly
                           ? `$${car.hourlyRate}/hr`
                           : `$${car.transferRate}/transfer`}
-                      </p>
+                      </p> */}
                       <p className="text-sm text-gray-500 dark:text-gray-500">
-                        Capacity: {car.capacity} passengers
+                        Capacity : {car.capacity} 
                       </p>
                     </div>
                   )}
