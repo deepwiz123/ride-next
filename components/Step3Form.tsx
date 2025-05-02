@@ -40,9 +40,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
     mode: "onBlur",
   });
 
-  const [selectedCar, setSelectedCar] = useState<string>(
-    bookingData.car.type || ""
-  );
+  const [selectedCar, setSelectedCar] = useState<string | null>();
 
   const cars = [
     {
@@ -180,26 +178,31 @@ export default function Step3Form({ formRef }: Step3FormProps) {
           </h3>
         </div>
         <div className="p-4">
-          {errors.type && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.type.message}
-            </p>
-          )}
-          {errors.quantity && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.quantity.message}
-            </p>
-          )}
-          {errors.capacity && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.capacity.message}
-            </p>
-          )}
-          {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
-            <p className="text-red-500 dark:text-red-400">
-              Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
-              passengers.
-            </p>
+          {selectedCar && (
+            <div className="w-full">
+              {errors.type && (
+                <p className="text-red-500 dark:text-red-400">
+                  {errors.type.message}
+                </p>
+              )}
+              {errors.quantity && (
+                <p className="text-red-500 dark:text-red-400">
+                  {errors.quantity.message}
+                </p>
+              )}
+              {errors.capacity && (
+                <p className="text-red-500 dark:text-red-400">
+                  {errors.capacity.message}
+                </p>
+              )}
+              {quantity * (capacity || 1) <
+                (bookingData.trip.passengers || 1) && (
+                <p className="text-red-500 dark:text-red-400">
+                  Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
+                  passengers.
+                </p>
+              )}
+            </div>
           )}
         </div>
 
