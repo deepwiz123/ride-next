@@ -27,7 +27,7 @@ export default function SummaryView() {
 
   return (
     <motion.div
-      className="w-full max-w-4xl mx-auto bg-white dark:bg-[#181818] rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col text-gray-900 dark:text-gray-100"
+      className="w-full bg-white dark:bg-[#181818] rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col text-gray-900 dark:text-gray-100"
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
@@ -152,14 +152,14 @@ export default function SummaryView() {
               {bookingData.trip.hourly ? "Hourly" : "Distance-based"}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
+          {/* <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Trip Details
             </span>
             <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {hourlyDetails}
             </span>
-          </div>
+          </div> */}
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Car Type
@@ -168,14 +168,14 @@ export default function SummaryView() {
               {bookingData.car.type}
             </span>
           </div>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
+          {/* <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Car Quantity
             </span>
             <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.car.quantity}
             </span>
-          </div>
+          </div> */}
           {/* <div className="sm:col-span-2 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Total Fare

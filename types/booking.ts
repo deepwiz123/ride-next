@@ -7,7 +7,7 @@ export interface Coordinates {
 export interface Trip {
   pickup: string;
   dropoff: string;
-  flightnumber : string;
+  flightnumber? : string;
   passengers: number;
   kids: number;
   bags: number;
@@ -31,7 +31,7 @@ export interface Customer {
 export interface Car {
   type: string;
   transferRate: number;
-  hourlyRate?: number;
+  hourlyRate: number;
   quantity: number;
   capacity : number;
 }

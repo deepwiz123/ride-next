@@ -2,68 +2,57 @@ import { z } from "zod";
 
 export const customerSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email"),
-  phone: z
-    .string()
-    .min(10, "Phone number must be at least 10 digits")
-    .regex(
-      /^[0-9\s\-()]+$/,
-      "Phone number can only contain digits, spaces, dashes, or parentheses"
-    )
-    .transform((val) => val.replace(/[\s\-()]/g, "")), // Normalize by removing spaces, dashes, parentheses
+  email: z.string().email("Invalid email address"),
+  phone: z.string().min(1, "Phone number is required"),
   countryCode: z.string().min(1, "Country code is required"),
 });
 
-const baseTripSchema = z.object({
+export const coordinatesSchema = z.object({
+  lat: z.number(),
+  lng: z.number(),
+});
+
+export const tripSchema = z.object({
   pickup: z.string().min(1, "Pickup location is required"),
   dropoff: z.string().min(1, "Dropoff location is required"),
-  dateTime: z.string().nonempty("Date and time are required"),
   passengers: z
     .number()
-    .min(1, "At least 1 passenger is required")
-    .max(99, "Passengers cannot exceed 99"),
-  kids: z
-    .number()
-    .min(0, "Kids cannot be negative")
-    .max(99, "Kids cannot exceed 99"),
-  bags: z
-    .number()
-    .min(0, "Bags cannot be negative")
-    .max(99, "Bags cannot exceed 99"),
-  pickupLatLng: z
-    .object({ lat: z.number(), lng: z.number() })
-    .optional()
-    .nullable(),
-  dropoffLatLng: z
-    .object({ lat: z.number(), lng: z.number() })
-    .optional()
-    .nullable(),
-  stops: z.array(z.string()).optional(),
-});
-
-const transferTripSchema = baseTripSchema.extend({
-  hourly: z.literal(false),
-});
-
-const hourlyTripSchema = baseTripSchema.extend({
-  hourly: z.literal(true),
+    .min(1, "At least one passenger is required")
+    .max(99, "Maximum 99 passengers"),
+  kids: z.number().min(0, "Kids cannot be negative").max(99, "Maximum 99 kids"),
+  bags: z.number().min(0, "Bags cannot be negative").max(99, "Maximum 99 bags"),
+  dateTime: z
+    .string()
+    .min(1, "Date and time are required")
+    .refine(
+      (value) => {
+        const selectedDate = new Date(value);
+        const now = new Date();
+        return selectedDate >= now;
+      },
+      { message: "Pickup date and time cannot be in the past" }
+    ),
+  hourly: z.boolean(),
   durationHours: z.number().min(0, "Duration hours cannot be negative"),
   durationMinutes: z
     .number()
-    .min(0)
-    .max(59, "Minutes must be between 0 and 59"),
+    .min(0, "Duration minutes cannot be negative")
+    .max(59, "Maximum 59 minutes"),
+  stops: z.array(z.string()).optional(),
+  distance: z.string().optional(),
+  pickupLatLng: coordinatesSchema.optional(),
+  dropoffLatLng: coordinatesSchema.optional(),
+  flightNumber: z.string().optional(),
 });
 
-export const tripSchema = z.union([transferTripSchema, hourlyTripSchema]);
-
 export const carSchema = z.object({
-  type: z.string().min(1, "Please select a car type"),
-  transferRate: z.number().min(0, "Transfer rate must be non-negative"),
-  hourlyRate: z.number().min(0, "Hourly rate must be non-negative").optional(),
+  type: z.string().min(1, "Car type is required"),
+  transferRate: z.number().min(0, "Transfer rate cannot be negative"),
+  hourlyRate: z.number().min(0, "Hourly rate cannot be negative"),
   quantity: z
     .number()
-    .min(1, "At least 1 car is required")
-    .max(10, "Quantity cannot exceed 10"),
+    .min(0, "Quantity cannot be negative")
+    .max(10, "Maximum 10 cars"),
   capacity: z.number().min(1, "Capacity must be at least 1"),
 });
 
@@ -104,4 +93,14 @@ export const paymentSchema = z.object({
     .min(5, "Postal code must be at least 5 characters")
     .max(10, "Postal code cannot exceed 10 characters"),
   specialInstructions: z.string().optional(),
+});
+
+export const bookingSchema = z.object({
+  bookingId: z.string(),
+  step: z.number().min(1).max(5),
+  customer: customerSchema,
+  trip: tripSchema,
+  car: carSchema,
+  fare: z.number().min(0, "Fare cannot be negative"),
+  payment: paymentSchema,
 });

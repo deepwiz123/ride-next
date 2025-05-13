@@ -39,7 +39,8 @@ export default function Step3Form({ formRef }: Step3FormProps) {
     mode: "onBlur",
   });
 
-  const [selectedCar, setSelectedCar] = useState<string | null>();
+  const [selectedCar, setSelectedCar] = useState<string | null>(bookingData.car.type || null);
+  const [noCarSelected, setNoCarSelected] = useState(false);
 
   const cars = [
     {
@@ -70,13 +71,6 @@ export default function Step3Form({ formRef }: Step3FormProps) {
       capacity: 6,
       image: "/reservations/Lincoln Navigator.png",
     },
-    {
-      type: "Mercedes Sprinter Van",
-      transferRate: 150,
-      hourlyRate: 25,
-      capacity: 14,
-      image: "/reservations/Mercedes Sprinter Van.png",
-    },
   ];
 
   const quantity = watch("quantity");
@@ -86,16 +80,22 @@ export default function Step3Form({ formRef }: Step3FormProps) {
   useEffect(() => {
     const hasErrors =
       Object.keys(errors).length > 0 ||
-      quantity * (capacity || 1) < (bookingData.trip.passengers || 1);
+      quantity * (capacity || 1) < (bookingData.trip.passengers || 1) ||
+      noCarSelected;
     if (hasErrors && containerRef.current) {
       containerRef.current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
     }
-  }, [errors, quantity, capacity, bookingData.trip.passengers]);
+  }, [errors, quantity, capacity, bookingData.trip.passengers, noCarSelected]);
 
   const onSubmit = (data: Car) => {
+    if (!selectedCar) {
+      setNoCarSelected(true);
+      return;
+    }
+    setNoCarSelected(false);
     updateBookingData({
       car: data,
       fare: calculateFare(),
@@ -110,7 +110,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
     capacity: number;
   }) => {
     if (selectedCar === car.type) {
-      setSelectedCar("");
+      setSelectedCar(null);
       resetField("type");
       resetField("transferRate");
       resetField("hourlyRate");
@@ -144,6 +144,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
         fare: calculateFare(),
       });
     }
+    setNoCarSelected(false);
   };
 
   const handleQuantityChange = (increment: boolean) => {
@@ -169,7 +170,6 @@ export default function Step3Form({ formRef }: Step3FormProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Scrollable Content */}
       <div className="flex-1 p-4">
         <div className="flex items-center gap-3 justify-center">
           <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
@@ -177,31 +177,30 @@ export default function Step3Form({ formRef }: Step3FormProps) {
           </h3>
         </div>
         <div className="p-4">
-          {selectedCar && (
-            <>
-              {errors.type && (
-                <p className="text-red-500 dark:text-red-400">
-                  {errors.type.message}
-                </p>
-              )}
-              {errors.quantity && (
-                <p className="text-red-500 dark:text-red-400">
-                  {errors.quantity.message}
-                </p>
-              )}
-              {errors.capacity && (
-                <p className="text-red-500 dark:text-red-400">
-                  {errors.capacity.message}
-                </p>
-              )}
-              {quantity * (capacity || 1) <
-                (bookingData.trip.passengers || 1) && (
-                <p className="text-red-500 dark:text-red-400">
-                  Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
-                  passengers.
-                </p>
-              )}
-            </>
+          {noCarSelected && (
+            <p className="text-red-500 dark:text-red-400">
+              Please select a car to proceed.
+            </p>
+          )}
+          {errors.type && (
+            <p className="text-red-500 dark:text-red-400">
+              {errors.type.message}
+            </p>
+          )}
+          {errors.quantity && (
+            <p className="text-red-500 dark:text-red-400">
+              {errors.quantity.message}
+            </p>
+          )}
+          {errors.capacity && (
+            <p className="text-red-500 dark:text-red-400">
+              {errors.capacity.message}
+            </p>
+          )}
+          {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
+            <p className="text-red-500 dark:text-red-400">
+              Selected cars cannot accommodate {bookingData.trip.passengers} passengers.
+            </p>
           )}
         </div>
 
@@ -233,49 +232,9 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                   {selectedCar === car.type ? (
                     <div className="flex items-center justify-center gap-2 ml-2 w-full">
                       <div className="flex items-center gap-2 w-full">
-                        <Input
-                          label="Quantity"
-                          type="number"
-                          className="flex-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-gray-100 dark:placeholder-gray-500"
-                          {...register("quantity", { valueAsNumber: true })}
-                          min={0}
-                          max={10}
-                          onClick={(e) => e.stopPropagation()}
-                          onChange={(e) => {
-                            const qty = Number(e.target.value);
-                            setValue("quantity", qty);
-                            updateBookingData({
-                              car: { ...bookingData.car, quantity: qty },
-                              fare: calculateFare(),
-                            });
-                          }}
-                        />
-                        <div className="md:hidden flex gap-1 self-end">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="p-2 rounded-md bg-gray-200 dark:bg-gray-700"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleQuantityChange(false);
-                            }}
-                            disabled={quantity <= 1}
-                          >
-                            -
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="p-2 rounded-md bg-gray-200 dark:bg-gray-700"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleQuantityChange(true);
-                            }}
-                            disabled={quantity >= 10}
-                          >
-                            +
-                          </Button>
-                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                          {car.type}
+                        </h3>
                       </div>
                     </div>
                   ) : (
@@ -283,13 +242,8 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {car.type}
                       </h3>
-                      {/* <p className="text-gray-600 dark:text-gray-400">
-                        {bookingData.trip.hourly
-                          ? `$${car.hourlyRate}/hr`
-                          : `$${car.transferRate}/transfer`}
-                      </p> */}
                       <p className="text-sm text-gray-500 dark:text-gray-500">
-                        Capacity : {car.capacity} 
+                        Capacity: {car.capacity}
                       </p>
                     </div>
                   )}

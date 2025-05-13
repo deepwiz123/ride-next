@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/Button";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { useDebounce } from "@/hooks/useDebounce";
 import { RefObject } from "react";
+import MapComponent from "./ui/MapComponent";
 
 declare global {
   interface Window {
@@ -25,14 +26,24 @@ type Step2FormProps = {
 
 export default function Step2Form({ formRef }: Step2FormProps) {
   const { updateBookingData, bookingData } = useBooking();
-  const [distance, setDistance] = useState<string | null>(bookingData.trip.distance || "10.50");
-  const [distanceMetric, setDistanceMetric] = useState<string | undefined>("km");
+  const [distance, setDistance] = useState<string | null>(
+    bookingData.trip.distance || "10.50"
+  );
+  const [distanceMetric, setDistanceMetric] = useState<string | undefined>(
+    "km"
+  );
   const [isHourly, setIsHourly] = useState(bookingData.trip.hourly ?? false);
-  const [stopCount, setStopCount] = useState(bookingData.trip.stops?.length || 0);
+  const [stopCount, setStopCount] = useState(
+    bookingData.trip.stops?.length || 0
+  );
   const mapRef = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [directionsService] = useState(() => new window.google.maps.DirectionsService());
-  const [directionsRenderer] = useState(() => new window.google.maps.DirectionsRenderer());
+  const [directionsService] = useState(
+    () => new window.google.maps.DirectionsService()
+  );
+  const [directionsRenderer] = useState(
+    () => new window.google.maps.DirectionsRenderer()
+  );
 
   const {
     register,
@@ -46,7 +57,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
     defaultValues: {
       ...bookingData.trip,
       hourly: bookingData.trip.hourly ?? false,
-      flightnumber:bookingData.trip.flightnumber || "",
+      flightnumber: bookingData.trip.flightnumber || "",
       passengers: bookingData.trip.passengers || 1,
       kids: bookingData.trip.kids || 0,
       bags: bookingData.trip.bags || 0,
@@ -97,7 +108,12 @@ export default function Step2Form({ formRef }: Step2FormProps) {
   }, [initMap]);
 
   const calculateDistance = useCallback(() => {
-    if (debouncedPickupLatLng && debouncedDropoffLatLng && directionsService && map) {
+    if (
+      debouncedPickupLatLng &&
+      debouncedDropoffLatLng &&
+      directionsService &&
+      map
+    ) {
       directionsService.route(
         {
           origin: debouncedPickupLatLng,
@@ -106,7 +122,9 @@ export default function Step2Form({ formRef }: Step2FormProps) {
         },
         (result, status) => {
           if (status === google.maps.DirectionsStatus.OK && result) {
-            const newDistance = result.routes[0].legs[0].distance?.text || "Unable to calculate distance";
+            const newDistance =
+              result.routes[0].legs[0].distance?.text ||
+              "Unable to calculate distance";
             setDistance(newDistance);
             updateBookingData({
               trip: {
@@ -120,7 +138,13 @@ export default function Step2Form({ formRef }: Step2FormProps) {
         }
       );
     }
-  }, [debouncedPickupLatLng, debouncedDropoffLatLng, directionsService, map, updateBookingData]);
+  }, [
+    debouncedPickupLatLng,
+    debouncedDropoffLatLng,
+    directionsService,
+    map,
+    updateBookingData,
+  ]);
 
   useEffect(() => {
     calculateDistance();
@@ -164,7 +188,9 @@ export default function Step2Form({ formRef }: Step2FormProps) {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
         };
-        setValue(field, place.formatted_address || "", { shouldValidate: true });
+        setValue(field, place.formatted_address || "", {
+          shouldValidate: true,
+        });
         setValue(`${field}LatLng`, latLng, { shouldValidate: true });
         updateBookingData({
           trip: {
@@ -189,7 +215,11 @@ export default function Step2Form({ formRef }: Step2FormProps) {
         <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-8">
           Enter Your Trip Details
         </h3>
-        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-6"
+        >
           <div className="flex sm:flex-row bg-gray-100 dark:bg-gray-600 p-2 rounded-xl gap-2">
             <button
               type="button"
@@ -223,15 +253,18 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                 className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 placeholder="Enter pickup location"
                 {...register("pickup")}
-                // onFocus={() => {
-                //   const autocomplete = new window.google.maps.places.Autocomplete(
-                //     document.querySelector(`input[name="pickup"]`) as HTMLInputElement,
-                //     { types: ["geocode"] }
-                //   );
-                //   autocomplete.addListener("place_changed", () => {
-                //     handlePlaceSelect(autocomplete.getPlace(), "pickup");
-                //   });
-                // }}
+                onFocus={() => {
+                  const autocomplete =
+                    new window.google.maps.places.Autocomplete(
+                      document.querySelector(
+                        `input[name="pickup"]`
+                      ) as HTMLInputElement,
+                      { types: ["geocode"] }
+                    );
+                  autocomplete.addListener("place_changed", () => {
+                    handlePlaceSelect(autocomplete.getPlace(), "pickup");
+                  });
+                }}
               />
               {errors.pickup && (
                 <p className="text-xs sm:text-sm text-red-500 dark:text-red-400">
@@ -246,15 +279,18 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                 className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 placeholder="Enter dropoff location"
                 {...register("dropoff")}
-                // onFocus={() => {
-                //   const autocomplete = new window.google.maps.places.Autocomplete(
-                //     document.querySelector(`input[name="dropoff"]`) as HTMLInputElement,
-                //     { types: ["geocode"] }
-                //   );
-                //   autocomplete.addListener("place_changed", () => {
-                //     handlePlaceSelect(autocomplete.getPlace(), "dropoff");
-                //   });
-                // }}
+                onFocus={() => {
+                  const autocomplete =
+                    new window.google.maps.places.Autocomplete(
+                      document.querySelector(
+                        `input[name="dropoff"]`
+                      ) as HTMLInputElement,
+                      { types: ["geocode"] }
+                    );
+                  autocomplete.addListener("place_changed", () => {
+                    handlePlaceSelect(autocomplete.getPlace(), "dropoff");
+                  });
+                }}
               />
               {errors.dropoff && (
                 <p className="text-xs sm:text-sm text-red-500 dark:text-red-400">
@@ -271,19 +307,10 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                 className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                 placeholder="Enter Flight Number"
                 {...register("flightnumber")}
-                // onFocus={() => {
-                //   const autocomplete = new window.google.maps.places.Autocomplete(
-                //     document.querySelector(`input[name="dropoff"]`) as HTMLInputElement,
-                //     { types: ["geocode"] }
-                //   );
-                //   autocomplete.addListener("place_changed", () => {
-                //     handlePlaceSelect(autocomplete.getPlace(), "dropoff");
-                //   });
-                // }}
               />
-              {errors.dropoff && (
+              {errors.flightnumber && (
                 <p className="text-xs sm:text-sm text-red-500 dark:text-red-400">
-                  {errors.dropoff.message}
+                  {errors.flightnumber.message}
                 </p>
               )}
             </div>
@@ -292,7 +319,9 @@ export default function Step2Form({ formRef }: Step2FormProps) {
           <div
             className="flex flex-col gap-4 sm:gap-6 cursor-pointer"
             onClick={() => {
-              const input = document.getElementById("dateTimeInput") as HTMLInputElement;
+              const input = document.getElementById(
+                "dateTimeInput"
+              ) as HTMLInputElement;
               input?.focus();
             }}
           >
@@ -306,13 +335,15 @@ export default function Step2Form({ formRef }: Step2FormProps) {
               error={errors.dateTime}
             />
           </div>
-
+{/* 
           {!isHourly && distance && (
             <p className="text-sm text-gray-700 dark:text-gray-300">
-              <strong className="text-gray-900 dark:text-gray-100">Estimated Distance:</strong>{" "}
+              <strong className="text-gray-900 dark:text-gray-100">
+                Estimated Distance:
+              </strong>{" "}
               {distance} {distanceMetric}
             </p>
-          )}
+          )} */}
           {isHourly && (
             <div className="space-y-6">
               <div className="flex flex-col gap-4 sm:gap-6 md:grid md:grid-cols-2 flex-col-440">
@@ -366,6 +397,24 @@ export default function Step2Form({ formRef }: Step2FormProps) {
             </div>
           )}
           <div className="h-[400px] w-full rounded-md overflow-hidden" ref={mapRef} />
+          {/* <div className="h-[400px] w-full rounded-md overflow-hidden">
+            <MapComponent
+              pickupLatLng={pickupLatLng}
+              dropoffLatLng={dropoffLatLng}
+              setPickupLatLng={(coords) =>
+                setValue("pickupLatLng", coords, { shouldValidate: true })
+              }
+              setDropoffLatLng={(coords) =>
+                setValue("dropoffLatLng", coords, { shouldValidate: true })
+              }
+              setPickupAddress={(address) =>
+                setValue("pickup", address, { shouldValidate: true })
+              }
+              setDropoffAddress={(address) =>
+                setValue("dropoff", address, { shouldValidate: true })
+              }
+            />
+          </div> */}
 
           <div className="flex flex-col gap-4 sm:gap-6 md:grid md:grid-cols-3 flex-col-440">
             <Input

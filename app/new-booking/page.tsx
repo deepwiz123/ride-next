@@ -121,7 +121,7 @@ export default function RidePage() {
     setMessage(null);
   };
 
-  return (
+  return (bookingData.step <= 4 ? (
     <div className="h-screen flex flex-col items-center justify-center bg-white bg-[url('/reservations/backgroundmdswhite.jpg')] dark:bg-black dark:bg-[url('/reservations/backgroundmds.jpg')] bg-cover bg-center p-4 transition-colors duration-300">
       {message && (
         <MessageCard
@@ -153,7 +153,7 @@ export default function RidePage() {
           {bookingData.step === 2 && <Step2Form formRef={formRef} />}
           {bookingData.step === 3 && <Step3Form formRef={formRef} />}
           {bookingData.step === 4 && <Step4Form formRef={formRef} />}
-          {bookingData.step === 5 && <SummaryView />}
+          {/* {bookingData.step === 5 && <SummaryView />} */}
         </div>
 
         {/* Consolidated Buttons */}
@@ -193,5 +193,8 @@ export default function RidePage() {
         </div>
       </motion.div>
     </div>
-  );
+  ) : (
+  <div>
+    <SummaryView/>
+  </div>));
 }

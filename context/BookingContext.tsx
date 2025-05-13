@@ -1,27 +1,28 @@
-"use client";
+'use client'
 
 import { Car, Customer, Payment, Trip } from "@/types/booking";
-import React, { createContext, useContext, useState, useMemo } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 
-interface BookingState {
+export interface BookingState {
   bookingId: string;
   step: number;
   customer: Customer;
   trip: Trip;
   car: Car;
   fare: number;
-  payment: Payment
+  payment: Payment;
 }
 
-interface BookingContextType {
+type BookingContextType = {
   bookingData: BookingState;
-  updateBookingData: (updates: Partial<BookingState>) => void;
-  calculateFare: () => number; // New method to calculate fare
-}
+  updateBookingData: (data: Partial<BookingState>) => void;
+  resetBooking: () => void;
+  calculateFare: () => number;
+};
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
-export function BookingProvider({ children }: { children: React.ReactNode }) {
+export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [bookingData, setBookingData] = useState<BookingState>({
     bookingId: "",
     step: 1,
@@ -38,6 +39,7 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
       durationMinutes: 0,
       stops: [],
       distance: "0.0",
+      flightnumber: "",
     },
     car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1, capacity: 1 },
     fare: 0,
@@ -52,66 +54,69 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
     },
   });
 
-  const calculateFare = () => {
-    const { car, trip } = bookingData;
-    let fare = 0;
+  const updateBookingData = useCallback((data: Partial<BookingState>) => {
+    setBookingData((prev) => ({
+      ...prev,
+      ...data,
+      trip: { ...prev.trip, ...(data.trip || {}) },
+      customer: { ...prev.customer, ...(data.customer || {}) },
+      car: { ...prev.car, ...(data.car || {}) },
+      payment: { ...prev.payment, ...(data.payment || {}) },
+    }));
+  }, []);
 
-    // Constants
-    const BASE_FEE = 10;
-    const STOP_FEE = 5;
-
-    if (trip.hourly) {
-      // Hourly-based fare
-      const totalHours =
-        (trip.durationHours ?? 0 + Number(trip?.durationMinutes)/60) || 0;
-      fare = car.hourlyRate ?? 0 * totalHours;
-    } else {
-      // Distance-based fare
-      const distance = Number(trip.distance) || 0; // Convert string to number, default to 0
-      fare = car.transferRate * distance;
-    }
-
-    // Add base fee
-    fare += BASE_FEE;
-
-    // Add fee for additional stops
-    fare += Array(trip?.stops).length * STOP_FEE;
-
-    // Multiply by car quantity
-    fare *= car.quantity;
-
-    // Ensure fare is non-negative and rounded to 2 decimals
-    return Math.max(0, Number(fare.toFixed(2)));
-  };
-
-  const updateBookingData = (updates: Partial<BookingState>) => {
-    setBookingData((prev) => {
-      const newData = { ...prev, ...updates };
-      // Recalculate fare if car or trip data changes
-      if (updates.car || updates.trip) {
-        newData.fare = calculateFare();
-      }
-      return newData;
+  const resetBooking = useCallback(() => {
+    setBookingData({
+      bookingId: "",
+      step: 1,
+      customer: { name: "", email: "", phone: "", countryCode: "" },
+      trip: {
+        pickup: "",
+        dropoff: "",
+        passengers: 1,
+        kids: 0,
+        bags: 0,
+        dateTime: "",
+        hourly: false,
+        durationHours: 0,
+        durationMinutes: 0,
+        stops: [],
+        distance: "0.0",
+        flightnumber: "",
+      },
+      car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1, capacity: 1},
+      fare: 0,
+      payment: {
+        method: "credit",
+        cardNumber: "",
+        expiryDate: "",
+        cvv: "",
+        cardholderName: "",
+        billingPostalCode: "",
+        specialInstructions: "",
+      },
     });
-  };
+  }, []);
 
-  const value = useMemo(
-    () => ({
-      bookingData,
-      updateBookingData,
-      calculateFare,
-    }),
-    [bookingData]
-  );
+  const calculateFare = useCallback(() => {
+    const { car, trip } = bookingData;
+    if (!car.type || car.quantity < 1) return 0;
+    const rate = trip.hourly ? car.hourlyRate : car.transferRate;
+    const duration = trip.hourly ? (trip.durationHours || 0) + (trip.durationMinutes || 0) / 60 : 1;
+    return rate * car.quantity * duration;
+  }, [bookingData]);
 
   return (
-    <BookingContext.Provider value={value}>{children}</BookingContext.Provider>
+    <BookingContext.Provider value={{ bookingData, updateBookingData, resetBooking, calculateFare }}>
+      {children}
+    </BookingContext.Provider>
   );
-}
+};
 
 export const useBooking = () => {
   const context = useContext(BookingContext);
-  if (!context)
+  if (!context) {
     throw new Error("useBooking must be used within a BookingProvider");
+  }
   return context;
 };
