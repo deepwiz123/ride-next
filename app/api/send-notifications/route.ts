@@ -63,13 +63,23 @@ const customerEmailTemplate = (booking: BookingData) => `
 }</td>
             </tr>
             ${
+              booking.trip.flightnumber
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Flight Number:</td>
+                <td style="color: #555;">${booking.trip.flightnumber}</td>
+              </tr>
+            `
+                : ""
+            }
+            ${
               booking.trip.stops && booking.trip.stops.length > 0
-                ? `<tr>
-                    <td style="font-weight: bold; color: #333;">Stops:</td>
-                    <td style="color: #555;">${booking.trip.stops.join(
-                      ", "
-                    )}</td>
-                  </tr>`
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Stops:</td>
+                <td style="color: #555;">${booking.trip.stops.join(", ")}</td>
+              </tr>
+            `
                 : ""
             }
             <tr>
@@ -96,23 +106,30 @@ const customerEmailTemplate = (booking: BookingData) => `
             </tr>
             ${
               booking.trip.hourly
-                ? `<tr>
-                    <td style="font-weight: bold; color: #333;">Hourly Rate:</td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight: bold; color: #333;">Duration:</td>
-                    <td style="color: #555;">${
-                      booking.trip.durationHours || 0
-                    } hrs, ${booking.trip.durationMinutes || 0} mins</td>
-                  </tr>`
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Hourly Rate:</td>
+                <td style="color: #555;">$${booking.car.hourlyRate.toFixed(
+                  2
+                )}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; color: #333;">Duration:</td>
+                <td style="color: #555;">${
+                  booking.trip.durationHours || 0
+                } hrs, ${booking.trip.durationMinutes || 0} mins</td>
+              </tr>
+            `
                 : ""
             }
             ${
               booking.trip.distance
-                ? `<tr>
-                    <td style="font-weight: bold; color: #333;">Distance:</td>
-                    <td style="color: #555;">${booking.trip.distance}</td>
-                  </tr>`
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Distance:</td>
+                <td style="color: #555;">${booking.trip.distance}</td>
+              </tr>
+            `
                 : ""
             }
             <tr>
@@ -123,10 +140,12 @@ const customerEmailTemplate = (booking: BookingData) => `
             </tr>
             ${
               booking.fare
-                ? `<tr>
-                    <td style="font-weight: bold; color: #333;">Total Fare:</td>
-                    <td style="color: #555;">$${booking.fare.toFixed(2)}</td>
-                  </tr>`
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Total Fare:</td>
+                <td style="color: #555;">$${booking.fare.toFixed(2)}</td>
+              </tr>
+            `
                 : ""
             }
             <tr>
@@ -141,8 +160,41 @@ const customerEmailTemplate = (booking: BookingData) => `
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Terms Accepted:</td>
-                            <td style="color: #555;">True</td>
+              <td style="color: #555;">True</td>
             </tr>
+            ${
+              booking.returnTrip
+                ? `
+              <tr>
+                <td colspan="2" style="font-weight: bold; color: #333; padding-top: 20px;">Return Reservation:</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; color: #333;">Return Date & Time:</td>
+                <td style="color: #555;">${new Date(
+                  booking.returnTrip.returnDateTime
+                ).toLocaleString()}</td>
+              </tr>
+              ${
+                booking.returnTrip.returnFlightNumber
+                  ? `
+                <tr>
+                  <td style="font-weight: bold; color: #333;">Return Flight Number:</td>
+                  <td style="color: #555;">${booking.returnTrip.returnFlightNumber}</td>
+                </tr>
+              `
+                  : ""
+              }
+              <tr>
+                <td style="font-weight: bold; color: #333;">Return Drop-off Location:</td>
+                <td style="color: #555;">${booking.returnTrip.returnDropoff}${
+                    booking.returnTrip.returnDropoffLatLng
+                      ? ` (Lat: ${booking.returnTrip.returnDropoffLatLng.lat}, Lng: ${booking.returnTrip.returnDropoffLatLng.lng})`
+                      : ""
+                  }</td>
+              </tr>
+            `
+                : ""
+            }
           </table>
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
             We’ll send you a reminder closer to your trip. If you have any questions, contact us at <a href="mailto:support@ridebooking.com" style="color: #1a73e8; text-decoration: none;">support@ridebooking.com</a>.
@@ -158,7 +210,7 @@ const customerEmailTemplate = (booking: BookingData) => `
       <tr>
         <td style="padding: 20px; text-align: center; background-color: #f4f4f4; border-radius: 0 0 8px 8px;">
           <p style="color: #777; font-size: 14px; margin: 0;">
-            © ${new Date().getFullYear()}Copyright © 2025 Metro DTW Sedan <br>
+            © ${new Date().getFullYear()} Metro DTW Sedan <br>
             <a href="https://metrodtw.wizardcomm.in/" style="color: #1a73e8; text-decoration: none;">Visit our website</a> | 
             <a href="https://metrodtw.wizardcomm.in/privacy-policy/" style="color: #1a73e8; text-decoration: none;">Privacy Policy</a>
           </p>
@@ -233,13 +285,23 @@ const companyEmailTemplate = (booking: BookingData) => `
 }</td>
             </tr>
             ${
+              booking.trip.flightnumber
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Flight Number:</td>
+                <td style="color: #555;">${booking.trip.flightnumber}</td>
+              </tr>
+            `
+                : ""
+            }
+            ${
               booking.trip.stops && booking.trip.stops.length > 0
-                ? `<tr>
-                    <td style="font-weight: bold; color: #333;">Stops:</td>
-                    <td style="color: #555;">${booking.trip.stops.join(
-                      ", "
-                    )}</td>
-                  </tr>`
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Stops:</td>
+                <td style="color: #555;">${booking.trip.stops.join(", ")}</td>
+              </tr>
+            `
                 : ""
             }
             <tr>
@@ -266,23 +328,30 @@ const companyEmailTemplate = (booking: BookingData) => `
             </tr>
             ${
               booking.trip.hourly
-                ? `<tr>
-                    <td style="font-weight: bold; color: #333;">Hourly Rate:</td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight: bold; color: #333;">Duration:</td>
-                    <td style="color: #555;">${
-                      booking.trip.durationHours || 0
-                    } hrs, ${booking.trip.durationMinutes || 0} mins</td>
-                  </tr>`
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Hourly Rate:</td>
+                <td style="color: #555;">$${booking.car.hourlyRate.toFixed(
+                  2
+                )}</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; color: #333;">Duration:</td>
+                <td style="color: #555;">${
+                  booking.trip.durationHours || 0
+                } hrs, ${booking.trip.durationMinutes || 0} mins</td>
+              </tr>
+            `
                 : ""
             }
             ${
               booking.trip.distance
-                ? `<tr>
-                    <td style="font-weight: bold; color: #333;">Distance:</td>
-                    <td style="color: #555;">${booking.trip.distance}</td>
-                  </tr>`
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Distance:</td>
+                <td style="color: #555;">${booking.trip.distance}</td>
+              </tr>
+            `
                 : ""
             }
             <tr>
@@ -293,10 +362,12 @@ const companyEmailTemplate = (booking: BookingData) => `
             </tr>
             ${
               booking.fare
-                ? `<tr>
-                    <td style="font-weight: bold; color: #333;">Total Fare:</td>
-                    <td style="color: #555;">$${booking.fare.toFixed(2)}</td>
-                  </tr>`
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Total Fare:</td>
+                <td style="color: #555;">$${booking.fare.toFixed(2)}</td>
+              </tr>
+            `
                 : ""
             }
             <tr>
@@ -307,8 +378,41 @@ const companyEmailTemplate = (booking: BookingData) => `
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Terms Accepted:</td>
-                            <td style="color: #555;">True</td>
+              <td style="color: #555;">True</td>
             </tr>
+            ${
+              booking.returnTrip
+                ? `
+              <tr>
+                <td colspan="2" style="font-weight: bold; color: #333; padding-top: 20px;">Return Reservation:</td>
+              </tr>
+              <tr>
+                <td style="font-weight: bold; color: #333;">Return Date & Time:</td>
+                <td style="color: #555;">${new Date(
+                  booking.returnTrip.returnDateTime
+                ).toLocaleString()}</td>
+              </tr>
+              ${
+                booking.returnTrip.returnFlightNumber
+                  ? `
+                <tr>
+                  <td style="font-weight: bold; color: #333;">Return Flight Number:</td>
+                  <td style="color: #555;">${booking.returnTrip.returnFlightNumber}</td>
+                </tr>
+              `
+                  : ""
+              }
+              <tr>
+                <td style="font-weight: bold; color: #333;">Return Drop-off Location:</td>
+                <td style="color: #555;">${booking.returnTrip.returnDropoff}${
+                    booking.returnTrip.returnDropoffLatLng
+                      ? ` (Lat: ${booking.returnTrip.returnDropoffLatLng.lat}, Lng: ${booking.returnTrip.returnDropoffLatLng.lng})`
+                      : ""
+                  }</td>
+              </tr>
+            `
+                : ""
+            }
           </table>
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
             Please contact the customer as soon as possible to confirm payment and arrange the ride.
@@ -338,12 +442,11 @@ const companyEmailTemplate = (booking: BookingData) => `
 export async function POST(req: NextRequest) {
   try {
     const body: BookingData = await req.json();
-    const { bookingId, customer, trip, car } = body;
+    const { bookingId, customer, trip, car, payment } = body;
 
     // Validate required fields
     // if (
     //   !bookingId ||
-    //   !step ||
     //   !customer ||
     //   !customer.name ||
     //   !customer.email ||
@@ -361,19 +464,29 @@ export async function POST(req: NextRequest) {
     //   !car.transferRate ||
     //   !car.quantity ||
     //   !car.capacity ||
-    //   !fare ||
     //   !payment ||
     //   !payment.method ||
     //   !payment.cardNumber ||
     //   !payment.expiryDate ||
     //   !payment.cvv ||
     //   !payment.cardholderName ||
-    //   !payment.billingPostalCode) {
+    //   !payment.billingPostalCode
+    // ) {
     //   return NextResponse.json(
     //     { error: "Missing required fields" },
     //     { status: 400 }
     //   );
     // }
+
+    // Validate returnTrip fields if present
+    if (body.returnTrip) {
+      if (!body.returnTrip.returnDateTime || !body.returnTrip.returnDropoff) {
+        return NextResponse.json(
+          { error: "Missing required return trip fields" },
+          { status: 400 }
+        );
+      }
+    }
 
     // Email messages
     const emailMsg = {
@@ -382,7 +495,13 @@ export async function POST(req: NextRequest) {
       }>`,
       to: customer.email,
       subject: `Booking Confirmation - ${bookingId}`,
-      text: `Your booking for ${car.type} from ${trip.pickup} to ${trip.dropoff} is confirmed! Booking ID: ${bookingId}`,
+      text: `Your booking for ${car.type} from ${trip.pickup} to ${
+        trip.dropoff
+      }${
+        body.returnTrip
+          ? ` with a return from ${body.returnTrip.returnDropoff}`
+          : ""
+      } is confirmed! Booking ID: ${bookingId}`,
       html: customerEmailTemplate({ ...body }),
     };
 
@@ -392,7 +511,13 @@ export async function POST(req: NextRequest) {
       }>`,
       to: process.env.COMPANY_EMAIL || "ride@yopmail.com",
       subject: `New Booking Notification - ${bookingId}`,
-      text: `New booking received. Contact ${customer.name} at ${customer.countryCode}${customer.phone} for payment confirmation. Booking ID: ${bookingId}`,
+      text: `New booking received. Contact ${customer.name} at ${
+        customer.countryCode
+      }${customer.phone} for payment confirmation. Booking ID: ${bookingId}${
+        body.returnTrip
+          ? ` Includes return from ${body.returnTrip.returnDropoff}`
+          : ""
+      }`,
       html: companyEmailTemplate({ ...body }),
     };
 

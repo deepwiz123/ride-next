@@ -39,7 +39,9 @@ export default function Step3Form({ formRef }: Step3FormProps) {
     mode: "onBlur",
   });
 
-  const [selectedCar, setSelectedCar] = useState<string | null>(bookingData.car.type || null);
+  const [selectedCar, setSelectedCar] = useState<string | null>(
+    bookingData.car.type || null
+  );
   const [noCarSelected, setNoCarSelected] = useState(false);
 
   const cars = [
@@ -199,7 +201,8 @@ export default function Step3Form({ formRef }: Step3FormProps) {
           )}
           {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
             <p className="text-red-500 dark:text-red-400">
-              Selected cars cannot accommodate {bookingData.trip.passengers} passengers.
+              Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
+              passengers.
             </p>
           )}
         </div>
@@ -216,7 +219,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                 whileHover={{ scale: 1.05 }}
                 className={`border-2 rounded-xl p-2 cursor-pointer shadow-sm transition-all dark:bg-[#181818] dark:border-gray-700 ${
                   selectedCar === car.type
-                    ? "border-blue-600 bg-blue-50 dark:border-blue-400 dark:bg-[#29292991]"
+                    ? "border-blue-600 bg-blue-50 dark:border-blue-50 dark:bg-blue-500"
                     : "border-gray-300 bg-white dark:border-gray-600 dark:bg-[#29292991]"
                 }`}
                 onClick={() => handleCarSelect(car)}
@@ -228,7 +231,9 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                   height={150}
                   className="w-full rounded-md mb-2"
                 />
-                <div className="flex justify-between items-center">
+                <div
+                  className={`flex justify-between items-center rounded-md p-2`}
+                >
                   {selectedCar === car.type ? (
                     <div className="flex items-center justify-center gap-2 ml-2 w-full">
                       <div className="flex items-center gap-2 w-full">

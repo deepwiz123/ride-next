@@ -1,59 +1,76 @@
 import { z } from "zod";
 
 export const customerSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(1, "Name is required").max(100),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(1, "Phone number is required"),
   countryCode: z.string().min(1, "Country code is required"),
 });
 
-export const coordinatesSchema = z.object({
-  lat: z.number(),
-  lng: z.number(),
-});
-
 export const tripSchema = z.object({
   pickup: z.string().min(1, "Pickup location is required"),
   dropoff: z.string().min(1, "Dropoff location is required"),
-  passengers: z
-    .number()
-    .min(1, "At least one passenger is required")
-    .max(99, "Maximum 99 passengers"),
-  kids: z.number().min(0, "Kids cannot be negative").max(99, "Maximum 99 kids"),
-  bags: z.number().min(0, "Bags cannot be negative").max(99, "Maximum 99 bags"),
+  pickupLatLng: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
+  dropoffLatLng: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
   dateTime: z
     .string()
-    .min(1, "Date and time are required")
     .refine(
-      (value) => {
-        const selectedDate = new Date(value);
+      (val) => {
+        const selectedDate = new Date(val);
         const now = new Date();
         return selectedDate >= now;
       },
       { message: "Pickup date and time cannot be in the past" }
     ),
+  flightnumber: z.string().optional(),
+  passengers: z.number().min(1, "At least one passenger is required").max(99),
+  kids: z.number().min(0).max(99).optional(),
+  bags: z.number().min(0).max(99).optional(),
   hourly: z.boolean(),
-  durationHours: z.number().min(0, "Duration hours cannot be negative"),
-  durationMinutes: z
-    .number()
-    .min(0, "Duration minutes cannot be negative")
-    .max(59, "Maximum 59 minutes"),
+  durationHours: z.number().min(0).optional(),
+  durationMinutes: z.number().min(0).max(59).optional(),
   stops: z.array(z.string()).optional(),
   distance: z.string().optional(),
-  pickupLatLng: coordinatesSchema.optional(),
-  dropoffLatLng: coordinatesSchema.optional(),
-  flightNumber: z.string().optional(),
+});
+
+export const returnTripSchema = z.object({
+  returnDateTime: z
+    .string()
+    .min(1, "Return date and time are required")
+    .refine(
+      (val) => {
+        const selectedDate = new Date(val);
+        const now = new Date();
+        return selectedDate >= now;
+      },
+      { message: "Return date and time cannot be in the past" }
+    ),
+  returnFlightNumber: z.string().optional(),
+  returnDropoff: z.string().min(1, "Return drop-off location is required"),
+  returnDropoffLatLng: z
+    .object({
+      lat: z.number(),
+      lng: z.number(),
+    })
+    .optional(),
 });
 
 export const carSchema = z.object({
   type: z.string().min(1, "Car type is required"),
-  transferRate: z.number().min(0, "Transfer rate cannot be negative"),
-  hourlyRate: z.number().min(0, "Hourly rate cannot be negative"),
-  quantity: z
-    .number()
-    .min(0, "Quantity cannot be negative")
-    .max(10, "Maximum 10 cars"),
-  capacity: z.number().min(1, "Capacity must be at least 1"),
+  transferRate: z.number().min(0),
+  hourlyRate: z.number().min(0),
+  quantity: z.number().min(1, "At least one car is required").max(10),
+  capacity: z.number().min(1, "Car capacity must be at least 1"),
 });
 
 export const paymentSchema = z.object({
@@ -93,14 +110,4 @@ export const paymentSchema = z.object({
     .min(5, "Postal code must be at least 5 characters")
     .max(10, "Postal code cannot exceed 10 characters"),
   specialInstructions: z.string().optional(),
-});
-
-export const bookingSchema = z.object({
-  bookingId: z.string(),
-  step: z.number().min(1).max(5),
-  customer: customerSchema,
-  trip: tripSchema,
-  car: carSchema,
-  fare: z.number().min(0, "Fare cannot be negative"),
-  payment: paymentSchema,
 });

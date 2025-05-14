@@ -335,8 +335,8 @@ export default function Step2Form({ formRef }: Step2FormProps) {
               error={errors.dateTime}
             />
           </div>
-{/* 
-          {!isHourly && distance && (
+
+          {/* {!isHourly && distance && (
             <p className="text-sm text-gray-700 dark:text-gray-300">
               <strong className="text-gray-900 dark:text-gray-100">
                 Estimated Distance:
@@ -351,7 +351,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                   label="Duration (Hours)"
                   type="number"
                   min={0}
-                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                   {...register("durationHours", { valueAsNumber: true })}
                   error={errors.durationHours}
                 />
@@ -360,7 +360,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                   type="number"
                   min={0}
                   max={59}
-                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                   {...register("durationMinutes", { valueAsNumber: true })}
                   error={errors.durationMinutes}
                 />
@@ -371,7 +371,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                     <Input
                       label={`Stop ${index + 1}`}
                       placeholder={`Enter Stop ${index + 1} location`}
-                      className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                      className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-black placeholder-gray-400 dark:bg-[#181818] dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
                       {...register(`stops.${index}` as const)}
                       error={errors.stops?.[index] as any}
                     />
@@ -388,7 +388,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full flex items-center justify-center gap-2 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600"
+                  className="w-full flex items-center justify-center gap-2 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 dark:bg-[#181818] dark:text-gray-100 dark:hover:bg-gray-600"
                   onClick={addStop}
                 >
                   <FaPlus /> Add Stop

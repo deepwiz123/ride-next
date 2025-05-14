@@ -1,50 +1,50 @@
-'use client'
+"use client";
 
-import { Car, Customer, Payment, Trip } from "@/types/booking";
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
+import { BookingData } from "@/types/booking";
 
-export interface BookingState {
-  bookingId: string;
-  step: number;
-  customer: Customer;
-  trip: Trip;
-  car: Car;
-  fare: number;
-  payment: Payment;
-}
-
-type BookingContextType = {
-  bookingData: BookingState;
-  updateBookingData: (data: Partial<BookingState>) => void;
-  resetBooking: () => void;
+interface BookingContextType {
+  bookingData: BookingData;
+  updateBookingData: (data: Partial<BookingData>) => void;
   calculateFare: () => number;
-};
+}
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
-export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [bookingData, setBookingData] = useState<BookingState>({
-    bookingId: "",
-    step: 1,
-    customer: { name: "", email: "", phone: "", countryCode: "" },
+export const BookingProvider = ({ children }: { children: ReactNode }) => {
+  const [bookingData, setBookingData] = useState<BookingData>({
+    bookingId: `MDS${Math.floor(1000 + Math.random() * 9000)}`,
+    customer: {
+      name: "",
+      email: "",
+      phone: "",
+      countryCode: "",
+    },
     trip: {
       pickup: "",
       dropoff: "",
+      flightnumber: "",
+      dateTime: "",
       passengers: 1,
       kids: 0,
       bags: 0,
-      dateTime: "",
       hourly: false,
       durationHours: 0,
       durationMinutes: 0,
       stops: [],
-      distance: "0.0",
-      flightnumber: "",
+      distance: "10.50",
     },
-    car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1, capacity: 1 },
+    returnTrip: undefined,
+    car: {
+      type: "",
+      transferRate: 0,
+      hourlyRate: 0,
+      quantity: 1,
+      capacity: 0,
+    },
     fare: 0,
     payment: {
-      method: "credit",
+      method: "",
       cardNumber: "",
       expiryDate: "",
       cvv: "",
@@ -52,62 +52,37 @@ export const BookingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       billingPostalCode: "",
       specialInstructions: "",
     },
+    step: 1,
   });
 
-  const updateBookingData = useCallback((data: Partial<BookingState>) => {
+  const updateBookingData = (data: Partial<BookingData>) => {
     setBookingData((prev) => ({
       ...prev,
       ...data,
-      trip: { ...prev.trip, ...(data.trip || {}) },
-      customer: { ...prev.customer, ...(data.customer || {}) },
-      car: { ...prev.car, ...(data.car || {}) },
-      payment: { ...prev.payment, ...(data.payment || {}) },
+      customer: { ...prev.customer, ...data.customer },
+      trip: { ...prev.trip, ...data.trip },
+      returnTrip: data.returnTrip !== undefined ? { ...prev.returnTrip, ...data.returnTrip } : prev.returnTrip,
+      car: { ...prev.car, ...data.car },
+      payment: { ...prev.payment, ...data.payment },
     }));
-  }, []);
+  };
 
-  const resetBooking = useCallback(() => {
-    setBookingData({
-      bookingId: "",
-      step: 1,
-      customer: { name: "", email: "", phone: "", countryCode: "" },
-      trip: {
-        pickup: "",
-        dropoff: "",
-        passengers: 1,
-        kids: 0,
-        bags: 0,
-        dateTime: "",
-        hourly: false,
-        durationHours: 0,
-        durationMinutes: 0,
-        stops: [],
-        distance: "0.0",
-        flightnumber: "",
-      },
-      car: { type: "", transferRate: 0, hourlyRate: 0, quantity: 1, capacity: 1},
-      fare: 0,
-      payment: {
-        method: "credit",
-        cardNumber: "",
-        expiryDate: "",
-        cvv: "",
-        cardholderName: "",
-        billingPostalCode: "",
-        specialInstructions: "",
-      },
-    });
-  }, []);
+  const calculateFare = () => {
+    const { trip, car } = bookingData;
+    if (!car.type) return 0;
 
-  const calculateFare = useCallback(() => {
-    const { car, trip } = bookingData;
-    if (!car.type || car.quantity < 1) return 0;
-    const rate = trip.hourly ? car.hourlyRate : car.transferRate;
-    const duration = trip.hourly ? (trip.durationHours || 0) + (trip.durationMinutes || 0) / 60 : 1;
-    return rate * car.quantity * duration;
-  }, [bookingData]);
+    let fare = 0;
+    if (trip.hourly) {
+      const totalHours = (trip.durationHours || 0) + (trip.durationMinutes || 0) / 60;
+      fare = car.hourlyRate * totalHours * car.quantity;
+    } else {
+      fare = car.transferRate * car.quantity;
+    }
+    return fare;
+  };
 
   return (
-    <BookingContext.Provider value={{ bookingData, updateBookingData, resetBooking, calculateFare }}>
+    <BookingContext.Provider value={{ bookingData, updateBookingData, calculateFare }}>
       {children}
     </BookingContext.Provider>
   );

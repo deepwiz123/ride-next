@@ -50,17 +50,6 @@ export default function RidePage() {
     try {
       if (bookingData.step <= 4 && formRef.current) {
         formRef.current.requestSubmit();
-      } else if (bookingData.step === 5) {
-        // Step 5: Send notifications and confirm booking
-        await axios.post("/reservations/api/send-notifications", {
-          ...bookingData,
-        });
-
-        setMessage({
-          type: "success",
-          text: "Your booking has been successfully confirmed! Payment processed and notifications sent.",
-          bookingId: bookingData.bookingId,
-        });
       }
     } catch (error) {
       console.error("Error:", error);
@@ -73,66 +62,8 @@ export default function RidePage() {
     }
   };
 
-  // Handle message dismissal
-  const handleDismiss = () => {
-    if (message?.type === "success") {
-      updateBookingData({
-        bookingId: "",
-        step: 1,
-        customer: { name: "", email: "", phone: "", countryCode: "" },
-        trip: {
-          pickup: "",
-          dropoff: "",
-          passengers: 1,
-          kids: 0,
-          bags: 0,
-          dateTime: "",
-          hourly: false,
-          durationHours: 0,
-          durationMinutes: 0,
-          stops: [],
-          distance: "0.0",
-        },
-        car: {
-          type: "",
-          quantity: 1,
-          transferRate: 0,
-          hourlyRate: 0,
-          capacity: 1,
-        },
-        fare: 0,
-        payment: {
-          method: "credit",
-          cardNumber: "",
-          expiryDate: "",
-          cvv: "",
-          cardholderName: "",
-          billingPostalCode: "",
-          specialInstructions: "",
-        },
-      });
-      window.location.href = "https://metrodtw.wizardcomm.in/";
-    }
-    setMessage(null);
-  };
-
-  // Handle retry
-  const handleRetry = () => {
-    setMessage(null);
-  };
-
-  return (bookingData.step <= 4 ? (
+  return bookingData.step <= 4 ? (
     <div className="h-screen flex flex-col items-center justify-center bg-white bg-[url('/reservations/backgroundmdswhite.jpg')] dark:bg-black dark:bg-[url('/reservations/backgroundmds.jpg')] bg-cover bg-center p-4 transition-colors duration-300">
-      {message && (
-        <MessageCard
-          type={message.type}
-          message={message.text}
-          bookingId={message.bookingId}
-          onDismiss={handleDismiss}
-          onRetry={message.type === "failure" ? handleRetry : undefined}
-        />
-      )}
-
       <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center dark:text-gray-100 mb-4">
         Book Your Reservations
       </h3>
@@ -194,7 +125,8 @@ export default function RidePage() {
       </motion.div>
     </div>
   ) : (
-  <div>
-    <SummaryView/>
-  </div>));
+    <div>
+      <SummaryView />
+    </div>
+  );
 }

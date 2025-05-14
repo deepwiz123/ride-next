@@ -1,31 +1,37 @@
-
 export interface Coordinates {
   lat: number;
   lng: number;
-}
-
-export interface Trip {
-  pickup: string;
-  dropoff: string;
-  flightnumber? : string;
-  passengers: number;
-  kids: number;
-  bags: number;
-  dateTime: string;
-  hourly: boolean;
-  pickupLatLng?: Coordinates;
-  dropoffLatLng?: Coordinates;
-  distance?: string;
-  stops?: string[];
-  durationHours?: number; // Optional for transfer trips
-  durationMinutes?: number; // Optional for transfer trips
 }
 
 export interface Customer {
   name: string;
   email: string;
   phone: string;
-  countryCode: string; // Added countryCode field
+  countryCode: string;
+}
+
+export interface Trip {
+  pickup: string;
+  dropoff: string;
+  pickupLatLng?: Coordinates;
+  dropoffLatLng?: Coordinates;
+  dateTime: string;
+  flightnumber?: string;
+  passengers: number;
+  kids?: number;
+  bags?: number;
+  hourly: boolean;
+  durationHours?: number;
+  durationMinutes?: number;
+  stops?: string[];
+  distance?: string;
+}
+
+export interface ReturnTrip {
+  returnDateTime: string;
+  returnFlightNumber?: string;
+  returnDropoff: string;
+  returnDropoffLatLng?: Coordinates;
 }
 
 export interface Car {
@@ -33,11 +39,11 @@ export interface Car {
   transferRate: number;
   hourlyRate: number;
   quantity: number;
-  capacity : number;
+  capacity: number;
 }
 
 export interface Payment {
-  method: "credit" | "debit";
+  method: string;
   cardNumber: string;
   expiryDate: string;
   cvv: string;
@@ -48,10 +54,11 @@ export interface Payment {
 
 export interface BookingData {
   bookingId: string;
-  step: number;
   customer: Customer;
   trip: Trip;
+  returnTrip?: ReturnTrip;
   car: Car;
-  fare?: number;
-  payment : Payment;
+  fare: number;
+  payment: Payment;
+  step: number;
 }
