@@ -25,7 +25,7 @@ export function Header() {
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between p-4">
         <a
-          href="https://ride-next-iota.vercel.app/reservations"
+          href="https://metrodtw.wizardcomm.in/"
           className="text-2xl font-extrabold tracking-tight text-gray-800"
         >
           <div className="logo">
@@ -37,14 +37,41 @@ export function Header() {
             />
           </div>
         </a>
+        <div className="hidden md:flex space-x-6 text-sm text-black">
+          {/* Services with Dropdown */}
+          <div className="relative group">
+            <button className="hover:text-[#00A0FF] dark:hover:text-[#33A7FF] transition focus:outline-none">
+              Services
+            </button>
+            <div className="absolute left-0 mt-2 w-72 bg-white  dark:bg-black border border-gray-200 dark:border-black rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transform -translate-y-2 transition-all duration-200 z-50">
+              <a
+                href="https://metrodtw.wizardcomm.in/transportation-to-detroit-airport/"
+                className="block px-4 py-2 text-sm text-black dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Airport Transportation
+              </a>
+              <a
+                href="https://metrodtw.wizardcomm.in/detroit-airport-car-service/"
+                className="block px-4 py-2 text-sm text-black dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Airport Car Service
+              </a>
+              <a
+                href="https://metrodtw.wizardcomm.in/detroit-airport-taxi-service/%22"
+                className="block px-4 py-2 text-sm text-black dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Airport Taxi Service
+              </a>
+              <a
+                href="https://metrodtw.wizardcomm.in/airport/"
+                className="block px-4 py-2 text-sm text-black dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                Airport Transfers
+              </a>
+            </div>
+          </div>
 
-        <div className="hidden md:flex space-x-6 text-sm text-gray-800">
-          <a
-            href="https://metrodtw.wizardcomm.in/"
-            className="hover:text-[#00A0FF] dark:hover:text-[#33A7FF] transition"
-          >
-            Services
-          </a>
+          {/* Other Nav Items */}
           <a
             href="https://metrodtw.wizardcomm.in/fleet/"
             className="hover:text-[#00A0FF] dark:hover:text-[#33A7FF] transition"
@@ -57,12 +84,11 @@ export function Header() {
           >
             Rates
           </a>
-          <a
-            className="text-[#00A0FF] dark:text-[#33A7FF] transition"
-          >
+          <a className="text-[#00A0FF] dark:text-[#33A7FF] transition">
             Reservations
           </a>
         </div>
+
         <button
           className="md:hidden text-gray-800 dark:text-gray-100"
           onClick={() => setIsMenuOpen((prev) => !prev)}

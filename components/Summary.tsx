@@ -122,8 +122,9 @@ export default function SummaryView() {
     }
   };
 
-  const handleDismiss = () => {
+  const handleDismiss = async() => {
     if (message?.type === "success") {
+      window.location.href = "https://metrodtw.wizardcomm.in/";
       updateBookingData({
         bookingId: "",
         step: 1,
@@ -159,7 +160,6 @@ export default function SummaryView() {
           specialInstructions: "",
         },
       });
-      window.location.href = "https://metrodtw.wizardcomm.in/";
     }
     setMessage(null);
   };
@@ -195,7 +195,7 @@ export default function SummaryView() {
           Review your booking details before proceeding to confirmation.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Booking ID
@@ -294,14 +294,36 @@ export default function SummaryView() {
               </span>
             </div>
           )}
-          <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
+
+          {bookingData.trip.hourly && (
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
+              <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+                Hours
+              </span>
+              <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
+                {bookingData.trip.durationHours}
+              </span>
+            </div>
+          )}
+
+          {bookingData.trip.hourly && (
+            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
+              <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
+                Minutes
+              </span>
+              <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
+                {bookingData.trip.durationMinutes}
+              </span>
+            </div>
+          )}
+          {/* <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Trip Type
             </span>
             <span className="block text-gray-700 dark:text-gray-300 text-sm sm:text-base md:text-lg">
               {bookingData.trip.hourly ? "Hourly" : "Distance-based"}
             </span>
-          </div>
+          </div> */}
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm bg-white dark:bg-[#282929]">
             <span className="font-semibold text-[#33A7FF] text-xs sm:text-sm">
               Car Type

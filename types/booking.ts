@@ -43,7 +43,7 @@ export interface Car {
 }
 
 export interface Payment {
-  method: string;
+  method: 'credit' | 'debit' | undefined;
   cardNumber: string;
   expiryDate: string;
   cvv: string;

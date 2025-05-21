@@ -167,45 +167,54 @@ export default function Step3Form({ formRef }: Step3FormProps) {
   return (
     <motion.div
       ref={containerRef}
-      className="w-full max-w-6xl mx-auto bg-white rounded-2xl p-4 sm:p-6 lg:p-8 flex flex-col text-gray-900 dark:bg-[#181818] dark:text-gray-100"
+      className="w-full max-w-6xl mx-auto bg-white rounded-2xl pt-2 pb-4 px-4 sm:py-2  flex flex-col text-gray-900 dark:bg-[#181818] dark:text-gray-100"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-2">
         <div className="flex items-center gap-3 justify-center">
           <h3 className="text-xl sm:text-2xl lg:text-3xl font-medium text-center dark:text-gray-100 mb-4">
             Select Your Car/Ride
           </h3>
         </div>
-        <div className="p-4">
-          {noCarSelected && (
-            <p className="text-red-500 dark:text-red-400">
-              Please select a car to proceed.
-            </p>
+        {(noCarSelected ||
+          errors.type ||
+          errors.quantity ||
+          errors.capacity) && (
+          <div className="p-4 space-y-1">
+            {noCarSelected && (
+              <p className="text-red-500 dark:text-red-400">
+                Please select a car to proceed.
+              </p>
+            )}
+            {errors.type?.message && (
+              <p className="text-red-500 dark:text-red-400">
+                {errors.type.message}
+              </p>
+            )}
+            {errors.quantity?.message && (
+              <p className="text-red-500 dark:text-red-400">
+                {errors.quantity.message}
+              </p>
+            )}
+            {errors.capacity?.message && (
+              <p className="text-red-500 dark:text-red-400">
+                {errors.capacity.message}
+              </p>
+            )}
+          </div>
+        )}
+
+        {!noCarSelected &&
+          quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
+            <div className="p-4">
+              <p className="text-red-500 dark:text-red-400">
+                Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
+                passengers.
+              </p>
+            </div>
           )}
-          {errors.type && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.type.message}
-            </p>
-          )}
-          {errors.quantity && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.quantity.message}
-            </p>
-          )}
-          {errors.capacity && (
-            <p className="text-red-500 dark:text-red-400">
-              {errors.capacity.message}
-            </p>
-          )}
-          {quantity * (capacity || 1) < (bookingData.trip.passengers || 1) && (
-            <p className="text-red-500 dark:text-red-400">
-              Selected cars cannot accommodate {bookingData.trip.passengers}{" "}
-              passengers.
-            </p>
-          )}
-        </div>
 
         <motion.form
           ref={formRef}
@@ -224,13 +233,16 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                 }`}
                 onClick={() => handleCarSelect(car)}
               >
-                <Image
-                  src={car.image}
-                  alt={car.type}
-                  width={150}
-                  height={150}
-                  className="w-full rounded-md mb-2"
-                />
+                <div className="w-full h-[180px]">
+                  <Image
+                    src={car.image}
+                    alt={car.type}
+                    width={150}
+                    height={180}
+                    className={`w-full h-full object-contain rounded-md mb-2`}
+                  />
+                </div>
+
                 <div
                   className={`flex justify-between items-center rounded-md p-2`}
                 >
@@ -247,7 +259,7 @@ export default function Step3Form({ formRef }: Step3FormProps) {
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {car.type}
                       </h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-300">
                         Capacity: {car.capacity}
                       </p>
                     </div>

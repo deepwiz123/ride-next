@@ -220,7 +220,7 @@ export default function Step2Form({ formRef }: Step2FormProps) {
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-6"
         >
-          <div className="flex sm:flex-row bg-gray-100 dark:bg-gray-600 p-2 rounded-xl gap-2">
+          <div className="flex sm:flex-row bg-gray-100 dark:bg-gray-600 rounded-xl">
             <button
               type="button"
               className={`flex-1 rounded-lg font-semibold py-3 transition duration-300 ease-in-out ${
