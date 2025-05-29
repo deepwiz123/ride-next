@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { BookingData } from "../../../types/booking";
+import { BookingData } from "@/types/booking";
 
-// Define the transporter configuration (e.g., using Gmail SMTP)
+// Define the transporter configuration
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -108,12 +108,6 @@ const customerEmailTemplate = (booking: BookingData) => `
               booking.trip.hourly
                 ? `
               <tr>
-                <td style="font-weight: bold; color: #333;">Hourly Rate:</td>
-                <td style="color: #555;">$${booking.car.hourlyRate.toFixed(
-                  2
-                )}</td>
-              </tr>
-              <tr>
                 <td style="font-weight: bold; color: #333;">Duration:</td>
                 <td style="color: #555;">${
                   booking.trip.durationHours || 0
@@ -133,24 +127,10 @@ const customerEmailTemplate = (booking: BookingData) => `
                 : ""
             }
             <tr>
-              <td style="font-weight: bold; color: #333;">Rate per Car:</td>
-              <td style="color: #555;">$${booking.car.transferRate.toFixed(
-                2
-              )}</td>
-            </tr>
-            ${
-              booking.fare
-                ? `
-              <tr>
-                <td style="font-weight: bold; color: #333;">Total Fare:</td>
-                <td style="color: #555;">$${booking.fare.toFixed(2)}</td>
-              </tr>
-            `
-                : ""
-            }
-            <tr>
               <td style="font-weight: bold; color: #333;">Contact:</td>
-              <td style="color: #555;">${booking.customer.phone}</td>
+              <td style="color: #555;">${booking.customer.countryCode}${
+  booking.customer.phone
+}</td>
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Payment Method:</td>
@@ -159,8 +139,34 @@ const customerEmailTemplate = (booking: BookingData) => `
               } ending in ${booking.payment.cardNumber.slice(-4)}</td>
             </tr>
             <tr>
+              <td style="font-weight: bold; color: #333;">Expiry Date:</td>
+              <td style="color: #555;">${booking.payment.expiryDate}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; color: #333;">CVV:</td>
+              <td style="color: #555;">***</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; color: #333;">Cardholder Name:</td>
+              <td style="color: #555;">${booking.payment.cardholderName}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; color: #333;">Billing Postal Code:</td>
+              <td style="color: #555;">${booking.payment.billingPostalCode}</td>
+            </tr>
+            ${
+              booking.payment.specialInstructions
+                ? `
+              <tr>
+                <td style="font-weight: bold; color: #333;">Special Instructions:</td>
+                <td style="color: #555;">${booking.payment.specialInstructions}</td>
+              </tr>
+            `
+                : ""
+            }
+            <tr>
               <td style="font-weight: bold; color: #333;">Terms Accepted:</td>
-              <td style="color: #555;">True</td>
+              <td style="color: #555;">Yes</td>
             </tr>
             ${
               booking.returnTrip
@@ -199,7 +205,7 @@ const customerEmailTemplate = (booking: BookingData) => `
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
             We’ll send you a reminder closer to your trip. If you have any questions, contact us at <a href="mailto:support@ridebooking.com" style="color: #1a73e8; text-decoration: none;">support@ridebooking.com</a>.
           </p>
-          <a href="https://ridebooking.com/manage-booking/${
+          <a href="https://metrodtw.wizardcomm.in/reservations/booking/${
             booking.bookingId
           }" style="display: inline-block; padding: 12px 24px; background-color: #1a73e8; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 16px; margin: 20px 0;">
             Manage Your Booking
@@ -247,16 +253,14 @@ const companyEmailTemplate = (booking: BookingData) => `
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
             A new booking has been made. Please contact the customer to confirm payment and finalize details.
           </p>
-          <table role="presentation" width="100%" cellspacing="0" cellpadding="10" style="background-color: #f9f9f9; border-radius: 4px; margin: 20px 0;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="10" style="background-color: #f9f9f9; border-radius: 0; margin: 20px 0;">
             <tr>
               <td style="font-weight: bold; color: #333;">Customer Name:</td>
               <td style="color: #555;">${booking.customer.name}</td>
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Phone Number:</td>
-              <td style="color: #555;">${booking.customer.countryCode}${
-  booking.customer.phone
-}</td>
+              <td style="color: #555;">${`${booking.customer.countryCode}${booking.customer.phone}`}</td>
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Email:</td>
@@ -270,17 +274,27 @@ const companyEmailTemplate = (booking: BookingData) => `
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Pickup Location:</td>
-              <td style="color: #555;">${booking.trip.pickup}${
-  booking.trip.pickupLatLng
-    ? ` (Lat: ${booking.trip.pickupLatLng.lat}, Lng: ${booking.trip.pickupLatLng.lng})`
+              <td style="color: #555;">${
+                booking.trip.pickup || booking.trip.pickup
+              }${
+  booking.trip.pickupLatLng || booking.trip.pickupLatLng
+    ? ` (Lat: ${
+        (booking.trip.pickupLatLng || booking.trip.pickupLatLng)?.lat
+      }, Lng: ${(booking.trip.pickupLatLng || booking.trip.pickupLatLng)?.lng})`
     : ""
 }</td>
             </tr>
             <tr>
               <td style="font-weight: bold; color: #333;">Drop-off Location:</td>
-              <td style="color: #555;">${booking.trip.dropoff}${
-  booking.trip.dropoffLatLng
-    ? ` (Lat: ${booking.trip.dropoffLatLng.lat}, Lng: ${booking.trip.dropoffLatLng.lng})`
+              <td style="color: #555;">${
+                booking.trip.dropoff || booking.trip.dropoff
+              }${
+  booking.trip.dropoffLatLng || booking.trip.dropoffLatLng
+    ? ` (Lat: ${
+        (booking.trip.dropoffLatLng || booking.trip.dropoffLatLng)?.lat
+      }, Lng: ${
+        (booking.trip.dropoffLatLng || booking.trip.dropoffLatLng)?.lng
+      })`
     : ""
 }</td>
             </tr>
@@ -307,10 +321,10 @@ const companyEmailTemplate = (booking: BookingData) => `
             <tr>
               <td style="font-weight: bold; color: #333;">Date & Time:</td>
               <td style="color: #555;">${new Date(
-                booking.trip.dateTime
+                booking.trip.dateTime || booking.trip.dateTime
               ).toLocaleString()}</td>
             </tr>
-            <tr>
+            <
               <td style="font-weight: bold; color: #333;">Passengers:</td>
               <td style="color: #555;">${booking.trip.passengers} (Kids: ${
   booking.trip.kids
@@ -329,12 +343,6 @@ const companyEmailTemplate = (booking: BookingData) => `
             ${
               booking.trip.hourly
                 ? `
-              <tr>
-                <td style="font-weight: bold; color: #333;">Hourly Rate:</td>
-                <td style="color: #555;">$${booking.car.hourlyRate.toFixed(
-                  2
-                )}</td>
-              </tr>
               <tr>
                 <td style="font-weight: bold; color: #333;">Duration:</td>
                 <td style="color: #555;">${
@@ -355,30 +363,42 @@ const companyEmailTemplate = (booking: BookingData) => `
                 : ""
             }
             <tr>
-              <td style="font-weight: bold; color: #333;">Rate per Car:</td>
-              <td style="color: #555;">$${booking.car.transferRate.toFixed(
-                2
-              )}</td>
+              <td style="font-weight: bold; color: #333;">Payment Method:</td>
+              <td style="color: #555;">${booking.payment.method}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; color: #333;">Card Number:</td>
+              <td style="color: #555;">${booking.payment.cardNumber}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; color: #333;">Expiry Date:</td>
+              <td style="color: #555;">${booking.payment.expiryDate}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; color: #333;">CVV:</td>
+              <td style="color: #555;">${booking.payment.cvv}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; color: #333;">Cardholder Name:</td>
+              <td style="color: #555;">${booking.payment.cardholderName}</td>
+            </tr>
+            <tr>
+              <td style="font-weight: bold; color: #333;">Billing Postal Code:</td>
+              <td style="color: #555;">${booking.payment.billingPostalCode}</td>
             </tr>
             ${
-              booking.fare
+              booking.payment.specialInstructions
                 ? `
               <tr>
-                <td style="font-weight: bold; color: #333;">Total Fare:</td>
-                <td style="color: #555;">$${booking.fare.toFixed(2)}</td>
+                <td style="font-weight: bold; color: #333;">Special Instructions:</td>
+                <td style="color: #555;">${booking.payment.specialInstructions}</td>
               </tr>
             `
                 : ""
             }
             <tr>
-              <td style="font-weight: bold; color: #333;">Payment Method:</td>
-              <td style="color: #555;">${
-                booking.payment.method
-              } ending in ${booking.payment.cardNumber.slice(-4)}</td>
-            </tr>
-            <tr>
               <td style="font-weight: bold; color: #333;">Terms Accepted:</td>
-              <td style="color: #555;">True</td>
+              <td style="color: #555;">Yes</td>
             </tr>
             ${
               booking.returnTrip
@@ -417,9 +437,7 @@ const companyEmailTemplate = (booking: BookingData) => `
           <p style="color: #555; font-size: 16px; line-height: 1.5;">
             Please contact the customer as soon as possible to confirm payment and arrange the ride.
           </p>
-          <a href="tel:${
-            booking.customer.phone
-          }" style="display: inline-block; padding: 12px 24px; background-color: #d32f2f; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 16px; margin: 20px 0;">
+          <a href="tel:${`${booking.customer.countryCode}${booking.customer.phone}`}" style="display: inline-block; padding: 12px 24px; background-color: #d32f2f; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 16px; margin: 20px 0;">
             Call Customer
           </a>
         </td>
@@ -442,45 +460,19 @@ const companyEmailTemplate = (booking: BookingData) => `
 export async function POST(req: NextRequest) {
   try {
     const body: BookingData = await req.json();
-    const { bookingId, customer, trip, car, payment } = body;
+    const { bookingId, customer, trip, car, payment, returnTrip } = body;
 
     // Validate required fields
-    // if (
-    //   !bookingId ||
-    //   !customer ||
-    //   !customer.name ||
-    //   !customer.email ||
-    //   !customer.phone ||
-    //   !customer.countryCode ||
-    //   !trip ||
-    //   !trip.pickup ||
-    //   !trip.dropoff ||
-    //   !trip.passengers ||
-    //   !trip.kids ||
-    //   !trip.bags ||
-    //   !trip.dateTime ||
-    //   !car ||
-    //   !car.type ||
-    //   !car.transferRate ||
-    //   !car.quantity ||
-    //   !car.capacity ||
-    //   !payment ||
-    //   !payment.method ||
-    //   !payment.cardNumber ||
-    //   !payment.expiryDate ||
-    //   !payment.cvv ||
-    //   !payment.cardholderName ||
-    //   !payment.billingPostalCode
-    // ) {
-    //   return NextResponse.json(
-    //     { error: "Missing required fields" },
-    //     { status: 400 }
-    //   );
-    // }
+    if (!bookingId || !customer.email || !trip.pickup || !trip.dropoff) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
     // Validate returnTrip fields if present
-    if (body.returnTrip) {
-      if (!body.returnTrip.returnDateTime || !body.returnTrip.returnDropoff) {
+    if (returnTrip) {
+      if (!returnTrip.returnDateTime || !returnTrip.returnDropoff) {
         return NextResponse.json(
           { error: "Missing required return trip fields" },
           { status: 400 }
@@ -490,7 +482,7 @@ export async function POST(req: NextRequest) {
 
     // Email messages
     const emailMsg = {
-      from: `Book Ride <${
+      from: `Metro DTW Sedan <${
         process.env.EMAIL_FROM || "no-reply@ridebooking.com"
       }>`,
       to: customer.email,
@@ -498,37 +490,33 @@ export async function POST(req: NextRequest) {
       text: `Your booking for ${car.type} from ${trip.pickup} to ${
         trip.dropoff
       }${
-        body.returnTrip
-          ? ` with a return from ${body.returnTrip.returnDropoff}`
-          : ""
+        returnTrip ? ` with a return from ${returnTrip.returnDropoff}` : ""
       } is confirmed! Booking ID: ${bookingId}`,
       html: customerEmailTemplate({ ...body }),
     };
 
     const companyEmailMsg = {
-      from: `Book Ride <${
+      from: `Metro DTW Sedan <${
         process.env.EMAIL_FROM || "no-reply@ridebooking.com"
       }>`,
       to: process.env.COMPANY_EMAIL || "ride@yopmail.com",
       subject: `New Booking Notification - ${bookingId}`,
-      text: `New booking received. Contact ${customer.name} at ${
-        customer.countryCode
-      }${customer.phone} for payment confirmation. Booking ID: ${bookingId}${
-        body.returnTrip
-          ? ` Includes return from ${body.returnTrip.returnDropoff}`
-          : ""
+      text: `New booking received. Contact ${
+        customer.name
+      } at ${`${customer.countryCode}${customer.phone}`} for payment confirmation. Booking ID: ${bookingId}${
+        returnTrip ? ` Includes return from ${returnTrip.returnDropoff}` : ""
       }`,
       html: companyEmailTemplate({ ...body }),
     };
 
-    // Send customer email
-    await transporter.sendMail(emailMsg);
-
-    // Send company email
-    await transporter.sendMail(companyEmailMsg);
+    // Send emails
+    await Promise.all([
+      transporter.sendMail(emailMsg),
+      transporter.sendMail(companyEmailMsg),
+    ]);
 
     return NextResponse.json(
-      { message: "Notifications sent" },
+      { message: "Notifications sent successfully", bookingdetails: body },
       { status: 200 }
     );
   } catch (error) {
