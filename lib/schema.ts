@@ -3,7 +3,7 @@ import { z } from "zod";
 export const customerSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
   email: z.string().email("Invalid email address"),
-  phone: z.string().min(1, "Phone number is required"),
+  phone: z.string().min(10, "Phone number must have minimum 10 Digits"),
   countryCode: z.string().min(1, "Country code is required"),
 });
 

@@ -32,7 +32,7 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
       durationHours: 0,
       durationMinutes: 0,
       stops: [],
-      distance: "10.50",
+      distance: "",
     },
     returnTrip: undefined,
     car: {
@@ -44,7 +44,7 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
     },
     fare: 0,
     payment: {
-      method: "",
+      method: "credit",
       cardNumber: "",
       expiryDate: "",
       cvv: "",
@@ -61,7 +61,10 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
       ...data,
       customer: { ...prev.customer, ...data.customer },
       trip: { ...prev.trip, ...data.trip },
-      returnTrip: data.returnTrip !== undefined ? { ...prev.returnTrip, ...data.returnTrip } : prev.returnTrip,
+      returnTrip:
+        data.returnTrip !== undefined
+          ? { ...prev.returnTrip, ...data.returnTrip }
+          : prev.returnTrip,
       car: { ...prev.car, ...data.car },
       payment: { ...prev.payment, ...data.payment },
     }));
@@ -73,7 +76,8 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
 
     let fare = 0;
     if (trip.hourly) {
-      const totalHours = (trip.durationHours || 0) + (trip.durationMinutes || 0) / 60;
+      const totalHours =
+        (trip.durationHours || 0) + (trip.durationMinutes || 0) / 60;
       fare = car.hourlyRate * totalHours * car.quantity;
     } else {
       fare = car.transferRate * car.quantity;
@@ -82,7 +86,9 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <BookingContext.Provider value={{ bookingData, updateBookingData, calculateFare }}>
+    <BookingContext.Provider
+      value={{ bookingData, updateBookingData, calculateFare }}
+    >
       {children}
     </BookingContext.Provider>
   );
