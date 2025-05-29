@@ -277,7 +277,8 @@ export default function SummaryView() {
               Customer Phone
             </span>
             <span className="block text-gray-700 dark:text-gray-300 text-base">
-              `${bookingData.customer.countryCode}${bookingData.customer.phone}`
+              `{bookingData.customer.countryCode}" "{bookingData.customer.phone}
+              `
             </span>
           </div>
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-white dark:bg-[#282929]">
